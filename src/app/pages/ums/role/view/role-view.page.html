@@ -1,0 +1,89 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="User Management"
+  breadcrumb="Roles"
+  basePath="/ums"
+  primarySectionLabel="UMS"
+  [mainMenuItems]="menuItems"
+>
+  <div class="space-y-6">
+    <section class="flex items-center justify-between">
+      <div class="space-y-1">
+        <h1 class="text-lg font-semibold text-slate-900">
+          Roles
+        </h1>
+        <p class="text-sm text-slate-600">
+          Configure reusable roles and permission templates for users.
+        </p>
+      </div>
+      <a
+        routerLink="/ums/roles/create"
+        class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+      >
+        Create role
+      </a>
+    </section>
+
+    <section>
+      <app-ui-table>
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Role
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Description
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Users
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Status
+            </th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white">
+          <tr
+            *ngFor="let role of roles"
+            class="cursor-pointer hover:bg-slate-50"
+            [routerLink]="['/ums/roles', role.id, 'edit']"
+          >
+            <td class="px-4 py-3 text-sm font-semibold text-slate-900">
+              {{ role.name }}
+            </td>
+            <td class="px-4 py-3 text-sm text-slate-700">
+              {{ role.description }}
+            </td>
+            <td class="px-4 py-3 text-sm text-slate-700">
+              {{ role.users }}
+            </td>
+            <td class="px-4 py-3 text-sm">
+              <span
+                class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium"
+                [ngClass]="{
+                  'bg-green-50 text-green-700': role.status === 'Active',
+                  'bg-amber-50 text-amber-700': role.status === 'Restricted'
+                }"
+              >
+                {{ role.status }}
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex justify-end gap-2">
+                <span
+                  class="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700"
+                >
+                  Edit
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </app-ui-table>
+    </section>
+  </div>
+</app-trade-layout>
+

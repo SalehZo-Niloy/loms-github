@@ -1,0 +1,136 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Create New Query"
+  basePath="/loms"
+>
+  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-md mx-auto">
+    <section class="flex items-center justify-between">
+      <h1 class="text-2xl font-semibold text-slate-900">
+        Create New Query
+      </h1>
+    </section>
+
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-slate-700">
+          Loan Application *
+        </label>
+        <select
+          class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+          [(ngModel)]="selectedLoanId"
+        >
+          <option value="">
+            -- Select Loan --
+          </option>
+          <option *ngFor="let la of loanApps" [ngValue]="la.id">
+            {{ la.appNo }} - {{ la.customerName }} ({{ la.product }})
+          </option>
+        </select>
+      </div>
+
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-slate-700">
+          Title *
+        </label>
+        <input
+          type="text"
+          class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+          [(ngModel)]="title"
+          placeholder="Short summary of the issue"
+        />
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-slate-700">
+            Category
+          </label>
+          <select
+            class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="selectedCategory"
+          >
+            <option *ngFor="let c of categories" [ngValue]="c">
+              {{ c }}
+            </option>
+          </select>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-slate-700">
+            Priority
+          </label>
+          <select
+            class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="selectedPriority"
+          >
+            <option *ngFor="let p of priorities" [ngValue]="p">
+              {{ p }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-slate-700">
+          Recipients *
+        </label>
+        <div class="rounded-md border border-slate-300 bg-white p-2 max-h-40 overflow-y-auto text-sm text-slate-800">
+          <label
+            *ngFor="let u of availableRecipients"
+            class="flex items-center gap-2 py-1"
+          >
+            <input
+              type="checkbox"
+              [checked]="selectedRecipientIds.includes(u.id)"
+              (change)="toggleRecipient(u.id, $event.target.checked)"
+            />
+            <span>{{ u.name }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-slate-700">
+          Initial Message *
+        </label>
+        <textarea
+          rows="4"
+          class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+          [(ngModel)]="initialMessage"
+          placeholder="Describe the query..."
+        ></textarea>
+      </div>
+
+      <!-- <div class="space-y-1 max-w-xs">
+        <label class="block text-sm font-medium text-slate-700">
+          SLA (Hours)
+        </label>
+        <input
+          type="number"
+          class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+          [(ngModel)]="slaHours"
+          min="1"
+        />
+      </div> -->
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button
+          type="button"
+          class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700"
+          (click)="cancel()"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+          (click)="sendQuery()"
+        >
+          Send Query
+        </button>
+      </div>
+    </section>
+  </div>
+</app-loms-layout>
+

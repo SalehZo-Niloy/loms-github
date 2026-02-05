@@ -1,0 +1,169 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Master LC / Dashboard"
+  basePath="/trade"
+>
+  <!-- Stats Cards -->
+  <div class="grid gap-4 md:grid-cols-4 mb-6">
+    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-gray-500 uppercase">Pending DC Advising</p>
+          <p class="text-2xl font-bold text-gray-900 mt-1">{{ pendingDCAdvisingCount }}</p>
+        </div>
+        <div class="p-3 rounded-full bg-blue-50 text-blue-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-gray-500 uppercase">Master LC Requests</p>
+          <p class="text-2xl font-bold text-gray-900 mt-1">{{ masterLCRequestsCount }}</p>
+        </div>
+        <div class="p-3 rounded-full bg-purple-50 text-purple-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-gray-500 uppercase">Pending Approvals</p>
+          <p class="text-2xl font-bold text-gray-900 mt-1">{{ pendingApprovalsCount }}</p>
+        </div>
+        <div class="p-3 rounded-full bg-orange-50 text-orange-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-gray-500 uppercase">Issued Master LCs</p>
+          <p class="text-2xl font-bold text-gray-900 mt-1">{{ issuedMasterLCsCount }}</p>
+        </div>
+        <div class="p-3 rounded-full bg-green-50 text-green-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Available Export LCs for Master LC Creation -->
+  <div class="mb-6 rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+      <h3 class="text-lg font-medium text-slate-900">Available Export LCs</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-600">
+        <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+          <tr>
+            <th class="px-6 py-3 font-semibold">LC Number</th>
+            <th class="px-6 py-3 font-semibold">Beneficiary</th>
+            <th class="px-6 py-3 font-semibold">Amount</th>
+            <th class="px-6 py-3 font-semibold">Issue Date</th>
+            <th class="px-6 py-3 font-semibold">Expiry Date</th>
+            <th class="px-6 py-3 font-semibold text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+          <!-- Mock Data for now, ideally fetched from TradeRequestService -->
+          <tr
+            class="hover:bg-slate-50 cursor-pointer"
+            [routerLink]="['/trade/master-lc/customer/create']"
+            [queryParams]="{ lc: 'ELC/EU/2026/789' }"
+          >
+            <td class="px-6 py-4 whitespace-nowrap text-blue-700 font-medium">
+              <span class="hover:underline">ELC/EU/2026/789</span>
+            </td>
+            <td class="px-6 py-4">Best Garments Ltd (BD)</td>
+            <td class="px-6 py-4">€75,000.00</td>
+            <td class="px-6 py-4">15 Jan 2026</td>
+            <td class="px-6 py-4">21 Mar 2026</td>
+            <td class="px-6 py-4 text-right">
+              <span class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
+                Create Master LC
+              </span>
+            </td>
+          </tr>
+          <tr
+            class="hover:bg-slate-50 cursor-pointer"
+            [routerLink]="['/trade/master-lc/customer/create']"
+            [queryParams]="{ lc: 'ELC/US/2026/102' }"
+          >
+            <td class="px-6 py-4 whitespace-nowrap text-blue-700 font-medium">
+              <span class="hover:underline">ELC/US/2026/102</span>
+            </td>
+            <td class="px-6 py-4">Best Garments Ltd (BD)</td>
+            <td class="px-6 py-4">$50,000.00</td>
+            <td class="px-6 py-4">10 Jan 2026</td>
+            <td class="px-6 py-4">15 Apr 2026</td>
+            <td class="px-6 py-4 text-right">
+              <span class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
+                Create Master LC
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Master LC Requests -->
+  <div class="rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+      <h3 class="text-lg font-medium text-slate-900">Recent Master LC Requests</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-600">
+        <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+          <tr>
+            <th class="px-6 py-3 font-semibold">Request ID</th>
+            <th class="px-6 py-3 font-semibold">Export LC No</th>
+            <th class="px-6 py-3 font-semibold">Supplier</th>
+            <th class="px-6 py-3 font-semibold">Amount</th>
+            <th class="px-6 py-3 font-semibold">Status</th>
+            <th class="px-6 py-3 font-semibold">Date</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+          <tr
+            *ngFor="let req of recentRequests$ | async"
+            class="hover:bg-slate-50 cursor-pointer"
+            [routerLink]="['/trade/master-lc/customer/create']"
+            [queryParams]="{ lc: req.exportLCNo }"
+          >
+            <td class="px-6 py-4 whitespace-nowrap text-blue-700 font-medium">
+              <span class="hover:underline">{{ req.id }}</span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-blue-700">
+              <span class="hover:underline">{{ req.exportLCNo }}</span>
+            </td>
+            <td class="px-6 py-4">{{ req.supplierName }}</td>
+            <td class="px-6 py-4">{{ req.currency }} {{ req.requestedAmount | number:'1.2-2' }}</td>
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium" [ngClass]="getStatusClass(req.status)">
+                {{ req.status }}
+              </span>
+            </td>
+            <td class="px-6 py-4">{{ req.submissionDate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-trade-layout>

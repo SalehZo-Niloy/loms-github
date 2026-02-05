@@ -1,0 +1,242 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Create Request"
+  basePath="/trade"
+>
+    <div class="max-w-3xl mx-auto">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Create DC Advising Request</h1>
+            <p class="text-sm text-gray-500">Submit a new Export LC for advising.</p>
+        </div>
+
+        <!-- Stepper -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <ng-container *ngFor="let step of steps; let i = index; let last = last">
+                    <div class="flex flex-col items-center relative z-10" [class.flex-1]="!last">
+                        <button (click)="goToStep(step.number)" [disabled]="step.number > currentStep"
+                            class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold transition-colors duration-200"
+                            [ngClass]="{
+                  'bg-blue-600 text-white': step.number <= currentStep,
+                  'bg-gray-200 text-gray-500': step.number > currentStep
+                }">
+                            <span *ngIf="step.number >= currentStep">{{ step.number }}</span>
+                            <svg *ngIf="step.number < currentStep" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                                <path fill-rule="evenodd"
+                                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <span class="absolute top-10 text-xs font-medium whitespace-nowrap" [ngClass]="{
+                  'text-blue-600': step.number <= currentStep,
+                  'text-gray-500': step.number > currentStep
+                }">
+                            {{ step.name }}
+                        </span>
+                    </div>
+                    <div *ngIf="!last" class="flex-1 h-0.5 bg-gray-200 relative -top-3 -mx-4">
+                        <div class="h-full bg-blue-600 transition-all duration-300"
+                            [style.width.%]="currentStep > step.number ? 100 : 0"></div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-12">
+            <ng-container [ngSwitch]="currentStep">
+                <!-- Step 1: Applicant -->
+                <div *ngSwitchCase="1">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Applicant Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <app-ui-input label="Applicant Name" [(value)]="data.applicant.name"></app-ui-input>
+                        <app-ui-input label="CIF Number" [(value)]="data.applicant.cif"></app-ui-input>
+                        <app-ui-input label="Account Number" [(value)]="data.applicant.account"></app-ui-input>
+                        <app-ui-input label="Email" type="email" [(value)]="data.applicant.email"></app-ui-input>
+                    </div>
+                </div>
+
+                <!-- Step 2: Export LC -->
+                <div *ngSwitchCase="2">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Export LC Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Upload SWIFT Message (PDF)</label>
+                            <div class="flex items-center space-x-2">
+                                <label class="cursor-pointer bg-white border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                    Choose File
+                                    <input type="file" accept="application/pdf" (change)="handleSwiftPdfUpload($event)" class="hidden">
+                                </label>
+                                <span class="text-sm text-gray-500">No file chosen</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Auto-fills LC fields from SWIFT</p>
+                        </div>
+
+                        <app-ui-input label="LC Number" [(value)]="data.exportLC.lcNo" [required]="true"></app-ui-input>
+                        
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-medium text-slate-700">LC Type</label>
+                            <select [(ngModel)]="data.exportLC.lcType" class="block w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                                <option value="" disabled selected>Select...</option>
+                                <option *ngFor="let type of lcTypes" [value]="type">{{ type }}</option>
+                            </select>
+                        </div>
+
+                        <app-ui-input label="LC Amount (FCY)" [value]="data.exportLC.amount" (valueChange)="data.exportLC.amount=$event; calculateLCY()"></app-ui-input>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-medium text-slate-700">Currency</label>
+                            <select [(ngModel)]="data.exportLC.currency" class="block w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                                <option value="" disabled selected>Select...</option>
+                                <option *ngFor="let curr of currencies" [value]="curr">{{ curr }}</option>
+                            </select>
+                        </div>
+
+                        <app-ui-input label="Exchange Rate" [value]="data.exportLC.exchangeRate" (valueChange)="data.exportLC.exchangeRate=$event; calculateLCY()"></app-ui-input>
+                        
+                        <div class="space-y-1.5">
+                             <label class="text-xs font-medium text-slate-700">LC Amount (LCY)</label>
+                             <input type="text" [value]="data.exportLC.amountLcy" disabled class="block w-full rounded-md border border-slate-200 bg-gray-50 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0">
+                        </div>
+
+                        <app-ui-input label="Issue Date" type="date" [(value)]="data.exportLC.issueDate"></app-ui-input>
+                        
+                        <app-ui-input label="Issuing Bank" [(value)]="data.exportLC.issuingBank"></app-ui-input>
+                        
+                        <div class="md:col-span-2">
+                             <app-ui-input label="Beneficiary Name" [(value)]="data.exportLC.beneficiaryName"></app-ui-input>
+                        </div>
+                    </div>
+                </div>
+                
+                 <!-- Step 3: DC Advice -->
+                <div *ngSwitchCase="3">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">DC Advice Details</h3>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="space-y-1.5">
+                             <label class="text-xs font-medium text-slate-700">DC Number (Auto)</label>
+                             <input type="text" [value]="data.dcAdvice.dcNumber" disabled class="block w-full rounded-md border border-slate-200 bg-gray-50 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0">
+                        </div>
+                        <app-ui-input label="Shipment Date" type="date" [(value)]="data.dcAdvice.shipmentDate"></app-ui-input>
+                        <app-ui-input label="Expiry Date" type="date" [(value)]="data.dcAdvice.expiryDate"></app-ui-input>
+                     </div>
+                </div>
+
+                <!-- Step 4: Documents -->
+                <div *ngSwitchCase="4">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Upload Documents</h3>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-blue-500 transition-colors cursor-pointer relative">
+                        <input type="file" multiple (change)="handleDocumentUpload($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        <div class="space-y-2 pointer-events-none">
+                             <div class="mx-auto h-12 w-12 text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                                </svg>
+                             </div>
+                             <div class="text-sm text-gray-600">
+                                Click to upload files (simulated)
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- File List -->
+                    <div *ngIf="data.documents.length > 0" class="mt-6 space-y-2">
+                        <h4 class="text-sm font-medium text-gray-700">Uploaded Files</h4>
+                        <div *ngFor="let doc of data.documents" class="flex items-center justify-between p-3 bg-gray-50 rounded-md border border-gray-200">
+                            <span class="text-sm text-gray-600">{{ doc.name }}</span>
+                            <div class="flex items-center space-x-3">
+                                <button (click)="previewDocument(doc)" class="text-blue-600 hover:text-blue-800 text-xs font-medium">View</button>
+                                <button (click)="removeDocument(doc)" class="text-red-500 hover:text-red-700 text-xs font-medium">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Review -->
+                <div *ngSwitchCase="5">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Review & Submit</h3>
+                    
+                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-4">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200">
+                            <h4 class="text-sm font-semibold text-gray-900">Applicant</h4>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-sm font-medium text-gray-900">{{ data.applicant.name }} ({{ data.applicant.cif }})</p>
+                            <p class="text-sm text-gray-500">{{ data.applicant.email }}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-4">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200">
+                            <h4 class="text-sm font-semibold text-gray-900">LC Details</h4>
+                        </div>
+                        <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-y-2 text-sm">
+                            <div class="col-span-2">
+                                <span class="text-gray-500">LC No:</span> <span class="font-medium text-gray-900 ml-1">{{ data.exportLC.lcNo }}</span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-500">Issuing Bank:</span> <span class="font-medium text-gray-900 ml-1">{{ data.exportLC.issuingBank || 'undefined' }}</span>
+                            </div>
+                             <div class="col-span-2">
+                                <span class="text-gray-500">Type:</span> <span class="font-medium text-gray-900 ml-1">{{ data.exportLC.lcType || 'undefined' }}</span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-500">Amount:</span> <span class="font-medium text-gray-900 ml-1">{{ data.exportLC.currency }} {{ data.exportLC.amount }}</span>
+                            </div>
+                             <div class="col-span-2">
+                                <span class="text-gray-500">Exchange Rate:</span> <span class="font-medium text-gray-900 ml-1">{{ data.exportLC.exchangeRate }}</span>
+                            </div>
+                             <div class="col-span-2">
+                                <span class="text-gray-500">LC Amount (LCY):</span> <span class="font-medium text-gray-900 ml-1">{{ data.exportLC.amountLcy }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                        <div class="p-4 bg-gray-50 border-b border-gray-200">
+                            <h4 class="text-sm font-semibold text-gray-900">Documents</h4>
+                        </div>
+                        <div class="p-4">
+                            <div *ngIf="data.documents.length === 0" class="text-sm text-gray-500 italic">No documents uploaded</div>
+                            <div *ngIf="data.documents.length > 0" class="space-y-2">
+                                <div *ngFor="let doc of data.documents" class="flex items-center justify-between p-3 bg-gray-50 rounded-md border border-gray-200">
+                                    <span class="text-sm text-gray-700">{{ doc.name }}</span>
+                                    <button (click)="previewDocument(doc)" class="text-blue-600 hover:text-blue-800 text-xs font-medium">Preview</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-8 flex items-center justify-between border-t border-slate-100 pt-6">
+            <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+                Save Draft
+            </button>
+
+            <div class="flex items-center gap-3">
+                <button *ngIf="currentStep > 1" (click)="prevStep()" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-md border border-slate-300">
+                    Back
+                </button>
+                
+                <button *ngIf="currentStep < 5" (click)="nextStep()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm">
+                    Next Step
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+
+                <button *ngIf="currentStep === 5" (click)="submit()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm">
+                    Submit Request
+                </button>
+            </div>
+        </div>
+    </div>
+</app-trade-layout>

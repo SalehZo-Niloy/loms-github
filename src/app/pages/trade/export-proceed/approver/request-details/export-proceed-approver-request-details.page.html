@@ -1,0 +1,196 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Proceed Details"
+  basePath="/trade"
+>
+  <!-- Header -->
+  <div class="mb-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <h1 class="text-2xl font-bold text-slate-900">{{ proceedDetails.id }}</h1>
+        <span class="rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-800">
+          {{ formatStatus(proceedDetails.status) }}
+        </span>
+      </div>
+      <div class="flex gap-3">
+        <a routerLink="/trade/export-proceed/approver/dashboard" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+          Back
+        </a>
+      </div>
+    </div>
+    <div class="mt-2 text-sm text-slate-500">
+      {{ proceedDetails.customer }} • {{ proceedDetails.refBill }}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+      
+      <!-- Approval Actions -->
+      <div class="rounded-xl border border-blue-100 bg-blue-50 p-6 shadow-sm">
+        <div class="mb-4">
+          <h2 class="text-lg font-semibold text-blue-900">Final Approval</h2>
+          <p class="mt-1 text-sm text-blue-700">Review the proceed details and provide your approval decision.</p>
+        </div>
+        <div class="flex gap-4">
+          <button (click)="approve()" class="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            Approve Request
+          </button>
+          <button (click)="reject()" class="flex items-center gap-2 rounded-lg border border-red-200 bg-white px-6 py-2.5 text-sm font-medium text-red-600 shadow-sm hover:bg-red-50 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Reject
+          </button>
+        </div>
+      </div>
+      
+      <!-- SWIFT / Receipt Details -->
+      <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-200 px-6 py-4">
+          <h2 class="text-lg font-semibold text-slate-900">SWIFT / Receipt Details</h2>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <p class="text-sm text-slate-500">SWIFT Reference</p>
+              <p class="mt-1 font-medium text-slate-900">{{ proceedDetails.swiftRef }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Value Date</p>
+              <p class="mt-1 font-medium text-slate-900">{{ proceedDetails.valueDate }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Currency</p>
+              <p class="mt-1 font-medium text-slate-900">{{ proceedDetails.currency }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Amount</p>
+              <p class="mt-1 font-medium text-slate-900">{{ proceedDetails.amount | number:'1.2-2' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distribution & Adjustment -->
+      <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-200 px-6 py-4">
+          <h2 class="text-lg font-semibold text-slate-900">Distribution & Adjustment</h2>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-y-6 gap-x-12">
+            <div>
+              <p class="text-sm text-slate-500">Credit to Customer</p>
+              <p class="mt-1 font-medium text-slate-900">{{ distributionSummary.creditToCustomer | currency:'USD' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Loan Adjustment</p>
+              <p class="mt-1 font-medium text-slate-900">{{ distributionSummary.loanAdjustment | currency:'USD' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Investment Adjustment</p>
+              <p class="mt-1 font-medium text-slate-900">{{ distributionSummary.investmentAdjustment | currency:'USD' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Total Charges</p>
+              <p class="mt-1 font-medium text-slate-900">{{ distributionSummary.totalCharges | currency:'USD' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Customer Details -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-4">Customer Details</h3>
+        <div class="space-y-4">
+          <div>
+            <p class="text-xs text-slate-500">Name</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.customer }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500">CIF</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.cif }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500">Account No</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.accountNo }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- References -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-4">References</h3>
+        <div class="space-y-4">
+          <div>
+            <p class="text-xs text-slate-500">Bill Number</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.refBill }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500">LC Number</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.refLC }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-4">History</h3>
+        <div class="relative border-l border-slate-200 ml-2 space-y-8">
+          
+          <div class="ml-6 relative">
+             <div class="absolute -left-[31px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-slate-300"></div>
+             <div class="flex justify-between items-start">
+               <div>
+                 <p class="text-sm font-medium text-slate-900">Distribution prepared.</p>
+                 <p class="text-xs text-slate-500 mt-0.5">Submitted for approval.</p>
+               </div>
+               <div class="text-right">
+                 <p class="text-xs text-slate-500">19 Jan 2026, 19:38</p>
+                 <p class="text-xs font-medium text-slate-900">Trade Officer</p>
+               </div>
+            </div>
+          </div>
+
+          <div class="ml-6 relative">
+            <div class="absolute -left-[31px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-slate-300"></div>
+             <div class="flex justify-between items-start">
+               <div>
+                 <p class="text-sm font-medium text-slate-900">SWIFT details validated</p>
+                 <p class="text-xs text-slate-500 mt-0.5">successfully.</p>
+               </div>
+               <div class="text-right">
+                 <p class="text-xs text-slate-500">19 Jan 2026, 19:23</p>
+                 <p class="text-xs font-medium text-slate-900">Trade Officer</p>
+               </div>
+            </div>
+          </div>
+
+          <div class="ml-6 relative">
+            <div class="absolute -left-[31px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-slate-300"></div>
+            <div class="flex justify-between items-start">
+               <div>
+                 <p class="text-sm font-medium text-slate-900">Proceed Received</p>
+                 <p class="text-xs text-slate-500 mt-0.5">manually via Dashboard</p>
+               </div>
+               <div class="text-right">
+                 <p class="text-xs text-slate-500">19 Jan 2026, 19:19</p>
+                 <p class="text-xs font-medium text-slate-900">System</p>
+               </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</app-trade-layout>

@@ -1,0 +1,170 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Request Details"
+  basePath="/trade"
+>
+  <div class="details-container p-6 bg-slate-50 min-h-screen" *ngIf="request">
+    <!-- Header -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 mb-6">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-4">
+          <h1 class="text-2xl font-bold text-slate-900">{{ request.id }}</h1>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(request.status)">
+            {{ request.status.replace('_', ' ') }}
+          </span>
+        </div>
+        <button (click)="goBack()" class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors border border-transparent hover:border-slate-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Back
+        </button>
+      </div>
+      <div class="text-sm text-slate-500">
+        Applicant: {{ request.applicant.name }} • LC: {{ request.exportLC.lcNo }}
+      </div>
+    </div>
+
+    <!-- Action Section -->
+    <div class="bg-indigo-50 border border-indigo-100 p-6 rounded-lg shadow-sm mb-6">
+      <h3 class="text-lg font-semibold text-indigo-900 mb-2">RO Validation</h3>
+      <p class="text-indigo-700 mb-4 text-sm">Review documents and validate the request.</p>
+      
+      <div class="flex gap-4">
+        <button 
+          (click)="passValidation()"
+          class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+        >
+          Pass Validation
+        </button>
+        <button 
+          (click)="returnToCustomer()"
+          class="bg-white text-slate-700 border border-slate-300 px-6 py-2 rounded-lg font-medium hover:bg-slate-50 transition-colors"
+        >
+          Return to Customer
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Documents -->
+        <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+          <h3 class="text-lg font-semibold text-slate-900 mb-4">Documents</h3>
+          <div class="space-y-4">
+            <div *ngFor="let doc of request.documents" class="flex items-start gap-4 p-4 border border-slate-200 rounded-lg">
+              <div class="text-slate-400 text-2xl">
+                <i class="far fa-file-pdf"></i>
+              </div>
+              <div class="flex-1">
+                <div class="font-medium text-slate-900">{{ doc.name }}</div>
+                <div class="text-xs text-slate-500 mt-1">
+                  {{ (doc.size || 0) / 1024 | number:'1.0-0' }} KB • {{ doc.uploadDate }}
+                </div>
+                <div class="mt-2 flex items-center gap-2">
+                    <span 
+                        class="text-xs font-semibold px-2 py-0.5 rounded"
+                        [ngClass]="{
+                            'bg-green-100 text-green-700': doc.status === 'VALID',
+                            'bg-red-100 text-red-700': doc.status === 'INVALID',
+                            'bg-yellow-100 text-yellow-700': doc.status === 'PENDING'
+                        }"
+                    >
+                        {{ doc.status }}
+                    </span>
+                    <button 
+                        (click)="toggleDocumentStatus(doc)"
+                        class="text-xs text-blue-600 hover:text-blue-800 font-medium underline"
+                    >
+                        Toggle Status
+                    </button>
+                </div>
+                <div *ngIf="doc.remark" class="text-xs text-red-600 mt-1">Remark: {{ doc.remark }}</div>
+              </div>
+            </div>
+            <div *ngIf="request.documents.length === 0" class="text-slate-500 text-center py-4">
+              No documents uploaded
+            </div>
+          </div>
+        </div>
+
+        <!-- LC Details -->
+        <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+          <h3 class="text-lg font-semibold text-slate-900 mb-4">LC & Advice Details</h3>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">LC Number</label>
+              <div class="font-medium text-slate-900">{{ request.exportLC.lcNo }}</div>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">LC Type</label>
+              <div class="font-medium text-slate-900">{{ request.exportLC.lcType }}</div>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">Issuing Bank</label>
+              <div class="font-medium text-slate-900">{{ request.exportLC.issuingBank }}</div>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">Beneficiary</label>
+              <div class="font-medium text-slate-900">{{ request.exportLC.beneficiaryName }}</div>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">Amount (FCY)</label>
+              <div class="font-medium text-slate-900">{{ request.exportLC.currency }} {{ request.exportLC.amount | number }}</div>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">Amount (LCY)</label>
+              <div class="font-medium text-slate-900">{{ request.exportLC.amountLcy | number }}</div>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">Expiry Date</label>
+              <div class="font-medium text-slate-900">{{ request.exportLC.expiryDate }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Applicant -->
+        <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+          <h3 class="text-lg font-semibold text-slate-900 mb-4">Applicant</h3>
+          <div class="space-y-3">
+            <div>
+              <div class="text-xs text-slate-500">Name</div>
+              <div class="font-medium text-slate-900">{{ request.applicant.name }}</div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-500">CIF</div>
+              <div class="font-medium text-slate-900">{{ request.applicant.cif }}</div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-500">Account</div>
+              <div class="font-medium text-slate-900">{{ request.applicant.account }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+          <h3 class="text-lg font-semibold text-slate-900 mb-4">History</h3>
+          <div class="relative pl-4 border-l-2 border-slate-100 space-y-6">
+            <div *ngFor="let event of request.history" class="relative">
+              <div class="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-blue-600 border-2 border-white ring-1 ring-slate-100"></div>
+              <div>
+                <div class="flex justify-between items-baseline mb-1">
+                  <span class="font-semibold text-slate-900 text-sm">{{ event.status.replace('_', ' ') }}</span>
+                  <span class="text-xs text-slate-500">{{ event.date }}</span>
+                </div>
+                <div class="text-xs text-slate-500 mb-2">by {{ event.actor }}</div>
+                <div *ngIf="event.comment" class="bg-slate-50 p-2 rounded text-xs text-slate-600">
+                  {{ event.comment }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-trade-layout>

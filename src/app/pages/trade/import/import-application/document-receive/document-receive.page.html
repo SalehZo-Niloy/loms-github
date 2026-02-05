@@ -1,0 +1,219 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Document Receive"
+  basePath="/trade"
+>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-lg font-semibold text-slate-900">{{ header.title }}</h1>
+        <p class="mt-1 text-xs text-slate-500">{{ header.subtitle }}</p>
+      </div>
+      <!-- <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+      >
+        <span class="text-base">←</span>
+        Back to LC Details
+      </button> -->
+    </div>
+  </section>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+    <div class="space-y-6">
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">LC Reference Information</h2>
+          <span
+            class="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700"
+            >Active</span
+          >
+        </div>
+        <div class="grid gap-4 px-6 py-5 sm:grid-cols-2">
+          <div *ngFor="let item of referenceInfo">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              {{ item.label }}
+            </div>
+            <div class="mt-1 text-sm font-semibold text-slate-900">{{ item.value }}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Export Documents</h2>
+          <button type="button" class="text-xs font-semibold text-slate-500 hover:text-slate-700">
+            Mark received documents
+          </button>
+        </div>
+        <div class="space-y-3 px-6 py-5">
+          <label
+            *ngFor="let document of documents"
+            class="flex items-center justify-between gap-4 rounded-xl border border-slate-200 px-4 py-3"
+          >
+            <div class="flex items-center gap-3">
+              <input type="checkbox" [(ngModel)]="document.received" class="h-4 w-4" />
+              <div>
+                <div class="text-xs font-semibold text-slate-900">{{ document.name }}</div>
+                <div class="text-[11px] text-slate-500">{{ document.description }}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 text-[11px]">
+              <span
+                class="rounded-full px-2 py-0.5 font-semibold"
+                [ngClass]="
+                  document.required ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
+                "
+              >
+                {{ document.required ? 'Required' : 'Optional' }}
+              </span>
+              <span class="text-slate-400">●</span>
+              <span class="text-slate-500">View</span>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Receipt Details</h2>
+        </div>
+        <div class="grid gap-4 px-6 py-5 sm:grid-cols-2">
+          <label class="text-xs text-slate-600">
+            <span class="mb-2 block font-semibold text-slate-700">Receiving Date</span>
+            <input
+              type="date"
+              [(ngModel)]="receiptDetails.date"
+              class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900"
+            />
+          </label>
+          <label class="text-xs text-slate-600">
+            <span class="mb-2 block font-semibold text-slate-700">Receiving Time</span>
+            <input
+              type="time"
+              [(ngModel)]="receiptDetails.time"
+              class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900"
+            />
+          </label>
+          <label class="text-xs text-slate-600">
+            <span class="mb-2 block font-semibold text-slate-700">Received By</span>
+            <input
+              type="text"
+              [value]="receiptDetails.receivedBy"
+              class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              readonly
+            />
+          </label>
+          <label class="text-xs text-slate-600">
+            <span class="mb-2 block font-semibold text-slate-700">Delivery Method</span>
+            <select
+              [(ngModel)]="receiptDetails.deliveryMethod"
+              class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900"
+            >
+              <option *ngFor="let method of deliveryMethods" [value]="method">
+                {{ method }}
+              </option>
+            </select>
+          </label>
+          <label class="sm:col-span-2 text-xs text-slate-600">
+            <span class="mb-2 block font-semibold text-slate-700">Additional Notes</span>
+            <textarea
+              [(ngModel)]="receiptDetails.notes"
+              rows="3"
+              placeholder="Enter any additional notes about the document receipt..."
+              class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400"
+            ></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <app-ui-button variant="secondary">Cancel</app-ui-button>
+          <div class="flex flex-wrap items-center gap-2">
+            <app-ui-button variant="secondary">Save Draft</app-ui-button>
+            <button
+              type="button"
+              (click)="onConfirmReceipt()"
+              class="rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-700"
+            >
+              Confirm Receipt
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="space-y-6">
+      <section class="rounded-2xl bg-emerald-600 px-5 py-4 text-white shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Receipt Summary</div>
+            <div class="text-[11px] text-emerald-100">Documents Received</div>
+          </div>
+          <span class="text-lg font-semibold"
+            >{{ documentsReceivedCount }} / {{ documents.length }}</span
+          >
+        </div>
+        <div class="mt-4 space-y-3 text-xs">
+          <div class="flex items-center justify-between border-b border-white/20 pb-2">
+            <span>Required Documents</span>
+            <span class="font-semibold"
+              >{{ receivedRequiredCount }} / {{ requiredDocumentsCount }}</span
+            >
+          </div>
+          <div class="flex items-center justify-between border-b border-white/20 pb-2">
+            <span>Optional Documents</span>
+            <span class="font-semibold"
+              >{{ receivedOptionalCount }} / {{ optionalDocumentsCount }}</span
+            >
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Completion Status</span>
+            <span class="font-semibold">{{ completionPercent }}%</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-5 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Document Process Flow</h2>
+        </div>
+        <div class="space-y-3 px-5 py-4 text-xs text-slate-600">
+          <div *ngFor="let step of processSteps" class="flex items-start gap-3">
+            <span
+              class="flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold"
+              [ngClass]="
+                step.status === 'completed'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : step.status === 'current'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-slate-100 text-slate-500'
+              "
+            >
+              <span *ngIf="step.status === 'completed'">✓</span>
+              <span *ngIf="step.status !== 'completed'">•</span>
+            </span>
+            <div>
+              <div class="font-semibold text-slate-900">{{ step.title }}</div>
+              <div class="text-[11px] text-slate-400">{{ step.note }}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 text-xs text-blue-700"
+      >
+        <div class="font-semibold">Document Guidelines</div>
+        <p class="mt-1 text-[11px] text-blue-700">
+          Ensure all required documents are received before confirming receipt.
+        </p>
+        <button type="button" class="mt-2 text-[11px] font-semibold text-blue-700">
+          View Guidelines
+        </button>
+      </section>
+    </aside>
+  </div>
+</app-trade-layout>

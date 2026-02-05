@@ -1,0 +1,530 @@
+<app-trade-layout
+  organisationName="Trade Finance Operations"
+  solutionName="Guarantee Officer"
+  breadcrumb="SWIFT MT767 - Guarantee Amendment"
+  basePath="/trade"
+>
+  <div class="space-y-6">
+    <section class="rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-[11px] text-blue-100 shadow-sm">
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="grid flex-1 gap-4 md:grid-cols-6">
+          <div class="space-y-1">
+            <div class="font-semibold uppercase tracking-wide">
+              Amendment Request ID
+            </div>
+            <div class="text-sm font-semibold text-white">
+              AMD-2024-00789
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="font-semibold uppercase tracking-wide">
+              Original Guarantee Ref
+            </div>
+            <div class="text-sm font-semibold text-white">
+              GTR-2024-001234
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="font-semibold uppercase tracking-wide">
+              Guarantee Type
+            </div>
+            <div class="text-sm font-semibold text-white">
+              Performance Guarantee
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="font-semibold uppercase tracking-wide">
+              Original Amount
+            </div>
+            <div class="text-sm font-semibold text-white">
+              USD 500,000
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="font-semibold uppercase tracking-wide">
+              Submitted By
+            </div>
+            <div class="text-sm font-semibold text-white">
+              Al Khaleej Trading LLC
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="font-semibold uppercase tracking-wide">
+              Submission Date
+            </div>
+            <div class="text-sm font-semibold text-white">
+              15-Jan-2024 14:32
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-2 text-xs">
+          <div class="inline-flex items-center gap-2 rounded-full bg-blue-500/20 px-3 py-1 text-[11px] font-semibold text-white">
+            <span>MT767 Preparation</span>
+          </div>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-100 hover:text-white"
+            (click)="goBackToReview()"
+          >
+            ← Back to Review
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-[2.4fr,1.1fr]">
+      <div class="space-y-5">
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-blue-600"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 18v-6m0-4h.01"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Group 1: Message Identification (Mandatory)
+              </div>
+              <div class="text-[11px] text-slate-500">
+                Core reference fields for the MT767 amendment message.
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                :27: Sequence of Total
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900">
+                1/1
+              </div>
+              <div class="text-[10px] text-slate-400">
+                System-generated, read-only
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                :20: Transaction Reference Number
+              </div>
+              <div class="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900">
+                AMD2024-00789
+              </div>
+              <div class="text-[10px] text-slate-400">
+                System-generated
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                :21: Related Reference (Original Guarantee)
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900">
+                GTR2024001234
+              </div>
+              <div class="text-[10px] text-slate-400">
+                Auto-filled from guarantee reference
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                :23: Further Identification
+              </div>
+              <div class="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900">
+                AMND
+              </div>
+              <div class="text-[10px] text-slate-400">
+                System-derived (Amendment)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12.75 11.25 15 15 9.75"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.5 12a7.5 7.5 0 1 0 15 0 7.5 7.5 0 0 0-15 0z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Group 2: Amendment Control Information (Mandatory)
+              </div>
+              <div class="text-[11px] text-slate-500">
+                Controls the effective date of the amendment.
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                :31C: Date of Issue / Request to Issue
+              </div>
+              <div
+                class="flex items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900"
+              >
+                <span>19/12/2024</span>
+                <span class="text-[13px] text-slate-400">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 3v3m8-3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v11H4V7a2 2 0 0 1 2-2z"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <div class="text-[10px] text-slate-400">
+                System date (editable if policy allows)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-amber-300 bg-amber-50 p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-xs font-semibold text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v4m0 4h.01"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-amber-900">
+                Group 3: Amendment Details (CRITICAL)
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 space-y-3">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                :77C: Amendment Details
+              </div>
+              <textarea
+                rows="10"
+                class="mt-1 w-full rounded-md border border-amber-300 bg-white px-3 py-2 font-mono text-[11px] text-slate-900 outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+              >
+AMENDMENT TO GUARANTEE GTR2024001234
+
+AMOUNT INCREASED FROM USD 500,000.00 TO USD 750,000.00
+EXPIRY DATE EXTENDED FROM 31-DEC-2024 TO 30-JUN-2025
+EFFECTIVE DATE: 19-JAN-2024
+
+ALL OTHER TERMS REMAIN UNCHANGED
+BENEFICIARY: EMIRATES CONSTRUCTION LLC
+GOVERNING RULES: URDG 758
+CLAIM PERIOD: 30 DAYS (UNCHANGED)
+MARGIN: ADDITIONAL USD 25,000 REQUIRED
+              </textarea>
+            </div>
+            <div class="rounded-lg border border-amber-200 bg-amber-50 p-3 text-[11px] text-amber-900">
+              <div class="flex items-center gap-2">
+                <div class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-[11px] font-semibold text-amber-700">
+                  1
+                </div>
+                <div class="font-semibold">
+                  SWIFT Format Requirements
+                </div>
+              </div>
+              <ul class="mt-2 ml-6 list-disc space-y-1">
+                <li>Maximum 65 characters per line</li>
+                <li>Use uppercase letters only</li>
+                <li>No special characters except / : . , -</li>
+                <li>Reference original guarantee number</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <h2 class="text-sm font-semibold text-slate-900">
+            SWIFT Routing Information
+          </h2>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Sender BIC
+              </div>
+              <div class="rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-xs text-slate-900">
+                ADCBAEADXXX
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Receiver BIC
+              </div>
+              <div class="rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-xs text-slate-900">
+                CITI AEXXXXX
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-slate-900 p-5 text-xs text-emerald-200 shadow-inner">
+          <div class="flex items-center justify-between text-[10px] text-slate-400">
+            <span>MT767</span>
+            <span>Preview • SWIFT FIN</span>
+          </div>
+          <div class="mt-3 max-h-[360px] overflow-auto rounded-xl bg-slate-950/40 p-3 font-mono text-[11px] leading-relaxed">
+            <pre class="whitespace-pre">
+&#123;1:F01ADCBAEADAXXX0000000000&#125;&#123;2:O7671124200111ADCBAEADAXXX00000000002001111124N&#125;&#123;4:
+:20:AMD-2024-00789
+:21:GTR2024001234
+:23:AMND
+:31C:241219
+:77C:AMENDMENT TO GUARANTEE GTR2024001234
+AMOUNT INCREASED FROM USD 500,000.00 TO USD 750,000.00
+EXPIRY DATE EXTENDED FROM 31-DEC-2024 TO 30-JUN-2025
+ALL OTHER TERMS REMAIN UNCHANGED
+BENEFICIARY: EMIRATES CONSTRUCTION LLC
+MARGIN: ADDITIONAL USD 25,000 REQUIRED
+-&#125;
+            </pre>
+          </div>
+        </section>
+      </div>
+
+      <section class="space-y-4">
+        <section class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-xs shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-slate-900">
+              Validation Panel
+            </h2>
+          </div>
+          <div class="mt-4 space-y-2 text-[11px]">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-emerald-800">
+              Validation Status
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between rounded-md bg-emerald-100 px-3 py-2 text-emerald-800">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12.75 11.25 15 15 9.75"
+                      />
+                    </svg>
+                  </span>
+                  <span>All mandatory MT767 fields populated</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between rounded-md bg-emerald-100 px-3 py-2 text-emerald-800">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12.75 11.25 15 15 9.75"
+                      />
+                    </svg>
+                  </span>
+                  <span>Amendment references original guarantee</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between rounded-md bg-emerald-100 px-3 py-2 text-emerald-800">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12.75 11.25 15 15 9.75"
+                      />
+                    </svg>
+                  </span>
+                  <span>Amount and dates consistent</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between rounded-md bg-emerald-100 px-3 py-2 text-emerald-800">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12.75 11.25 15 15 9.75"
+                      />
+                    </svg>
+                  </span>
+                  <span>SWIFT format validated</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between rounded-md bg-blue-50 px-3 py-2 text-blue-700">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] text-white"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 5v14m0 0 5-5m-5 5-5-5"
+                      />
+                    </svg>
+                  </span>
+                  <span>Ready for escalation</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 space-y-2">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              SWIFT Details
+            </div>
+            <div class="rounded-xl border border-emerald-100 bg-white p-3 text-[11px] text-slate-700">
+              <div class="flex items-center justify-between">
+                <span>Message Type</span>
+                <span class="font-semibold text-slate-900">MT767</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span>Priority</span>
+                <span class="font-semibold text-slate-900">Normal</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span>Delivery</span>
+                <span class="font-semibold text-slate-900">SWIFT Network</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span>Status</span>
+                <span class="font-semibold text-amber-700">Draft Ready</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 space-y-2">
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+              (click)="navigateToFinalReview()"
+            >
+              Generate SWIFT MT767
+            </button>
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md border border-blue-600 bg-white px-4 py-2 text-[11px] font-semibold text-blue-700 hover:bg-blue-50"
+            >
+              Save SWIFT Draft
+            </button>
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md border border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-100"
+            >
+              Cancel
+            </button>
+          </div>
+          <div class="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
+            Important: Once generated, this SWIFT message cannot be modified. Ensure all details are accurate before
+            proceeding.
+          </div>
+        </section>
+      </section>
+    </section>
+  </div>
+</app-trade-layout>

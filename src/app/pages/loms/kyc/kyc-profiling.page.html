@@ -1,0 +1,219 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="KYC Profiling"
+  basePath="/loms"
+>
+  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-4 w-full flex-1 max-w-screen-xl mx-auto">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-semibold text-slate-900">
+        KYC Profiling: {{ item?.applicant }}
+      </h1>
+      <div class="text-sm text-slate-600">
+        App ID: <span class="font-medium text-slate-800">{{ item?.appId }}</span>
+      </div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
+      <div class="space-y-4">
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm text-sm text-slate-800">
+          <div class="mb-3 text-sm font-semibold text-slate-900">
+            Applicant Summary
+          </div>
+          <div class="grid gap-3 md:grid-cols-3">
+            <div>
+              <div class="text-xs text-slate-500">Applicant</div>
+              <div class="font-medium text-slate-900">
+                {{ item?.applicant }}
+              </div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-500">Product</div>
+              <div class="font-medium text-slate-900">
+                {{ item?.product }}
+              </div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-500">Application ID</div>
+              <div class="font-medium text-slate-900">
+                {{ item?.appId }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-3 text-sm">
+            <div class="text-sm font-semibold text-slate-900">
+              1. Eligibility & Screening
+            </div>
+            <div class="grid gap-3 md:grid-cols-3">
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-slate-700">
+                  Applicant Age
+                </label>
+                <input
+                  type="number"
+                  class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                  [(ngModel)]="applicantAge"
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-slate-700">
+                  PEP Status
+                </label>
+                <select
+                  class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                  [(ngModel)]="isPep"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-slate-700">
+                  Sanctions Screening Result
+                </label>
+                <select
+                  class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                  [(ngModel)]="sanctionsResult"
+                >
+                  <option value="Clear">Clear</option>
+                  <option value="Hit">Hit</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-3 text-sm">
+            <div class="text-sm font-semibold text-slate-900">
+              2. Demographic Information
+            </div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-slate-700">
+                  Full Legal Name
+                </label>
+                <input
+                  type="text"
+                  class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                  [ngModel]="item?.applicant"
+                  readonly
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-slate-700">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-3 text-sm">
+            <div class="text-sm font-semibold text-slate-900">
+              3. Financial Profile
+            </div>
+            <div class="grid gap-3 md:grid-cols-3">
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-slate-700">
+                  Monthly Income
+                </label>
+                <input
+                  type="number"
+                  class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                  [(ngModel)]="monthlyIncome"
+                />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-slate-700">
+                  Primary Source of Funds
+                </label>
+                <select
+                  class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                >
+                  <option>Salary</option>
+                  <option>Business</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-slate-700">
+                  Main Bank Name
+                </label>
+                <input
+                  type="text"
+                  class="w-full rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-3 text-sm">
+            <div class="text-sm font-semibold text-slate-900">
+              4. Document Checklist
+            </div>
+            <div class="grid gap-3 md:grid-cols-3">
+              <label class="flex items-center gap-2 text-xs text-slate-800">
+                <input type="checkbox" />
+                <span>ID Copy (Required)</span>
+              </label>
+              <label class="flex items-center gap-2 text-xs text-slate-800">
+                <input type="checkbox" />
+                <span>Utility Bill (Proof of address)</span>
+              </label>
+              <label class="flex items-center gap-2 text-xs text-slate-800">
+                <input type="checkbox" />
+                <span>Income documents</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3">
+            <button
+              type="button"
+              class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700"
+              (click)="saveDraft()"
+            >
+              Save Draft
+            </button>
+            <button
+              type="button"
+              class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              (click)="submitForApproval()"
+            >
+              Submit for Approval
+            </button>
+          </div>
+        </div>
+
+        </div>
+
+        <div class="space-y-4">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm text-sm">
+            <div class="mb-3 text-sm font-semibold text-slate-900">
+              Risk Assessment
+            </div>
+            <div class="flex flex-col items-center justify-center gap-2 py-4">
+              <div class="text-4xl font-semibold text-slate-900">
+                {{ riskScore }}
+              </div>
+              <div class="text-xs text-slate-500">
+                Overall risk score (0–100)
+              </div>
+              <button
+                type="button"
+                class="mt-2 rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                (click)="recalculateRisk()"
+              >
+                Recalculate
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</app-loms-layout>

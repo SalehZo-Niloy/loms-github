@@ -1,0 +1,97 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="User Management"
+  breadcrumb="Users"
+  basePath="/ums"
+  primarySectionLabel="UMS"
+  [mainMenuItems]="menuItems"
+>
+  <div class="space-y-6">
+    <section class="flex items-center justify-between">
+      <div class="space-y-1">
+        <h1 class="text-lg font-semibold" [ngClass]="theme.text.primary">
+          Users
+        </h1>
+        <p class="text-sm text-slate-600">
+          Manage platform users, their roles, designations and permissions.
+        </p>
+      </div>
+      <a
+        routerLink="/ums/users/create"
+        class="inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium shadow-sm hover:bg-blue-700"
+        [ngClass]="theme.button.primary"
+      >
+        Create user
+      </a>
+    </section>
+
+    <section>
+      <app-ui-table>
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              User
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Role
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Designation
+            </th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Status
+            </th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white">
+          <tr
+            *ngFor="let user of users"
+            class="cursor-pointer hover:bg-slate-50"
+            [routerLink]="['/ums/users', user.id, 'edit']"
+          >
+            <td class="px-4 py-3">
+              <div class="flex flex-col">
+                <span class="text-sm font-semibold" [ngClass]="theme.text.primary">
+                  {{ user.name }}
+                </span>
+                <span class="text-xs" [ngClass]="theme.text.muted">
+                  {{ user.email }}
+                </span>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-sm text-slate-700">
+              {{ user.role }}
+            </td>
+            <td class="px-4 py-3 text-sm text-slate-700">
+              {{ user.designation }}
+            </td>
+            <td class="px-4 py-3 text-sm">
+              <span
+                class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium"
+                [ngClass]="{
+                  'bg-green-50 text-green-700': user.status === 'Active',
+                  'bg-amber-50 text-amber-700': user.status === 'Invited',
+                  'bg-red-50 text-red-700': user.status === 'Suspended'
+                }"
+              >
+                {{ user.status }}
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex justify-end gap-2">
+                <span
+                  class="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700"
+                >
+                  Edit
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </app-ui-table>
+    </section>
+  </div>
+</app-trade-layout>

@@ -1,0 +1,185 @@
+<app-trade-layout>
+  <div class="p-6 bg-gray-50 min-h-screen" *ngIf="bill">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold text-gray-800">Bill Details</h1>
+      <div class="flex items-center space-x-4">
+        
+      </div>
+    </div>
+
+    <!-- Bill Header Card -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div class="flex justify-between items-start">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h2 class="text-3xl font-bold text-gray-900">{{ bill.id }}</h2>
+            <span [class]="'px-2.5 py-0.5 rounded-full text-xs font-medium uppercase ' + getStatusClass(bill.status)">
+              {{ bill.status.replace('_', ' ') }}
+            </span>
+          </div>
+          <p class="text-gray-500">
+            LC: {{ bill.lcNumber }} • Customer: {{ bill.customerName }}
+          </p>
+        </div>
+        <button (click)="goBack()" class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-white rounded-md transition-colors border border-transparent hover:border-slate-200">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back
+        </button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="bg-indigo-50 border border-indigo-100 p-6 rounded-lg shadow-sm mb-6" *ngIf="bill.status === 'APPROVED' || bill.status === 'VERIFIED'">
+      <h3 class="text-lg font-semibold text-indigo-900 mb-2">Final Approval</h3>
+      <p class="text-indigo-700 mb-4 text-sm">Review the verified request and provide final approval to send to the importer.</p>
+      <div class="flex gap-4">
+        <button (click)="approveRequest()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors shadow-sm flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          Approve Request
+        </button>
+        <button (click)="rejectRequest()" class="bg-white text-red-600 border border-red-200 hover:bg-red-50 font-medium py-2 px-6 rounded-lg transition-colors shadow-sm flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+          Reject
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Left Column -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Documents -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Documents</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+              <div class="flex items-center gap-3">
+                <div class="p-2 bg-gray-200 rounded text-gray-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-900">Invoice.pdf</p>
+                  <p class="text-xs text-gray-500 flex items-center gap-1">
+                    Invoice <span class="text-blue-600 flex items-center gap-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Verified</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+              <div class="flex items-center gap-3">
+                <div class="p-2 bg-gray-200 rounded text-gray-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-900">BL.pdf</p>
+                  <p class="text-xs text-gray-500 flex items-center gap-1">
+                    Bill of Lading <span class="text-blue-600 flex items-center gap-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Verified</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bill & Buyer Info -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Bill & Buyer Information</h3>
+          <div class="grid grid-cols-2 gap-y-6 gap-x-8">
+            <div>
+              <p class="text-sm text-gray-500">Buyer Name</p>
+              <p class="font-medium text-gray-900">{{ bill.buyerName }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Buyer Country</p>
+              <p class="font-medium text-gray-900">{{ bill.country }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Buyer Bank</p>
+              <p class="font-medium text-gray-900">{{ bill.issuingBank }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Collection Type</p>
+              <p class="font-medium text-gray-900">{{ bill.collectionType }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Tenor</p>
+              <p class="font-medium text-gray-900">{{ bill.tenor }} Days</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Amount</p>
+              <p class="text-xl font-bold text-blue-600">{{ bill.currency }} {{ bill.amount | number:'1.2-2' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Maturity Date</p>
+              <p class="font-medium text-gray-900">01 Mar 2026</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column -->
+      <div class="lg:col-span-1">
+        
+        <!-- Tracking History -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Tracking History</h3>
+          <div class="relative pl-4 border-l-2 border-gray-200 space-y-8">
+            
+            <!-- Item 1 -->
+            <div class="relative">
+              <div class="absolute -left-[21px] bg-white p-0.5">
+                <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+              </div>
+              <div>
+                <div class="flex justify-between items-start">
+                  <p class="font-medium text-gray-900">Verified</p>
+                  <div class="text-right">
+                    <p class="text-xs text-gray-500">19 Jan</p>
+                    <p class="text-xs text-gray-400">2026, 11:03</p>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-500 uppercase mt-0.5">by TRADE_OFFICER</p>
+                <div class="mt-2 p-3 bg-gray-50 rounded text-sm text-gray-600 border border-gray-100">
+                  Documents verified. Compliance check passed.
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="relative">
+              <div class="absolute -left-[21px] bg-white p-0.5">
+                <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
+              </div>
+              <div>
+                <div class="flex justify-between items-start">
+                  <p class="font-medium text-gray-900">Submitted</p>
+                  <div class="text-right">
+                    <p class="text-xs text-gray-500">18 Jan 2026, 11:03</p>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-500 uppercase mt-0.5">by EXPORTER</p>
+                <div class="mt-2 p-2 bg-gray-50 rounded text-sm text-gray-600 border border-gray-100">
+                  Submitted
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</app-trade-layout>

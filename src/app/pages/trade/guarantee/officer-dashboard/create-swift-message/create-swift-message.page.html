@@ -1,0 +1,1478 @@
+<app-trade-layout
+  organisationName="Trade Finance Operations"
+  solutionName="Guarantee Officer"
+  breadcrumb="Create SWIFT Message – MT760"
+  basePath="/trade"
+>
+  <div class="space-y-6">
+    <section class="rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="space-y-1">
+          <h1 class="text-lg font-semibold text-slate-900">
+            Create SWIFT Message – MT760
+          </h1>
+          <p class="text-xs text-slate-600">
+            Issue of Demand Guarantee / Standby LC
+          </p>
+          <p class="text-[11px] text-slate-500">
+            Application ID:
+            <span class="font-semibold text-blue-600">GTR-2024-001234</span>
+          </p>
+        </div>
+        <div class="space-y-1 text-right text-xs">
+          <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Message Type
+          </div>
+          <div
+            class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-[11px] font-semibold text-blue-700"
+          >
+            MT760
+          </div>
+        </div>
+      </div>
+    </section>
+
+        <section
+          class="rounded-2xl border border-slate-200 bg-white p-3 text-[11px] shadow-sm"
+        >
+          <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Create SWIFT steps
+              </div>
+              <div class="mt-1 text-[10px] text-slate-500">
+                Step {{ activeStep }} of {{ totalSteps }} • {{ overallProgressPercent }}% complete
+              </div>
+            </div>
+            <div class="mt-1 flex items-center gap-2 md:mt-0">
+              <div class="h-1.5 w-32 overflow-hidden rounded-full bg-slate-100">
+                <div
+                  class="h-1.5 rounded-full bg-blue-600 transition-all"
+                  [ngStyle]="{ width: overallProgressPercent + '%' }"
+                ></div>
+              </div>
+              <span class="text-[10px] font-semibold text-slate-700">
+                {{ effectiveCompletedStepsCount }} / {{ totalSteps }} steps
+              </span>
+            </div>
+          </div>
+          <div class="mt-3 flex gap-2 overflow-x-auto pb-1">
+            <button
+              *ngFor="let step of steps"
+              type="button"
+              (click)="selectStep(step.id)"
+              class="group relative flex min-w-[140px] flex-1 items-center gap-2 rounded-lg border px-3 py-2 text-left text-[11px] transition-colors"
+              [ngClass]="
+                activeStep === step.id
+                  ? 'border-blue-600 bg-blue-50'
+                  : isStepCompleted(step.id)
+                    ? 'border-emerald-500 bg-emerald-50'
+                    : 'border-slate-200 bg-white hover:bg-slate-50'
+              "
+            >
+              <div class="relative flex items-center">
+                <div
+                  class="flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold"
+                  [ngClass]="
+                    activeStep === step.id
+                      ? 'bg-blue-600 text-white'
+                      : isStepCompleted(step.id)
+                        ? 'bg-emerald-500 text-white'
+                        : 'bg-slate-100 text-slate-700'
+                  "
+                >
+                  <span *ngIf="!isStepCompleted(step.id) || activeStep === step.id">
+                    {{ step.id }}
+                  </span>
+                  <span *ngIf="isStepCompleted(step.id) && activeStep !== step.id">
+                    ✓
+                  </span>
+                </div>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-[11px] font-semibold text-slate-900">
+                  {{ step.label }}
+                </span>
+                <span class="text-[10px] text-slate-500">
+                  <ng-container *ngIf="activeStep === step.id">
+                    Active
+                  </ng-container>
+                  <ng-container *ngIf="isStepCompleted(step.id) && activeStep !== step.id">
+                    Completed
+                  </ng-container>
+                  <ng-container *ngIf="!isStepCompleted(step.id) && activeStep !== step.id">
+                    Pending
+                  </ng-container>
+                </span>
+              </div>
+            </button>
+          </div>
+        </section>
+
+        <section
+          *ngIf="activeStep === 1"
+          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Step 1: Message Header &amp; Control
+              </h2>
+              <p class="mt-1 text-[11px] text-slate-600">
+                Sequence A – Basic message identification and control information
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Sender's Reference (20)
+              </div>
+              <app-ui-input
+                label=""
+                type="text"
+                placeholder="GTR-2024-001234"
+                [value]="senderReference"
+                (valueChange)="senderReference = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                System generated reference
+              </p>
+              <p *ngIf="headerErrors.senderReference" class="text-[10px] text-red-600">
+                {{ headerErrors.senderReference }}
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Date of Issue (31C)
+              </div>
+              <app-ui-input
+                label=""
+                type="text"
+                placeholder="YYMMDD (e.g. 240111)"
+                [value]="dateOfIssue"
+                (valueChange)="dateOfIssue = $event"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                YYMMDD format (today)
+              </p>
+              <p *ngIf="headerErrors.dateOfIssue" class="text-[10px] text-red-600">
+                {{ headerErrors.dateOfIssue }}
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Purpose of Message (23)
+              </div>
+              <div
+                class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              >
+                <select
+                  class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                  [(ngModel)]="purposeOfMessage"
+                >
+                  <option
+                    *ngFor="let option of purposeOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
+              <p *ngIf="headerErrors.purposeOfMessage" class="text-[10px] text-red-600">
+                {{ headerErrors.purposeOfMessage }}
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Date of Expiry (31D)
+              </div>
+              <app-ui-input
+                label=""
+                type="text"
+                placeholder="YYMMDD (e.g. 241231)"
+                [value]="dateOfExpiry"
+                (valueChange)="dateOfExpiry = $event"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                YYMMDD format
+              </p>
+              <p *ngIf="headerErrors.dateOfExpiry" class="text-[10px] text-red-600">
+                {{ headerErrors.dateOfExpiry }}
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-4 md:flex-row md:items-center md:justify-between">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+              (click)="goBackToReview()"
+            >
+              ← Back to Application Review
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+              [disabled]="!canProceedFromCurrentStep()"
+              (click)="next()"
+            >
+              <span *ngIf="activeStep < steps.length">
+                Next: {{ getNextStepLabel() }}
+              </span>
+              <span *ngIf="activeStep >= steps.length">
+                Submit &amp; Escalate
+              </span>
+              <span class="ml-1">➜</span>
+            </button>
+          </div>
+        </section>
+
+        <section
+          *ngIf="activeStep === 2"
+          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Step 2: Undertaking Details
+              </h2>
+              <p class="mt-1 text-[11px] text-slate-600">
+                Capture the undertaking text and core obligations that will appear in the guarantee.
+              </p>
+            </div>
+            <div class="text-[11px] font-semibold text-slate-500">
+              Step {{ activeStep }} of {{ steps.length }}
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-[11px] text-amber-900">
+            <div class="font-semibold">
+              Critical Business Rules
+            </div>
+            <p class="mt-1">
+              These fields define the legal framework and operational characteristics of the undertaking.
+              Ensure compliance with bank policies and international standards.
+            </p>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Form of Undertaking (40A)
+              </div>
+              <div
+                class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              >
+                <select
+                  class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                  [(ngModel)]="undertaking.formOfUndertaking"
+                >
+                  <option value="STAND - Standby Letter of Credit">
+                    STAND - Standby Letter of Credit
+                  </option>
+                  <option value="DEMD - Demand Guarantee">
+                    DEMD - Demand Guarantee
+                  </option>
+                </select>
+              </div>
+              <p class="text-[10px] text-slate-500">
+                Select the underlying instrument type.
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Applicable Rules (40C)
+              </div>
+              <div
+                class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              >
+                <select
+                  class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                  [(ngModel)]="undertaking.applicableRules"
+                >
+                  <option value="URDG758 - Uniform Rules for Demand Guarantee">
+                    URDG758 - Uniform Rules for Demand Guarantee
+                  </option>
+                  <option value="ISP98 - International Standby Practices">
+                    ISP98 - International Standby Practices
+                  </option>
+                  <option value="No specific rules">
+                    No specific rules
+                  </option>
+                </select>
+              </div>
+              <p class="text-[10px] text-slate-500">
+                Select the governing rules for this undertaking.
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Undertaking Number (25)
+              </div>
+              <app-ui-input
+                label=""
+                type="text"
+                placeholder="System generated undertaking reference"
+                [value]="undertaking.undertakingNumber"
+                (valueChange)="undertaking.undertakingNumber = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                Internal reference for this undertaking.
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Expiry Type (31E)
+              </div>
+              <div
+                class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              >
+                <select
+                  class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                  [(ngModel)]="undertaking.expiryType"
+                >
+                  <option value="FIXD - Fixed expiry date">
+                    FIXD - Fixed expiry date
+                  </option>
+                  <option value="OPEN - Open-ended / until cancelled">
+                    OPEN - Open-ended / until cancelled
+                  </option>
+                  <option value="COND - Conditional expiry">
+                    COND - Conditional expiry
+                  </option>
+                </select>
+              </div>
+              <p class="text-[10px] text-slate-500">
+                Defines how and when the undertaking expires.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <div class="text-[11px] font-semibold text-slate-700">
+                  Claim Clause (47A)
+                </div>
+                <div class="text-[10px] text-slate-500">
+                  {{ claimClauseCharacters }}
+                </div>
+              </div>
+              <app-ui-input
+                label=""
+                type="textarea"
+                [rows]="6"
+                placeholder="Enter the exact claim clause text to appear in the guarantee"
+                [value]="undertaking.claimClause"
+                (valueChange)="undertaking.claimClause = $event"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                Maximum 350 characters recommended for SWIFT narrative field.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <div class="space-y-1.5">
+                <div class="text-[11px] font-semibold text-slate-700">
+                  Auto-Extension Clause
+                </div>
+                <div
+                  class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+                >
+                  <select
+                    class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                    [(ngModel)]="undertaking.autoExtension"
+                  >
+                    <option value="none">
+                      No auto-extension
+                    </option>
+                    <option value="auto-annual">
+                      Auto-extend annually unless cancelled
+                    </option>
+                    <option value="auto-periodic">
+                      Auto-extend by fixed period unless notice given
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-[11px] text-slate-800">
+                <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                  Validity Summary
+                </div>
+                <div class="mt-2 space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Issue Date</span>
+                    <span class="font-semibold">
+                      {{ getFormattedDateFromYYMMDD(dateOfIssue) || dateOfIssue }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Expiry Date</span>
+                    <span class="font-semibold">
+                      {{ getFormattedDateFromYYMMDD(dateOfExpiry) || dateOfExpiry }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Validity Period</span>
+                    <span class="font-semibold">
+                      {{ getValidityPeriodDays() || '—' }} days
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <div class="text-[11px] font-semibold text-slate-700">
+                  Reduction Clause
+                </div>
+                <div
+                  class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+                >
+                  <select
+                    class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                    [(ngModel)]="undertaking.reductionClause"
+                  >
+                    <option value="none">
+                      No reduction of amount
+                    </option>
+                    <option value="schedule-based">
+                      Reduction based on schedule / milestones
+                    </option>
+                    <option value="claim-based">
+                      Reduction upon partial claims
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mt-2 rounded-lg border border-slate-200 bg-slate-50 p-3 text-[11px] text-slate-700">
+                <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                  Field validation summary
+                </div>
+                <ul class="mt-2 space-y-1">
+                  <li class="flex items-center gap-2">
+                    <span
+                      class="flex h-4 w-4 items-center justify-center rounded-full text-[10px]"
+                      [ngClass]="undertaking.formOfUndertaking ? 'bg-green-600 text-white' : 'bg-amber-500 text-white'"
+                    >
+                      ✓
+                    </span>
+                    <span>Form of Undertaking selected</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span
+                      class="flex h-4 w-4 items-center justify-center rounded-full text-[10px]"
+                      [ngClass]="undertaking.applicableRules ? 'bg-green-600 text-white' : 'bg-amber-500 text-white'"
+                    >
+                      ✓
+                    </span>
+                    <span>Applicable Rules defined</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span
+                      class="flex h-4 w-4 items-center justify-center rounded-full text-[10px]"
+                      [ngClass]="undertaking.claimClause ? 'bg-green-600 text-white' : 'bg-amber-500 text-white'"
+                    >
+                      ✓
+                    </span>
+                    <span>Claim Clause completed</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-4 md:flex-row md:items-center md:justify-between">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+              (click)="previous()"
+            >
+              ← Previous: {{ getPreviousStepLabel() }}
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+              (click)="next()"
+            >
+              <span>
+                Next: {{ getNextStepLabel() }}
+              </span>
+              <span class="ml-1">➜</span>
+            </button>
+          </div>
+        </section>
+
+        <section
+          *ngIf="activeStep === 3"
+          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Step 3: Amount &amp; Currency
+              </h2>
+              <p class="mt-1 text-[11px] text-slate-600">
+                Define the guarantee amount, currency and related tolerances.
+              </p>
+            </div>
+            <div class="text-[11px] font-semibold text-slate-500">
+              Step {{ activeStep }} of {{ steps.length }}
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Currency (:32B:)
+              </div>
+              <div
+                class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              >
+                <select
+                  class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                  [(ngModel)]="amountCurrency.currency"
+                >
+                  <option value="USD - United States Dollar">
+                    USD - United States Dollar
+                  </option>
+                  <option value="EUR - Euro">
+                    EUR - Euro
+                  </option>
+                  <option value="GBP - Pound Sterling">
+                    GBP - Pound Sterling
+                  </option>
+                </select>
+              </div>
+              <p class="text-[10px] text-slate-500">
+                Currency of the guarantee amount.
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Guarantee Amount (32B)
+              </div>
+              <app-ui-input
+                label=""
+                type="text"
+                placeholder="2,500,000.00"
+                [value]="amountCurrency.guaranteeAmount"
+                (valueChange)="amountCurrency.guaranteeAmount = $event"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                Enter numeric amount with decimals.
+              </p>
+            </div>
+
+            <div class="space-y-1.5 md:col-span-2">
+              <div class="flex items-center justify-between">
+                <div class="text-[11px] font-semibold text-slate-700">
+                  Amount in Words
+                </div>
+              </div>
+              <app-ui-input
+                label=""
+                type="textarea"
+                [rows]="3"
+                placeholder="Two Million Five Hundred Thousand and 00/100 United States Dollars"
+                [value]="amountCurrency.amountInWords"
+                (valueChange)="amountCurrency.amountInWords = $event"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                Narrative amount that will appear in the guarantee text.
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Amount Tolerance
+              </div>
+              <div
+                class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              >
+                <select
+                  class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                  [(ngModel)]="amountCurrency.amountTolerance"
+                >
+                  <option value="none">
+                    No tolerance
+                  </option>
+                  <option value="+10%">
+                    Up to +10%
+                  </option>
+                  <option value="+/-10%">
+                    Up to +/-10%
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Maximum Amount
+              </div>
+              <app-ui-input
+                label=""
+                type="text"
+                placeholder="Optional maximum cap amount"
+                [value]="amountCurrency.maximumAmount"
+                (valueChange)="amountCurrency.maximumAmount = $event"
+              ></app-ui-input>
+            </div>
+
+            <div class="space-y-1.5 md:col-span-2">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Additional Amounts / Charges
+              </div>
+              <app-ui-input
+                label=""
+                type="textarea"
+                [rows]="2"
+                placeholder="E.g. interest, costs, or other amounts covered by the guarantee"
+                [value]="amountCurrency.additionalAmounts"
+                (valueChange)="amountCurrency.additionalAmounts = $event"
+              ></app-ui-input>
+            </div>
+          </div>
+
+          <div class="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-4 md:flex-row md:items-center md:justify-between">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+              (click)="previous()"
+            >
+              ← Previous: {{ getPreviousStepLabel() }}
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+              (click)="next()"
+            >
+              <span>
+                Next: {{ getNextStepLabel() }}
+              </span>
+              <span class="ml-1">➜</span>
+            </button>
+          </div>
+        </section>
+
+        <section
+          *ngIf="activeStep === 4"
+          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Step 4: Parties Information
+              </h2>
+              <p class="mt-1 text-[11px] text-slate-600">
+                Maintain applicant, beneficiary and advising/receiving bank details.
+              </p>
+            </div>
+            <div class="text-[11px] font-semibold text-slate-500">
+              Step {{ activeStep }} of {{ steps.length }}
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-3">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Issuing Bank (52A)
+              </div>
+              <app-ui-input
+                label="Bank Name"
+                type="text"
+                placeholder="Issuing bank name"
+                [value]="parties.issuingBank.name"
+                (valueChange)="parties.issuingBank.name = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <app-ui-input
+                label="BIC"
+                type="text"
+                placeholder="ITBKAEADXXX"
+                [value]="parties.issuingBank.bic"
+                (valueChange)="parties.issuingBank.bic = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 1"
+                type="text"
+                placeholder="Street and building"
+                [value]="parties.issuingBank.addressLine1"
+                (valueChange)="parties.issuingBank.addressLine1 = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 2"
+                type="text"
+                placeholder="City and country"
+                [value]="parties.issuingBank.addressLine2"
+                (valueChange)="parties.issuingBank.addressLine2 = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 3"
+                type="text"
+                placeholder="Additional details"
+                [value]="parties.issuingBank.addressLine3"
+                (valueChange)="parties.issuingBank.addressLine3 = $event"
+                [readonly]="true"
+              ></app-ui-input>
+            </div>
+
+            <div class="space-y-3">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Applicant (50)
+              </div>
+              <app-ui-input
+                label="Applicant Name"
+                type="text"
+                placeholder="Customer legal name"
+                [value]="parties.applicant.name"
+                (valueChange)="parties.applicant.name = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <app-ui-input
+                label="CIF"
+                type="text"
+                placeholder="Customer CIF"
+                [value]="parties.applicant.cif"
+                (valueChange)="parties.applicant.cif = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 1"
+                type="text"
+                placeholder="Street and building"
+                [value]="parties.applicant.addressLine1"
+                (valueChange)="parties.applicant.addressLine1 = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 2"
+                type="text"
+                placeholder="City and country"
+                [value]="parties.applicant.addressLine2"
+                (valueChange)="parties.applicant.addressLine2 = $event"
+                [readonly]="true"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 3"
+                type="text"
+                placeholder="Additional details"
+                [value]="parties.applicant.addressLine3"
+                (valueChange)="parties.applicant.addressLine3 = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Contact Email"
+                type="text"
+                placeholder="finance@example.com"
+                [value]="parties.applicant.email"
+                (valueChange)="parties.applicant.email = $event"
+              ></app-ui-input>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="space-y-3">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Beneficiary (59)
+              </div>
+              <app-ui-input
+                label="Beneficiary Name"
+                type="text"
+                placeholder="Beneficiary legal name"
+                [value]="parties.beneficiary.name"
+                (valueChange)="parties.beneficiary.name = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Country"
+                type="text"
+                placeholder="Country of beneficiary"
+                [value]="parties.beneficiary.country"
+                (valueChange)="parties.beneficiary.country = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 1"
+                type="text"
+                placeholder="Street and building"
+                [value]="parties.beneficiary.addressLine1"
+                (valueChange)="parties.beneficiary.addressLine1 = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 2"
+                type="text"
+                placeholder="City and country"
+                [value]="parties.beneficiary.addressLine2"
+                (valueChange)="parties.beneficiary.addressLine2 = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 3"
+                type="text"
+                placeholder="Additional details"
+                [value]="parties.beneficiary.addressLine3"
+                (valueChange)="parties.beneficiary.addressLine3 = $event"
+              ></app-ui-input>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                  Advising / Receiving Bank (57A)
+                </div>
+                <label class="flex items-center gap-2 text-[11px] text-slate-700">
+                  <input
+                    type="checkbox"
+                    class="h-3 w-3 rounded border-slate-300 text-blue-600"
+                    [(ngModel)]="parties.includeAdvisingBank"
+                  />
+                  <span>Include advising bank</span>
+                </label>
+              </div>
+              <app-ui-input
+                label="Bank Name"
+                type="text"
+                placeholder="Receiving/advising bank"
+                [value]="parties.advisingBank.name"
+                (valueChange)="parties.advisingBank.name = $event"
+                [readonly]="!parties.includeAdvisingBank"
+              ></app-ui-input>
+              <app-ui-input
+                label="BIC"
+                type="text"
+                placeholder="Bank identifier code"
+                [value]="parties.advisingBank.bic"
+                (valueChange)="parties.advisingBank.bic = $event"
+                [readonly]="!parties.includeAdvisingBank"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 1"
+                type="text"
+                placeholder="Street and building"
+                [value]="parties.advisingBank.addressLine1"
+                (valueChange)="parties.advisingBank.addressLine1 = $event"
+                [readonly]="!parties.includeAdvisingBank"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 2"
+                type="text"
+                placeholder="City and country"
+                [value]="parties.advisingBank.addressLine2"
+                (valueChange)="parties.advisingBank.addressLine2 = $event"
+                [readonly]="!parties.includeAdvisingBank"
+              ></app-ui-input>
+              <app-ui-input
+                label="Address Line 3"
+                type="text"
+                placeholder="Additional details"
+                [value]="parties.advisingBank.addressLine3"
+                (valueChange)="parties.advisingBank.addressLine3 = $event"
+                [readonly]="!parties.includeAdvisingBank"
+              ></app-ui-input>
+            </div>
+          </div>
+
+          <div class="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-4 md:flex-row md:items-center md:justify-between">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+              (click)="previous()"
+            >
+              ← Previous: {{ getPreviousStepLabel() }}
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+              (click)="next()"
+            >
+              <span>
+                Next: {{ getNextStepLabel() }}
+              </span>
+              <span class="ml-1">➜</span>
+            </button>
+          </div>
+        </section>
+
+        <section
+          *ngIf="activeStep === 5"
+          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Step 5: Terms &amp; Conditions
+              </h2>
+              <p class="mt-1 text-[11px] text-slate-600">
+                Configure claim periods, governing rules and additional clauses for the guarantee.
+              </p>
+            </div>
+            <div class="text-[11px] font-semibold text-slate-500">
+              Step {{ activeStep }} of {{ steps.length }}
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Template Type
+              </div>
+              <div
+                class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              >
+                <select
+                  class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                  [(ngModel)]="terms.templateType"
+                >
+                  <option value="standard">
+                    Standard bank template
+                  </option>
+                  <option value="customer-specific">
+                    Customer-specific template
+                  </option>
+                  <option value="free-format">
+                    Free format text
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Guarantee Type
+              </div>
+              <div
+                class="flex items-center rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900"
+              >
+                <select
+                  class="w-full bg-transparent text-xs text-slate-900 outline-none"
+                  [(ngModel)]="terms.guaranteeType"
+                >
+                  <option value="Performance Guarantee">
+                    Performance Guarantee
+                  </option>
+                  <option value="Advance Payment Guarantee">
+                    Advance Payment Guarantee
+                  </option>
+                  <option value="Bid Bond / Tender Guarantee">
+                    Bid Bond / Tender Guarantee
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-[11px] font-semibold text-slate-700">
+                Claim Period (Days)
+              </div>
+              <app-ui-input
+                label=""
+                type="text"
+                placeholder="30"
+                [value]="terms.claimPeriodDays.toString()"
+                (valueChange)="onClaimPeriodDaysChange($event)"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                Number of days after expiry during which claims can be presented.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <div class="text-[11px] font-semibold text-slate-700">
+                  Guarantee Text Preview (47A)
+                </div>
+              </div>
+              <app-ui-input
+                label=""
+                type="textarea"
+                [rows]="6"
+                placeholder="Generated guarantee text will appear here"
+                [value]="terms.generatedText"
+                (valueChange)="terms.generatedText = $event"
+              ></app-ui-input>
+              <p class="text-[10px] text-slate-500">
+                You can fine-tune the generated text before finalising the SWIFT narrative.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Underlying Transaction Summary
+              </div>
+              <app-ui-input
+                label="Contract Reference"
+                type="text"
+                placeholder="Underlying contract reference"
+                [value]="terms.underlying.contractReference"
+                (valueChange)="terms.underlying.contractReference = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Contract Date"
+                type="text"
+                placeholder="YYYY-MM-DD"
+                [value]="terms.underlying.contractDate"
+                (valueChange)="terms.underlying.contractDate = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Contract Description"
+                type="textarea"
+                [rows]="2"
+                placeholder="Short description of underlying project or obligation"
+                [value]="terms.underlying.description"
+                (valueChange)="terms.underlying.description = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Additional Details"
+                type="textarea"
+                [rows]="3"
+                placeholder="Further details describing the underlying contract"
+                [value]="terms.underlying.details"
+                (valueChange)="terms.underlying.details = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Contract Value"
+                type="text"
+                placeholder="Total contract value"
+                [value]="terms.underlying.contractValue"
+                (valueChange)="terms.underlying.contractValue = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Guarantee Percentage"
+                type="text"
+                placeholder="E.g. 50%"
+                [value]="terms.underlying.guaranteePercentage"
+                (valueChange)="terms.underlying.guaranteePercentage = $event"
+              ></app-ui-input>
+              <app-ui-input
+                label="Performance Period"
+                type="text"
+                placeholder="E.g. 24 months"
+                [value]="terms.underlying.performancePeriod"
+                (valueChange)="terms.underlying.performancePeriod = $event"
+              ></app-ui-input>
+            </div>
+          </div>
+          <div class="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-4 md:flex-row md:items-center md:justify-between">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+              (click)="previous()"
+            >
+              ← Previous: {{ getPreviousStepLabel() }}
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+              (click)="next()"
+            >
+              <span>
+                Next: {{ getNextStepLabel() }}
+              </span>
+              <span class="ml-1">➜</span>
+            </button>
+          </div>
+        </section>
+
+        <section
+          *ngIf="activeStep === 6"
+          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Step 6: Review &amp; Generate
+              </h2>
+              <p class="mt-1 text-[11px] text-slate-600">
+                Review all captured details, validate MT760 readiness, then generate and escalate.
+              </p>
+            </div>
+            <div class="flex flex-col items-start gap-2 text-[11px] text-slate-600 md:items-end">
+              <div class="text-[11px] font-semibold text-slate-500">
+                Step {{ activeStep }} of {{ steps.length }}
+              </div>
+              <p class="max-w-xs text-right text-[10px] text-slate-500">
+                To edit any section, use the Edit links below to jump back to that step.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-5 text-[11px] text-slate-800 lg:grid-cols-[minmax(0,1.5fr),minmax(0,1.2fr)]">
+            <div class="space-y-3">
+              <section class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <div class="flex items-center justify-between">
+                  <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                    Header &amp; Undertaking
+                  </div>
+                  <button
+                    type="button"
+                    class="text-[10px] font-semibold text-blue-600 hover:underline"
+                    (click)="goToStep(1)"
+                  >
+                    Edit header
+                  </button>
+                </div>
+                <div class="mt-2 grid gap-3 md:grid-cols-2">
+                  <div class="space-y-1">
+                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                      Sender's Reference (20)
+                    </div>
+                    <div class="text-sm font-semibold text-slate-900">
+                      {{ senderReference }}
+                    </div>
+                  </div>
+                  <div class="space-y-1">
+                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                      Purpose of Message (23)
+                    </div>
+                    <div class="text-sm font-semibold text-slate-900">
+                      {{ purposeOfMessage }}
+                    </div>
+                  </div>
+                  <div class="space-y-1">
+                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                      Date of Issue (31C)
+                    </div>
+                    <div class="text-sm font-semibold text-slate-900">
+                      {{ dateOfIssue }}
+                    </div>
+                  </div>
+                  <div class="space-y-1">
+                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                      Date of Expiry (31D)
+                    </div>
+                    <div class="text-sm font-semibold text-slate-900">
+                      {{ dateOfExpiry }}
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-3 rounded-md border border-slate-200 bg-white p-3 text-[10px] text-slate-700">
+                  <div class="flex items-center justify-between">
+                    <div class="font-semibold uppercase tracking-wide text-slate-500">
+                      Undertaking summary
+                    </div>
+                    <button
+                      type="button"
+                      class="text-[10px] font-semibold text-blue-600 hover:underline"
+                      (click)="goToStep(2)"
+                    >
+                      Edit undertaking
+                    </button>
+                  </div>
+                  <div class="mt-2 space-y-1">
+                    <div>
+                      <span class="font-semibold">Form:</span>
+                      <span class="ml-1">{{ undertaking.formOfUndertaking }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Rules:</span>
+                      <span class="ml-1">{{ undertaking.applicableRules }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Expiry type:</span>
+                      <span class="ml-1">{{ undertaking.expiryType }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Undertaking no.:</span>
+                      <span class="ml-1">{{ undertaking.undertakingNumber }}</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="grid gap-3 md:grid-cols-2">
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <div class="flex items-center justify-between">
+                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                      Amount &amp; Currency
+                    </div>
+                    <button
+                      type="button"
+                      class="text-[10px] font-semibold text-blue-600 hover:underline"
+                      (click)="goToStep(3)"
+                    >
+                      Edit amount
+                    </button>
+                  </div>
+                  <div class="mt-2 space-y-1">
+                    <div>
+                      <span class="font-semibold">Currency:</span>
+                      <span class="ml-1">{{ amountCurrency.currency }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Guarantee amount:</span>
+                      <span class="ml-1">{{ amountCurrency.guaranteeAmount }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Amount in words:</span>
+                      <span class="ml-1">{{ amountCurrency.amountInWords }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Tolerance:</span>
+                      <span class="ml-1">{{ amountCurrency.amountTolerance || '—' }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <div class="flex items-center justify-between">
+                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                      Parties snapshot
+                    </div>
+                    <button
+                      type="button"
+                      class="text-[10px] font-semibold text-blue-600 hover:underline"
+                      (click)="goToStep(4)"
+                    >
+                      Edit parties
+                    </button>
+                  </div>
+                  <div class="mt-2 space-y-1">
+                    <div>
+                      <span class="font-semibold">Applicant:</span>
+                      <span class="ml-1">{{ parties.applicant.name }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Beneficiary:</span>
+                      <span class="ml-1">{{ parties.beneficiary.name }}</span>
+                    </div>
+                    <div>
+                      <span class="font-semibold">Beneficiary country:</span>
+                      <span class="ml-1">{{ parties.beneficiary.country }}</span>
+                    </div>
+                    <div *ngIf="parties.includeAdvisingBank">
+                      <span class="font-semibold">Advising bank:</span>
+                      <span class="ml-1">{{ parties.advisingBank.name }}</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <div class="flex items-center justify-between">
+                  <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                    Terms overview
+                  </div>
+                  <button
+                    type="button"
+                    class="text-[10px] font-semibold text-blue-600 hover:underline"
+                    (click)="goToStep(5)"
+                  >
+                    Edit terms
+                  </button>
+                </div>
+                <div class="mt-2 space-y-1">
+                  <div>
+                    <span class="font-semibold">Guarantee type:</span>
+                    <span class="ml-1">{{ terms.guaranteeType }}</span>
+                  </div>
+                  <div>
+                    <span class="font-semibold">Claim period:</span>
+                    <span class="ml-1">{{ terms.claimPeriodDays }} days</span>
+                  </div>
+                  <div>
+                    <span class="font-semibold">Underlying contract:</span>
+                    <span class="ml-1">{{ terms.underlying.contractReference }}</span>
+                  </div>
+                  <div>
+                    <span class="font-semibold">Guarantee text preview:</span>
+                    <span class="ml-1 line-clamp-2">
+                      {{ terms.generatedText || 'No text generated yet.' }}
+                    </span>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div class="space-y-3">
+              <section class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <div class="flex items-center gap-2">
+                  <div class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                    ✓
+                  </div>
+                  <div>
+                    <div class="text-[11px] font-semibold text-slate-900">
+                      MT760 Readiness Checklist
+                    </div>
+                    <p class="text-[10px] text-slate-500">
+                      All sections must be complete before generating the SWIFT message.
+                    </p>
+                  </div>
+                </div>
+                <ul class="mt-3 space-y-2 text-[11px] text-slate-700">
+                  <li class="flex items-start gap-2">
+                    <span
+                      class="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px]"
+                      [ngClass]="
+                        isHeaderSectionComplete
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-amber-500 text-white'
+                      "
+                    >
+                      ✓
+                    </span>
+                    <span>Header &amp; control fields complete</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span
+                      class="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px]"
+                      [ngClass]="
+                        isUndertakingSectionComplete
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-amber-500 text-white'
+                      "
+                    >
+                      ✓
+                    </span>
+                    <span>Undertaking details captured (rules, expiry, claim clause)</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span
+                      class="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px]"
+                      [ngClass]="
+                        isAmountSectionComplete
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-amber-500 text-white'
+                      "
+                    >
+                      ✓
+                    </span>
+                    <span>Amount &amp; currency information complete</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span
+                      class="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px]"
+                      [ngClass]="
+                        isPartiesSectionComplete
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-amber-500 text-white'
+                      "
+                    >
+                      ✓
+                    </span>
+                    <span>Applicant and beneficiary details complete</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span
+                      class="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px]"
+                      [ngClass]="
+                        isTermsSectionComplete
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-amber-500 text-white'
+                      "
+                    >
+                      ✓
+                    </span>
+                    <span>Guarantee narrative and underlying contract details captured</span>
+                  </li>
+                </ul>
+                <div
+                  class="mt-3 rounded-md border px-3 py-2 text-[10px]"
+                  [ngClass]="
+                    isAllChecklistComplete
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                      : 'border-amber-200 bg-amber-50 text-amber-800'
+                  "
+                >
+                  <div class="font-semibold">
+                    MT760 status:
+                    <span>{{
+                      isAllChecklistComplete ? 'Ready for generation' : 'Incomplete – please review missing items'
+                    }}</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="rounded-lg border border-slate-200 bg-white p-3">
+                <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                  Officer confirmations
+                </div>
+                <div class="mt-3 space-y-2 text-[11px] text-slate-700">
+                  <label class="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600"
+                      [(ngModel)]="finalConfirmOperationalAccuracy"
+                    />
+                    <span>All captured header, amount, parties and terms details are operationally accurate.</span>
+                  </label>
+                  <label class="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600"
+                      [(ngModel)]="finalConfirmSwiftTextReviewed"
+                    />
+                    <span>Generated SWIFT MT760 narrative has been reviewed for content and formatting.</span>
+                  </label>
+                  <label class="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600"
+                      [(ngModel)]="finalConfirmAuthority"
+                    />
+                    <span>I am authorised to submit and escalate this SWIFT MT760 for checker review.</span>
+                  </label>
+                </div>
+              </section>
+
+              <section class="rounded-lg border border-slate-200 bg-slate-900 p-3 text-[10px] text-slate-50">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold uppercase tracking-wide text-slate-200">
+                    SWIFT MT760 preview
+                  </div>
+                  <span class="text-[9px] text-slate-400">
+                    Read-only – generated from captured fields
+                  </span>
+                </div>
+                <div class="mt-2 max-h-64 overflow-auto rounded-md bg-slate-950/60 p-3">
+                  <pre class="whitespace-pre-wrap font-mono text-[10px] leading-4">
+{{ swiftPreviewText }}
+                  </pre>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-col gap-2 border-t border-slate-100 pt-4 md:flex-row md:items-center md:justify-between">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+              (click)="previous()"
+            >
+              ← Previous: {{ getPreviousStepLabel() }}
+            </button>
+            <div class="flex flex-col items-stretch gap-1 md:items-end">
+              <button
+                type="button"
+                class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                [disabled]="!canGenerateSwift"
+                (click)="submitAndEscalate()"
+              >
+                Generate SWIFT &amp; Escalate
+                <span class="ml-1">➜</span>
+              </button>
+              <p
+                *ngIf="!canGenerateSwift"
+                class="text-right text-[10px] text-amber-700"
+              >
+                Complete checklist items and officer confirmations to enable SWIFT generation.
+              </p>
+            </div>
+          </div>
+        </section>
+  </div>
+</app-trade-layout>

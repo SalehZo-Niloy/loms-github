@@ -1,0 +1,466 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Document Handover View"
+  basePath="/trade"
+>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-lg font-semibold text-slate-900">{{ header.title }}</h1>
+        <div class="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+          <span>LC Reference</span>
+          <span class="font-semibold text-slate-900">{{ header.reference }}</span>
+          <span class="mx-1 text-slate-300">•</span>
+          <span>Status</span>
+          <span class="font-semibold text-slate-900">{{ submittingInfo.status }}</span>
+        </div>
+        <div class="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+          <span class="rounded-full bg-slate-50 px-2 py-0.5">
+            Type:
+            <span class="font-semibold text-slate-900">{{ submittingInfo.lcType }}</span>
+          </span>
+          <span class="rounded-full bg-slate-50 px-2 py-0.5">
+            Amount:
+            <span class="font-semibold text-slate-900">
+              {{ submittingInfo.amount }} {{ submittingInfo.currency }}
+            </span>
+          </span>
+          <span class="rounded-full bg-slate-50 px-2 py-0.5">
+            Beneficiary:
+            <span class="font-semibold text-slate-900">
+              {{ submittingInfo.beneficiaryName }}
+            </span>
+          </span>
+          <span class="rounded-full bg-slate-50 px-2 py-0.5">
+            Port of Discharge:
+            <span class="font-semibold text-slate-900">
+              {{ submittingInfo.portOfDischarge }}
+            </span>
+          </span>
+          <span class="rounded-full bg-slate-50 px-2 py-0.5">
+            Submitted:
+            <span class="font-semibold text-slate-900">
+              {{ submittingInfo.submissionDate }}
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          class="inline-flex items-center justify-center gap-2 rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:border-blue-700 hover:bg-blue-700"
+          (click)="goBackToHandoverList()"
+        >
+          <span>←</span>
+          <span>Back to Handover List</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,0.85fr)]">
+    <div class="space-y-6">
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <h2 class="text-sm font-semibold text-slate-900">LC Initiation Summary</h2>
+          <div class="flex items-center gap-2 text-[11px]">
+            <span
+              class="inline-flex items-center rounded-full bg-sky-50 px-3 py-1 font-semibold text-sky-700"
+            >
+              Customer Input
+            </span>
+            <span
+              class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-700"
+            >
+              Bank Input
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="mt-4 flex flex-wrap items-center gap-2 border-b border-slate-100 pb-3 text-xs text-slate-600"
+        >
+          <button
+            *ngFor="let tab of tabs"
+            type="button"
+            [ngClass]="getTabClasses(tab)"
+            (click)="setActiveTab(tab.id)"
+          >
+            <span
+              *ngIf="tab.id === activeTabId"
+              class="inline-flex h-1.5 w-1.5 rounded-full bg-blue-600"
+            ></span>
+            <span class="truncate">{{ tab.label }}</span>
+            <svg
+              *ngIf="tab.id === 'amount-currency' && tab.id !== activeTabId"
+              class="h-3 w-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                d="M7.6 13.4 4.2 10l1.2-1.2 2.2 2.2 6-6L15 6.2 7.6 13.4z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="mt-5 grid gap-6 md:grid-cols-3 text-xs text-slate-700">
+          <div *ngFor="let field of activeFields">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              {{ field.label }}
+            </div>
+            <div
+              class="mt-1 rounded-lg border px-3 py-2 text-sm font-semibold"
+              [ngClass]="{
+                'border-emerald-200 bg-emerald-50 text-emerald-800':
+                  field.tone === 'ro' && !field.readOnly,
+                'border-slate-200 bg-slate-50 text-slate-900':
+                  field.tone !== 'ro' || field.readOnly
+              }"
+            >
+              {{ field.value }}
+            </div>
+            <div
+              class="mt-1 text-[11px]"
+              [ngClass]="{
+                'text-emerald-600': field.tone === 'ro' && !field.readOnly,
+                'text-slate-400': field.tone !== 'ro' || field.readOnly
+              }"
+            >
+              {{ field.helper }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-sm font-semibold text-slate-900">LC & Shipment Summary</h2>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          <div *ngFor="let item of summary">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              {{ item.label }}
+            </div>
+            <div class="mt-1 text-sm font-semibold text-slate-900">
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between gap-3">
+          <h2 class="text-sm font-semibold text-slate-900">Submitted Documents</h2>
+          <p class="text-[11px] text-slate-500">
+            Uploaded via customer portal
+          </p>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full min-w-[520px] text-left text-xs text-slate-700">
+            <thead class="border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wide">
+              <tr>
+                <th class="px-3 py-2">Document Type</th>
+                <th class="px-3 py-2">File Name</th>
+                <th class="px-3 py-2">Uploaded By</th>
+                <th class="px-3 py-2">Upload Date</th>
+                <!-- <th class="px-3 py-2 text-right">Action</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let document of documents"
+                class="border-b border-slate-100 last:border-b-0"
+              >
+                <td class="px-3 py-2 font-semibold text-slate-900">{{ document.type }}</td>
+                <td class="px-3 py-2 text-slate-600">{{ document.fileName }}</td>
+                <td class="px-3 py-2">{{ document.uploadedBy }}</td>
+                <td class="px-3 py-2">{{ document.uploadDate }}</td>
+                <!-- <td class="px-3 py-2 text-right">
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1 text-xs font-semibold text-blue-700"
+                  >
+                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        d="M10 3c4.5 0 8.3 2.9 9.5 7-1.2 4.1-5 7-9.5 7S1.7 14.1.5 10C1.7 5.9 5.5 3 10 3zm0 2C6.8 5 4 7.2 2.9 10 4 12.8 6.8 15 10 15s6-2.2 7.1-5C16 7.2 13.2 5 10 5zm0 2.5A2.5 2.5 0 1 1 7.5 10 2.5 2.5 0 0 1 10 7.5z"
+                      />
+                    </svg>
+                    View
+                  </button>
+                </td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-sm font-semibold text-slate-900">Document vs Request Check</h2>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full min-w-[520px] text-left text-xs text-slate-700">
+            <thead class="border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wide">
+              <tr>
+                <th class="px-3 py-2">Parameter</th>
+                <th class="px-3 py-2">LC Request</th>
+                <th class="px-3 py-2">Document</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let row of comparison"
+                class="border-b border-slate-100 last:border-b-0"
+              >
+                <td class="px-3 py-2 text-xs font-semibold text-slate-900">
+                  {{ row.parameter }}
+                </td>
+                <td class="px-3 py-2 text-xs text-slate-700">
+                  {{ row.requestValue }}
+                </td>
+                <td class="px-3 py-2 text-xs">
+                  <span
+                    class="inline-flex items-center gap-1 text-emerald-600"
+                    *ngIf="row.matches"
+                  >
+                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        d="M7.6 13.4 4.2 10l1.2-1.2 2.2 2.2 6-6L15 6.2 7.6 13.4z"
+                      />
+                    </svg>
+                    {{ row.documentValue }}
+                  </span>
+                  <span class="text-rose-600" *ngIf="!row.matches">
+                    {{ row.documentValue }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <h2 class="text-sm font-semibold text-slate-900">Verification Checklist</h2>
+            <div class="mt-4 space-y-3 text-xs text-slate-700">
+              <label
+                *ngFor="let item of checklist"
+                class="flex items-center gap-2"
+              >
+                <input type="checkbox" [(ngModel)]="item.checked" class="h-3.5 w-3.5" />
+                <span>{{ item.label }}</span>
+              </label>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <h2 class="text-sm font-semibold text-slate-900">Discrepancy Details</h2>
+            <label class="block text-xs text-slate-600">
+              <span class="mb-2 block font-semibold text-slate-700">Discrepancy Description</span>
+              <textarea
+                [(ngModel)]="discrepancy.description"
+                rows="3"
+                placeholder="Describe any discrepancies found..."
+                class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              ></textarea>
+            </label>
+            <label class="block text-xs text-slate-600">
+              <span class="mb-2 block font-semibold text-slate-700">Missing / Incorrect Items</span>
+              <textarea
+                [(ngModel)]="discrepancy.missingItems"
+                rows="3"
+                placeholder="List missing or incorrect items..."
+                class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              ></textarea>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-4">
+            <h2 class="text-sm font-semibold text-slate-900">Internal Remarks</h2>
+            <label class="block text-xs text-slate-600">
+              <span class="mb-2 block font-semibold text-slate-700">RO / Trade Remarks</span>
+              <textarea
+                [(ngModel)]="remarks.tradeRemarks"
+                rows="4"
+                placeholder="Add internal remarks for trade team..."
+                class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              ></textarea>
+            </label>
+          </div>
+          <div class="space-y-4">
+            <h2 class="text-sm font-semibold text-slate-900">Routing Decision</h2>
+            <div class="mt-2 space-y-3 text-xs text-slate-700">
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="routing"
+                  value="forward"
+                  [(ngModel)]="routingDecision"
+                  class="h-3.5 w-3.5"
+                />
+                <span>Forward to Trade In-Charge for Review & Approval</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="routing"
+                  value="return"
+                  [(ngModel)]="routingDecision"
+                  class="h-3.5 w-3.5"
+                />
+                <span>Return to Customer for Correction</span>
+              </label>
+            </div>
+            <div class="mt-4 grid gap-3 md:grid-cols-2">
+              <button
+                type="button"
+                class="rounded-md bg-blue-800 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-900"
+                (click)="onForward('#1e40af')"
+              >
+                Forward to Trade In-Charge
+              </button>
+              <button
+                type="button"
+                class="rounded-md bg-slate-700 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800"
+                (click)="onSendBack('#374151')"
+              >
+                Send Back to Customer
+              </button>
+              <app-ui-button variant="secondary" (click)="onSaveAndContinue('#0f766e')">
+                Save &amp; Continue Later
+              </app-ui-button>
+              <app-ui-button variant="secondary" (click)="onCancel('#6b7280')">
+                Cancel
+              </app-ui-button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="space-y-6">
+      <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-900">
+          <span
+            class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-50 text-blue-600"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M10 1.5a4 4 0 0 1 4 4v1.1l1.6.8a1 1 0 0 1 .4 1.3l-1.2 2.1V15a2 2 0 0 1-2 2H7.2a2 2 0 0 1-2-2V10.8L4 8.7a1 1 0 0 1 .4-1.3L6 6.6V5.5a4 4 0 0 1 4-4zm-1 5.5h2V5.5a2 2 0 0 0-4 0V7z"
+              />
+            </svg>
+          </span>
+          Sanction Limit Overview
+        </div>
+        <p class="mt-2 text-[11px] text-slate-500">Limits maintained by Credit Department</p>
+
+        <div class="mt-4 space-y-3 text-xs text-slate-700">
+          <div class="rounded-lg border border-blue-200 bg-blue-50 p-3">
+            <div class="text-[11px] font-semibold uppercase text-slate-500">
+              Total Sanctioned Limit
+            </div>
+            <div class="mt-1 text-base font-semibold text-blue-700">
+              {{ sanctionOverview.totalLimit }}
+            </div>
+          </div>
+
+          <div class="rounded-lg border border-amber-200 bg-amber-50 p-3">
+            <div class="flex items-center justify-between text-[11px] font-semibold uppercase text-slate-500">
+              <span>Utilized Limit</span>
+              <span class="text-amber-700">{{ sanctionOverview.utilizationPercent }}%</span>
+            </div>
+            <div class="mt-1 text-sm font-semibold text-amber-700">
+              {{ sanctionOverview.utilizedLimit }}
+            </div>
+            <div class="mt-2 h-1.5 w-full rounded-full bg-amber-100">
+              <div
+                class="h-1.5 rounded-full bg-amber-500"
+                [style.width.%]="sanctionOverview.utilizationPercent"
+              ></div>
+            </div>
+          </div>
+
+          <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+            <div class="text-[11px] font-semibold uppercase text-slate-500">Available Limit</div>
+            <div class="mt-1 text-sm font-semibold text-emerald-700">
+              {{ sanctionOverview.availableLimit }}
+            </div>
+            <div class="mt-2 inline-flex items-center gap-1 text-[11px] text-emerald-700">
+              <span
+                class="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100"
+              >
+                <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    d="M7.6 13.4 4.2 10l1.2-1.2 2.2 2.2 6-6L15 6.2 7.6 13.4z"
+                  />
+                </svg>
+              </span>
+              {{ sanctionOverview.status }}
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 border-t border-slate-100 pt-4 text-xs text-slate-700">
+          <div class="text-[11px] font-semibold uppercase text-slate-500">
+            Exposure Impact Indicator
+          </div>
+          <div class="mt-3 space-y-2 text-xs text-slate-600">
+            <div class="flex items-center justify-between">
+              <span>Proposed LC Amount</span>
+              <span class="font-semibold text-slate-900">{{ exposure.proposedAmount }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Post-LC Available Limit</span>
+              <span class="font-semibold text-slate-900">{{ exposure.availableAfter }}</span>
+            </div>
+            <div class="inline-flex items-center gap-2 text-emerald-600" *ngIf="exposure.withinLimit">
+              <span
+                class="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100"
+              >
+                <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    d="M7.6 13.4 4.2 10l1.2-1.2 2.2 2.2 6-6L15 6.2 7.6 13.4z"
+                  />
+                </svg>
+              </span>
+              Within Limit
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 border-t border-slate-100 pt-4 text-xs text-slate-700">
+          <div class="text-[11px] font-semibold uppercase text-slate-500">Product Eligibility</div>
+          <div class="mt-3 space-y-2">
+            <div *ngFor="let item of eligibility" class="flex items-center justify-between">
+              <span>{{ item.label }}</span>
+              <span
+                class="rounded-full px-2 py-0.5 text-[11px] font-semibold"
+                [ngClass]="item.statusClass"
+              >
+                {{ item.status }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700">
+          <div class="flex items-start gap-2">
+            <span
+              class="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-amber-100"
+            >
+              <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M10 2a8 8 0 1 1 0 16A8 8 0 0 1 10 2zm0 4a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V7a1 1 0 0 0-1-1zm0 7a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
+                />
+              </svg>
+            </span>
+            <span>{{ alertMessage }}</span>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+</app-trade-layout>

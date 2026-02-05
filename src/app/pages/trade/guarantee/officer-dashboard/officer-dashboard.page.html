@@ -1,0 +1,638 @@
+<app-trade-layout organisationName="Trade Finance" solutionName="Guarantee Officer" breadcrumb="Guarantee Officer Dashboard" basePath="/trade">
+  <div class="space-y-6">
+    <section class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-1">
+        <h1 class="text-lg font-semibold text-slate-900">
+          Guarantee Officer Dashboard
+        </h1>
+        <p class="text-sm text-slate-600">
+          Monitor guarantee applications, corrections and claims in real time.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <select
+          class="rounded-sm border border-slate-300 bg-white px-2 py-1 text-xs text-slate-700"
+          [value]="selectedBranchId"
+          (change)="onBranchChange($any($event.target).value)"
+        >
+          <option value="" disabled>Select Branches</option>
+          <option *ngFor="let branch of branchOptions" [value]="branch.id">
+            {{ branch.label }}
+          </option>
+        </select>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-sm border border-transparent bg-blue-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-blue-700"
+        >
+          <span>Refresh</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-semibold text-slate-900">
+          Priority Work Queue
+        </h2>
+        <p class="text-[11px] text-slate-500">
+          Tasks ordered by urgency and SLA
+        </p>
+      </div>
+      <div class="grid gap-3 md:grid-cols-3 xl:grid-cols-5">
+        <article
+          *ngFor="let item of priorityItems"
+          class="flex flex-col justify-between rounded-md border border-slate-200 bg-white p-4 text-xs shadow-sm cursor-pointer hover:border-blue-200 hover:shadow-md"
+          (click)="filterTableByPriority(item.id)"
+        >
+          <div class="flex items-center justify-between gap-3">
+            <div
+              class="flex h-8 w-8 items-center justify-center rounded-md bg-slate-50 text-blue-600"
+            >
+              <ng-container [ngSwitch]="item.id">
+                <svg
+                  *ngSwitchCase="'new'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 11h6m-6 4h4"
+                  />
+                </svg>
+                <svg
+                  *ngSwitchCase="'returned'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5H5v4"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 5 9 9h6a4 4 0 0 1 0 8H7"
+                  />
+                </svg>
+                <svg
+                  *ngSwitchCase="'amendments'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.232 5.232a2.5 2.5 0 0 1 3.536 3.536L9 18.536 5 19.5l.964-4L15.232 5.232z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7 19 10"
+                  />
+                </svg>
+                <svg
+                  *ngSwitchCase="'claims'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 5h14l-2 5-5 9-5-9-2-5z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 9h6"
+                  />
+                </svg>
+                <svg
+                  *ngSwitchCase="'issuance'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4l7 4v4c0 4-3 7-7 8-4-1-7-4-7-8V8l7-4z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9.5 12.5 11 14l3.5-3.5"
+                  />
+                </svg>
+                <svg
+                  *ngSwitchDefault
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16z"
+                  />
+                </svg>
+              </ng-container>
+            </div>
+            <div
+              class="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold"
+              [ngClass]="item.badgeClass"
+            >
+              <span>{{ item.count }}</span>
+            </div>
+          </div>
+          <div class="mt-3 space-y-1">
+            <div class="text-[13px] font-semibold text-slate-900">
+              {{ item.label }}
+            </div>
+            <p class="text-[11px] text-slate-500">
+              {{ item.description }}
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-3">
+      <div class="space-y-4 lg:col-span-2">
+        <div class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <div class="space-y-1">
+              <h2 class="text-sm font-semibold text-slate-900">
+                My Task Inbox
+              </h2>
+              <p class="text-xs text-slate-500">
+                Work on applications assigned to you today.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 border-b border-slate-200">
+            <nav class="-mb-px flex flex-wrap gap-4 text-xs">
+              <button
+                *ngFor="let tab of inboxTabs"
+                type="button"
+                class="inline-flex items-center gap-1 border-b-2 px-1 pb-2 font-medium"
+                [ngClass]="
+                  tab.id === activeInboxTab
+                    ? 'border-blue-600 text-blue-700'
+                    : 'border-transparent text-slate-500 hover:text-slate-700'
+                "
+                (click)="setActiveInboxTab(tab.id)"
+              >
+                <span>{{ tab.label }}</span>
+                <span
+                  class="inline-flex h-5 min-w-[1.5rem] items-center justify-center rounded-full bg-slate-100 px-1 text-[10px] font-semibold text-slate-700"
+                >
+                  {{ tab.count }}
+                </span>
+              </button>
+            </nav>
+          </div>
+
+          <div class="mt-4">
+            <ng-container *ngIf="activeInboxTab === 'applications'">
+              <div class="overflow-x-auto">
+                <app-ui-table>
+                <thead class="bg-slate-50">
+                  <tr class="text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    <th class="px-4 py-2">Application ID</th>
+                    <th class="px-4 py-2">Customer</th>
+                    <th class="px-4 py-2">Type</th>
+                    <th class="px-4 py-2">Amount</th>
+                    <th class="px-4 py-2">Submitted</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">SLA</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                  <tr
+                    *ngFor="let row of applications"
+                    class="text-xs hover:bg-slate-50 cursor-pointer"
+                    (click)="reviewApplication(row)"
+                  >
+                    <td class="px-4 py-2 font-semibold text-blue-700">
+                      <span>
+                        {{ row.id }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-2 text-slate-800">
+                      {{ row.customer }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-700">
+                      {{ row.type }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-900">
+                      {{ row.amount }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-600">
+                      {{ row.submitted }}
+                    </td>
+                    <td class="px-4 py-2">
+                      <span
+                        class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold"
+                        [ngClass]="
+                          row.status === 'Submitted'
+                            ? 'bg-emerald-50 text-emerald-800'
+                            : row.status === 'Return'
+                              ? theme.status.warning
+                              : theme.status.neutral
+                        "
+                      >
+                        {{ row.status }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-2 text-slate-700">
+                      {{ row.sla }}
+                    </td>
+                  </tr>
+                </tbody>
+                </app-ui-table>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="activeInboxTab === 'issuance'">
+              <div class="overflow-x-auto">
+                <app-ui-table>
+                <thead class="bg-slate-50">
+                  <tr class="text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    <th class="px-4 py-2">Application ID</th>
+                    <th class="px-4 py-2">Type</th>
+                    <th class="px-4 py-2">Amount</th>
+                    <th class="px-4 py-2">Approval Date</th>
+                    <th class="px-4 py-2">Issuance Status</th>
+                    <th class="px-4 py-2">Accounting Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                  <tr
+                    *ngFor="let row of issuanceRows"
+                    class="text-xs hover:bg-slate-50 cursor-pointer"
+                    (click)="openGuaranteeIssuance(row)"
+                  >
+                    <td class="px-4 py-2 font-semibold text-blue-700">
+                      <span>
+                        {{ row.id }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-2 text-slate-700">
+                      {{ row.type }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-900">
+                      {{ row.amount }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-600">
+                      {{ row.approvalDate }}
+                    </td>
+                    <td class="px-4 py-2">
+                      <span
+                        class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold"
+                        [ngClass]="
+                          row.issuanceStatus === 'Pending'
+                            ? theme.status.warning
+                            : 'bg-emerald-50 text-emerald-800'
+                        "
+                      >
+                        {{ row.issuanceStatus }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-2">
+                      <span
+                        class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold"
+                        [ngClass]="
+                          row.accountingStatus === 'Posted'
+                            ? 'bg-emerald-50 text-emerald-800'
+                            : theme.status.neutral
+                        "
+                      >
+                        {{ row.accountingStatus }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+                </app-ui-table>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="activeInboxTab === 'amendments'">
+              <div class="overflow-x-auto">
+                <app-ui-table>
+                <thead class="bg-slate-50">
+                  <tr class="text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    <th class="px-4 py-2">Amendment ID</th>
+                    <th class="px-4 py-2">Original Ref</th>
+                    <th class="px-4 py-2">Amendment Type</th>
+                    <th class="px-4 py-2">Financial Impact</th>
+                    <th class="px-4 py-2">Submitted</th>
+                    <th class="px-4 py-2">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                  <tr
+                    *ngFor="let row of amendmentRows"
+                    class="text-xs hover:bg-slate-50 cursor-pointer"
+                    (click)="openAmendmentProcessing(row)"
+                  >
+                    <td class="px-4 py-2 font-semibold text-blue-700">
+                      <span>
+                        {{ row.id }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-2 text-slate-800">
+                      {{ row.originalRef }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-700">
+                      {{ row.amendmentType }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-900">
+                      {{ row.financialImpact }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-600">
+                      {{ row.submitted }}
+                    </td>
+                    <td class="px-4 py-2">
+                      <span
+                        class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold"
+                        [ngClass]="
+                          row.status === 'Submitted'
+                            ? 'bg-blue-50 text-blue-800'
+                            : row.status === 'Pending approval'
+                              ? theme.status.warning
+                              : row.status === 'Returned'
+                                ? theme.status.danger
+                                : theme.status.neutral
+                        "
+                      >
+                        {{ row.status }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+                </app-ui-table>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="activeInboxTab === 'claims'">
+              <div class="overflow-x-auto">
+                <app-ui-table>
+                <thead class="bg-slate-50">
+                  <tr class="text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    <th class="px-4 py-2">Claim ID</th>
+                    <th class="px-4 py-2">Guarantee Ref</th>
+                    <th class="px-4 py-2">Claim Amount</th>
+                    <th class="px-4 py-2">Submitted</th>
+                    <th class="px-4 py-2">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                  <tr
+                    *ngFor="let row of claimRows"
+                    class="text-xs hover:bg-slate-50 cursor-pointer"
+                    (click)="openClaimHandling(row)"
+                  >
+                    <td class="px-4 py-2 font-semibold text-blue-700">
+                      <span>
+                        {{ row.id }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-2 text-slate-800">
+                      {{ row.guaranteeRef }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-900">
+                      {{ row.claimAmount }}
+                    </td>
+                    <td class="px-4 py-2 text-slate-600">
+                      {{ row.submitted }}
+                    </td>
+                    <td class="px-4 py-2">
+                      <span
+                        class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold"
+                        [ngClass]="
+                          row.status === 'New'
+                            ? 'bg-blue-50 text-blue-800'
+                            : row.status === 'Pending documents'
+                              ? theme.status.warning
+                              : row.status === 'Settled'
+                                ? 'bg-emerald-50 text-emerald-800'
+                                : theme.status.neutral
+                        "
+                      >
+                        {{ row.status }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+                </app-ui-table>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <section class="rounded-md border border-slate-200 bg-white p-4 text-xs shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-slate-900">
+              Today’s Performance
+            </h2>
+            <span class="text-[11px] text-slate-500">
+              Business Date: January 11, 2024
+            </span>
+          </div>
+          <div class="mt-3 grid gap-4 lg:grid-cols-2">
+            <div class="space-y-2">
+              <div class="text-[11px] font-semibold text-slate-600">
+                Completed Today
+              </div>
+              <div class="space-y-2">
+                <div
+                  *ngFor="let metric of performanceMetrics"
+                  class="flex items-center justify-between rounded-md bg-emerald-50 px-3 py-2"
+                >
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-[11px] text-emerald-700"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 12.75 11.25 15 15 9.75"
+                        />
+                      </svg>
+                    </div>
+                    <div class="text-[11px] text-slate-600">
+                      {{ metric.label }}
+                    </div>
+                  </div>
+                  <div class="text-base font-semibold text-slate-900">
+                    {{ metric.value }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-[11px] font-semibold text-slate-600">
+                Inventory
+              </div>
+              <div class="space-y-2">
+                <div
+                  *ngFor="let metric of stockMetrics"
+                  class="flex items-center justify-between rounded-md bg-slate-50 px-3 py-2"
+                >
+                  <div class="text-[11px] text-slate-600">
+                    {{ metric.label }}
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    {{ metric.value }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-md border border-slate-200 bg-white p-4 text-xs shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-slate-900">
+              Correction Queue
+            </h2>
+            <span class="text-[11px] text-amber-600">
+              Oldest items first
+            </span>
+          </div>
+          <div class="mt-3 space-y-3">
+            <div
+              *ngFor="let item of correctionQueue"
+              class="rounded-md border border-amber-100 bg-amber-50/40 px-3 py-2"
+            >
+              <div class="flex items-center justify-between">
+                <div class="inline-flex items-center gap-2">
+                  <span
+                    class="inline-flex h-5 min-w-[3.5rem] items-center justify-center rounded-full bg-amber-100 text-[10px] font-semibold text-amber-800"
+                  >
+                    {{ item.id }}
+                  </span>
+                  <span class="text-[11px] font-medium text-amber-900">
+                    {{ item.title }}
+                  </span>
+                </div>
+                <span class="text-[10px] text-amber-700">
+                  {{ item.age }}
+                </span>
+              </div>
+              <p class="mt-1 text-[11px] text-amber-700">
+                {{ item.description }}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-md border border-slate-200 bg-white p-4 text-xs shadow-sm">
+          <h2 class="text-sm font-semibold text-slate-900">
+            Recent Activity
+          </h2>
+          <div class="mt-3 space-y-2">
+            <div
+              *ngFor="let item of recentActivity"
+              class="flex items-start gap-2"
+            >
+              <span
+                class="mt-1 inline-flex h-2 w-2 rounded-full"
+                [ngClass]="item.dotClass"
+              ></span>
+              <div class="flex-1">
+                <div class="text-[11px] font-medium text-slate-900">
+                  {{ item.label }}
+                </div>
+                <div class="text-[11px] text-slate-600">
+                  {{ item.reference }}
+                </div>
+                <div class="text-[10px] text-slate-400">
+                  {{ item.timeAgo }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-md border border-slate-200 bg-white p-4 text-xs shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-slate-900">
+              Notifications
+            </h2>
+            <span class="text-[11px] text-slate-500">
+              8 unread
+            </span>
+          </div>
+          <div class="mt-3 space-y-2">
+            <div
+              *ngFor="let note of notifications"
+              class="flex items-start gap-3 rounded-md border bg-white px-3 py-2"
+              [ngClass]="note.borderClass"
+            >
+              <div class="mt-1 h-2 w-2 rounded-full bg-slate-300"></div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <div class="text-[11px] font-semibold text-slate-900">
+                    {{ note.title }}
+                  </div>
+                  <span class="text-[10px] text-slate-400">
+                    {{ note.timeAgo }}
+                  </span>
+                </div>
+                <p class="mt-0.5 text-[11px] text-slate-600">
+                  {{ note.description }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+</app-trade-layout>

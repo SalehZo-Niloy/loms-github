@@ -1,0 +1,168 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Proceed Details"
+  basePath="/trade"
+>
+  <!-- Header -->
+  <div class="mb-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <h1 class="text-2xl font-bold text-slate-900">{{ proceedDetails.id }}</h1>
+        <span 
+          class="rounded-full px-3 py-1 text-sm font-medium"
+          [class.bg-purple-100]="proceedDetails.status === 'PENDING_APPROVAL'"
+          [class.text-purple-800]="proceedDetails.status === 'PENDING_APPROVAL'"
+          [class.bg-red-100]="proceedDetails.status === 'DISCREPANCY_RAISED'"
+          [class.text-red-800]="proceedDetails.status === 'DISCREPANCY_RAISED'"
+          [class.bg-indigo-100]="proceedDetails.status === 'SWIFT_VALIDATED'"
+          [class.text-indigo-800]="proceedDetails.status === 'SWIFT_VALIDATED'"
+          [class.bg-green-100]="proceedDetails.status === 'REALIZED'"
+          [class.text-green-800]="proceedDetails.status === 'REALIZED'"
+        >
+          {{ formatStatus(proceedDetails.status) }}
+        </span>
+      </div>
+      <div>
+        <a routerLink="/trade/export-proceed/customer/dashboard" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+          Back
+        </a>
+      </div>
+    </div>
+    <div class="mt-2 text-sm text-slate-500">
+      {{ proceedDetails.customer }} • {{ proceedDetails.billNo }}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+      
+      <!-- SWIFT / Receipt Details -->
+      <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-200 px-6 py-4">
+          <h2 class="text-lg font-semibold text-slate-900">SWIFT / Receipt Details</h2>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <p class="text-sm text-slate-500">SWIFT Reference</p>
+              <p class="mt-1 font-medium text-slate-900">{{ proceedDetails.swiftRef }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Value Date</p>
+              <p class="mt-1 font-medium text-slate-900">{{ proceedDetails.valueDate }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Currency</p>
+              <p class="mt-1 font-medium text-slate-900">{{ proceedDetails.currency }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Amount</p>
+              <p class="mt-1 font-medium text-slate-900">{{ proceedDetails.amount | number:'1.2-2' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distribution & Adjustment -->
+      <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-200 px-6 py-4">
+          <h2 class="text-lg font-semibold text-slate-900">Distribution & Adjustment</h2>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-y-6 gap-x-12">
+            <div>
+              <p class="text-sm text-slate-500">Credit to Customer</p>
+              <p class="mt-1 font-medium text-slate-900">{{ distributionSummary.creditToCustomer | currency:'USD' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Loan Adjustment</p>
+              <p class="mt-1 font-medium text-slate-900">{{ distributionSummary.loanAdjustment | currency:'USD' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Investment Adjustment</p>
+              <p class="mt-1 font-medium text-slate-900">{{ distributionSummary.investmentAdjustment | currency:'USD' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500">Total Charges</p>
+              <p class="mt-1 font-medium text-slate-900">{{ distributionSummary.totalCharges | currency:'USD' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Discrepancy Alert -->
+      <div *ngIf="discrepancy.isRaised" class="rounded-md bg-red-50 p-4 border-l-4 border-red-500 flex items-start gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+           <circle cx="12" cy="12" r="10"></circle>
+           <line x1="12" y1="8" x2="12" y2="12"></line>
+           <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <div class="text-sm text-red-700">
+           <span class="font-bold">Discrepancy Raised:</span> {{ discrepancy.reason }}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Customer Details -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-4">Customer Details</h3>
+        <div class="space-y-4">
+          <div>
+            <p class="text-xs text-slate-500">Name</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.customer }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500">CIF</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.cif }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500">Account No</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.accountNo }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- References -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-4">References</h3>
+        <div class="space-y-4">
+          <div>
+            <p class="text-xs text-slate-500">Bill Number</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.billNo }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500">LC Number</p>
+            <p class="font-medium text-slate-900">{{ proceedDetails.lcNo }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-4">History</h3>
+        <div class="relative border-l border-slate-200 ml-2 space-y-8">
+          
+          <div *ngFor="let event of historyEvents" class="ml-6 relative">
+             <div class="absolute -left-[31px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-slate-300"></div>
+             <div class="flex justify-between items-start">
+               <div>
+                 <p class="text-sm font-medium text-slate-900">{{ event.title }}</p>
+                 <p class="text-xs text-slate-500 mt-0.5">{{ event.subtitle }}</p>
+               </div>
+               <div class="text-right">
+                 <p class="text-xs text-slate-500">{{ event.date }}</p>
+                 <p class="text-xs font-medium text-slate-900">{{ event.user }}</p>
+               </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</app-trade-layout>

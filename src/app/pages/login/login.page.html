@@ -1,0 +1,108 @@
+<div
+  class="relative flex min-h-screen flex-col bg-gray-50"
+>
+  <div class="relative z-10 flex flex-1 items-center justify-center px-4 sm:px-6 py-10 sm:py-16">
+    <div
+      class="w-full max-w-md rounded-2xl border p-8 shadow-lg shadow-black/5"
+      [ngClass]="[theme.border.default, theme.surface.card]"
+    >
+      <div class="flex flex-col items-center gap-2">
+        <app-auth-logo />
+      </div>
+
+      <form class="mt-6 space-y-4" (submit)="onSubmit()">
+        <div hlmField>
+          <label hlmFieldLabel class="text-xs font-medium text-slate-700">
+            Username
+            <span class="text-red-500">*</span>
+          </label>
+          <div hlmFieldContent>
+            <input
+              type="text"
+              class="block w-full rounded-md border px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [ngClass]="[theme.input.background.default, theme.border.default]"
+              placeholder="username"
+              [value]="username"
+              (input)="username = ($any($event.target)).value"
+            />
+          </div>
+        </div>
+
+        <div hlmField>
+          <label hlmFieldLabel class="text-xs font-medium text-slate-700">
+            Password
+            <span class="text-red-500">*</span>
+          </label>
+          <div hlmFieldContent>
+            <div class="relative">
+              <input
+                [attr.type]="isPasswordVisible ? 'text' : 'password'"
+                class="block w-full rounded-md border px-3 py-2 pr-10 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                [ngClass]="[theme.input.background.default, theme.border.default]"
+                placeholder="password"
+                [value]="password"
+                (input)="password = ($any($event.target)).value"
+              />
+              <button
+                hlmBtn
+                variant="ghost"
+                size="icon-xs"
+                type="button"
+                class="absolute inset-y-0 right-3 flex items-center justify-center text-slate-500 hover:text-slate-700"
+                (click)="togglePasswordVisibility()"
+              >
+                <ng-container *ngIf="!isPasswordVisible; else eyeOff">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"
+                    />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </ng-container>
+                <ng-template #eyeOff>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M3.98 8.223A10.477 10.477 0 0 0 2.458 12C3.732 16.057 7.523 19 12 19a9.96 9.96 0 0 0 3.75-.726"
+                    />
+                    <path
+                      d="M6.228 6.228A9.96 9.96 0 0 1 12 5c4.477 0 8.268 2.943 9.542 7a10.523 10.523 0 0 1-1.249 2.527"
+                    />
+                    <path d="M9.88 9.88A3 3 0 0 0 12 15a3 3 0 0 0 2.12-.879" />
+                    <line x1="4.5" y1="4.5" x2="19.5" y2="19.5" />
+                  </svg>
+                </ng-template>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button
+          hlmBtn
+          type="submit"
+          class="mt-2 flex w-full items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium "
+        
+        >
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,417 @@
+<app-trade-layout
+  organisationName="Trade Finance Operations"
+  solutionName="Guarantee Officer"
+  breadcrumb="Guarantee Claim Settlement"
+  basePath="/trade"
+>
+  <div class="space-y-6">
+    <section class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-1">
+        <h1 class="text-lg font-semibold text-slate-900">
+          Guarantee Claim Settlement
+        </h1>
+        <p class="text-xs text-slate-500">
+          Process approved claim settlement and execute payment to beneficiary.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 text-[11px]">
+        <div
+          class="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-700"
+        >
+          <span class="inline-flex h-3 w-3 items-center justify-center rounded-full bg-emerald-600 text-[9px] text-white">
+            ✓
+          </span>
+          <span>Claim approved for settlement</span>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-700 px-6 py-4 text-[11px] text-emerald-50 shadow-sm"
+    >
+      <div class="grid gap-4 text-xs md:grid-cols-6">
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Claim ID
+          </div>
+          <div class="text-sm font-semibold text-white">
+            CLM-2024-0456
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Guarantee Reference
+          </div>
+          <div class="text-sm font-semibold text-white">
+            GTR-2024-001234
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Claim Amount
+          </div>
+          <div class="text-sm font-semibold text-white">
+            USD 750,000
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Approval Date
+          </div>
+          <div class="text-sm font-semibold text-white">
+            29-Dec-2024
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Approval Authority
+          </div>
+          <div class="text-sm font-semibold text-white">
+            Credit Committee
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Approval Ref
+          </div>
+          <div class="text-sm font-semibold text-white">
+            APV-2024-789
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-[2.4fr,1.1fr]">
+      <div class="space-y-5">
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                💸
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-slate-900">
+                  Settlement Details
+                </div>
+              </div>
+            </div>
+            <span class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+              Approved
+            </span>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-3">
+            <div class="space-y-1 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Settlement Amount
+              </div>
+              <div class="text-xl font-semibold text-emerald-800">
+                USD 750,000
+              </div>
+              <div class="text-[10px] text-emerald-700">
+                Full claim amount
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Currency
+              </div>
+              <div class="text-lg font-semibold text-slate-900">
+                USD
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Settlement Type
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                Customer Indemnity
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Proposed Settlement Date
+              </div>
+              <div class="rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                30-Dec-2024
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+              🛡
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">
+                Approval &amp; Sanction Information
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1 rounded-xl bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Approval Authority
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                Credit Committee
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Approval Reference Number
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                APV-2024-789
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Approval Date &amp; Time
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                29-Dec-2024 14:35
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Conditions
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                None
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-amber-50 text-amber-600">
+              💳
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">
+                Financial &amp; Indemnity Data
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-2 rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-amber-800">
+                Customer Debit Account
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                **** **** **** 5678
+              </div>
+              <div class="text-[10px] text-amber-800">
+                Debit customer account immediately upon settlement execution.
+              </div>
+            </div>
+            <div class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Account Currency / Available Balance
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                USD • USD 1,250,000
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
+              🧾
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">
+                Beneficiary Payment Details
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1 rounded-xl border border-slate-200 bg-indigo-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Payment Amount
+              </div>
+              <div class="text-xl font-semibold text-indigo-900">
+                USD 750,000
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-slate-200 bg-indigo-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Value Date
+              </div>
+              <div class="text-lg font-semibold text-indigo-900">
+                30-Dec-2024
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Beneficiary Bank Name
+              </div>
+              <div class="rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                Citibank N.A. Dubai
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Beneficiary Bank BIC
+              </div>
+              <div class="rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                CITIAEAD
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Payment Channel
+              </div>
+              <div class="rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                SWIFT
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Payment Message Type
+              </div>
+              <div class="rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                MT202 / MT203
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-[11px] text-amber-800">
+            Payment will be executed immediately upon settlement confirmation. Customer account will be debited
+            simultaneously.
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+              ✔
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">
+                Settlement Confirmation
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 space-y-2 text-[11px] text-slate-700">
+            <label class="flex items-start gap-2">
+              <input type="checkbox" class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-emerald-600" />
+              <span>I confirm that all settlement details are accurate and complete.</span>
+            </label>
+            <label class="flex items-start gap-2">
+              <input type="checkbox" class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-emerald-600" />
+              <span>I confirm that customer account has sufficient funds.</span>
+            </label>
+            <label class="flex items-start gap-2">
+              <input type="checkbox" class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-emerald-600" />
+              <span>I authorize the settlement execution.</span>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <section class="space-y-4">
+        <section class="rounded-2xl border border-blue-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-slate-900">
+              Settlement Actions
+            </h2>
+          </div>
+          <div class="mt-4 space-y-3 text-[11px] text-slate-700">
+            <div class="rounded-lg bg-emerald-50 px-3 py-3">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-slate-900">Claim Amount</span>
+                <span class="text-sm font-semibold text-emerald-800">USD 750,000</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span class="font-semibold text-slate-900">Customer Debit</span>
+                <span class="text-sm font-semibold text-rose-600">USD 750,000</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span class="font-semibold text-slate-900">Margin Release</span>
+                <span class="text-sm font-semibold text-slate-900">USD 187,500</span>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span class="font-semibold text-slate-900">Payment to Beneficiary</span>
+                <span class="text-sm font-semibold text-slate-900">USD 750,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 space-y-2 text-[11px] text-slate-700">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              Pre-Execution Checks
+            </div>
+            <div class="rounded-lg border border-blue-200 bg-blue-50 px-3 py-3 space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-600"></span>
+                <span>Settlement approval verified</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-600"></span>
+                <span>Customer account validated</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-600"></span>
+                <span>Beneficiary details confirmed</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 rounded-lg border border-rose-200 bg-rose-50 px-3 py-3 text-[11px] text-rose-800">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[10px] text-white">
+                !
+              </span>
+              <span class="font-semibold">Critical Action</span>
+            </div>
+            <p class="mt-1">
+              Settlement execution is irreversible. Ensure all details are verified before proceeding.
+            </p>
+          </div>
+          <div class="mt-4 space-y-3">
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md bg-emerald-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-emerald-700"
+            >
+              Confirm Settlement
+            </button>
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+            >
+              <span class="mr-1">⬇</span>
+              <span>Download Preview</span>
+            </button>
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md bg-slate-100 px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-200"
+              (click)="goBackToHandling()"
+            >
+              ← Back to Review
+            </button>
+          </div>
+          <div class="mt-4 rounded-lg bg-slate-50 px-3 py-3 text-[11px] text-slate-600">
+            <div class="font-semibold text-slate-900">
+              Post-Settlement Actions:
+            </div>
+            <ul class="mt-1 space-y-1 list-disc pl-4">
+              <li>MT787 sent to beneficiary bank</li>
+              <li>MT202/MT203 payment executed</li>
+              <li>Customer account debited</li>
+              <li>Margin released</li>
+              <li>Guarantee status updated to “Settled”</li>
+              <li>Notifications sent to all parties</li>
+            </ul>
+          </div>
+        </section>
+      </section>
+    </section>
+  </div>
+</app-trade-layout>

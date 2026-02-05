@@ -1,0 +1,213 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="KYC Management"
+  basePath="/loms"
+>
+  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-xl mx-auto">
+    <section class="flex items-center justify-between">
+      <h1 class="text-2xl font-semibold text-slate-900">
+        KYC Setup Dashboard
+      </h1>
+      <div class="flex items-center gap-3 text-sm">
+        <span class="text-slate-600">Current Role:</span>
+        <select
+          class="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+          [(ngModel)]="currentRole"
+          (ngModelChange)="onRoleChange()"
+        >
+          <option [ngValue]="'Admin'">Admin (Policy)</option>
+          <option [ngValue]="'Branch'">Branch User</option>
+          <option [ngValue]="'Checker'">Checker (Approver)</option>
+        </select>
+      </div>
+    </section>
+
+    <ng-container *ngIf="currentRole === 'Admin'; else nonAdminViews">
+      <section class="space-y-4">
+        <div class="flex flex-wrap gap-3">
+          <div
+            *ngIf="activeRetailId"
+            class="inline-flex items-center rounded-full bg-violet-50 px-4 py-2 text-xs font-semibold text-violet-700"
+          >
+            ACTIVE RETAIL: {{ activeRetailId }}
+          </div>
+          <div
+            *ngIf="activeCardId"
+            class="inline-flex items-center rounded-full bg-violet-50 px-4 py-2 text-xs font-semibold text-violet-700"
+          >
+            ACTIVE CREDIT CARD: {{ activeCardId }}
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+            (click)="createNewSetup()"
+          >
+            + Create New Setup
+          </button>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <table class="min-w-full border-collapse text-sm">
+            <thead class="bg-slate-50">
+              <tr class="text-left text-xs font-semibold text-slate-600">
+                <th class="px-6 py-3">Setup ID</th>
+                <th class="px-6 py-3">Name</th>
+                <th class="px-6 py-3">Product</th>
+                <th class="px-6 py-3">Status</th>
+                <th class="px-6 py-3">Effective Date</th>
+                <th class="px-6 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let s of setups"
+                class="border-t border-slate-100 text-slate-800"
+              >
+                <td class="px-6 py-3">
+                  {{ s.id }}
+                </td>
+                <td class="px-4 py-3">
+                  {{ s.name }}
+                </td>
+                <td class="px-6 py-3">
+                  {{ s.product }}
+                </td>
+                <td class="px-6 py-3">
+                  <span
+                    class="inline-flex items-center rounded-full bg-violet-50 px-3 py-1 text-[11px] font-semibold text-violet-700"
+                  >
+                    {{ s.status | uppercase }}
+                  </span>
+                </td>
+                <td class="px-6 py-3">
+                  {{ s.effectiveDate }}
+                </td>
+                <td class="px-6 py-3">
+                  <div class="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      class="rounded-md border border-slate-300 px-3 py-1 text-xs font-medium text-slate-700"
+                      (click)="editSetup(s)"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      class="rounded-md border border-slate-300 px-3 py-1 text-xs font-medium text-slate-700"
+                      (click)="submitSetup(s)"
+                    >
+                      Submit
+                    </button>
+                    <button
+                      type="button"
+                      class="rounded-md border border-slate-300 px-3 py-1 text-xs font-medium text-slate-700"
+                      (click)="cloneSetup(s)"
+                    >
+                      Clone
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </ng-container>
+
+    <ng-template #nonAdminViews>
+      <section *ngIf="currentRole === 'Branch'; else checkerView" class="space-y-4">
+        <h2 class="text-xl font-semibold text-slate-900">
+          Branch KYC Worklist
+        </h2>
+        <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <table class="min-w-full border-collapse text-sm">
+            <thead class="bg-slate-50">
+              <tr class="text-left text-xs font-semibold text-slate-600">
+                <th class="px-6 py-3">App ID</th>
+                <th class="px-6 py-3">Product</th>
+                <th class="px-6 py-3">Applicant</th>
+                <th class="px-6 py-3">KYC Status</th>
+                <th class="px-6 py-3">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of branchItems"
+                class="border-t border-slate-100 text-slate-800"
+              >
+                <td class="px-6 py-3">
+                  {{ item.appId }}
+                </td>
+                <td class="px-6 py-3">
+                  {{ item.product }}
+                </td>
+                <td class="px-6 py-3">
+                  {{ item.applicant }}
+                </td>
+                <td class="px-6 py-3">
+                  {{ item.kycStatus | uppercase }}
+                </td>
+                <td class="px-6 py-3">
+                  <button
+                    type="button"
+                    class="rounded-md bg-blue-600 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-700"
+                    (click)="startKyc(item.appId)"
+                  >
+                    Start KYC
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <ng-template #checkerView>
+        <section class="space-y-4">
+          <h2 class="text-xl font-semibold text-slate-900">
+            KYC Review Worklist
+          </h2>
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <table class="min-w-full border-collapse text-sm">
+              <thead class="bg-slate-50">
+                <tr class="text-left text-xs font-semibold text-slate-600">
+                  <th class="px-6 py-3">App ID</th>
+                  <th class="px-6 py-3">Product</th>
+                  <th class="px-6 py-3">Applicant</th>
+                  <th class="px-6 py-3">KYC Status</th>
+                  <th class="px-6 py-3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of checkerItems"
+                  class="border-t border-slate-100 text-slate-800"
+                >
+                  <td class="px-6 py-3">
+                    {{ item.appId }}
+                  </td>
+                  <td class="px-6 py-3">
+                    {{ item.product }}
+                  </td>
+                  <td class="px-6 py-3">
+                    {{ item.applicant }}
+                  </td>
+                  <td class="px-6 py-3">
+                    {{ item.kycStatus | uppercase }}
+                  </td>
+                  <td class="px-6 py-3 text-xs text-slate-500">
+                    No Action
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </ng-template>
+    </ng-template>
+  </div>
+</app-loms-layout>

@@ -1,0 +1,190 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="LC Settlement Decision"
+  basePath="/trade"
+>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-lg font-semibold text-slate-900">{{ header.title }}</h1>
+        <p class="mt-1 text-xs text-slate-500">LC Number: {{ header.lcNumber }}</p>
+      </div>
+      <div class="flex items-center gap-4 text-xs text-slate-600">
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600"
+        >
+          View LC Document
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600"
+        >
+          History
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-6 rounded-2xl border border-blue-200 bg-blue-50 px-6 py-5 shadow-sm">
+    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div>
+        <div class="text-sm font-semibold text-slate-900">Letter of Credit Details</div>
+        <div class="text-xs text-slate-500">
+          Review LC information and select appropriate settlement method
+        </div>
+      </div>
+      <span
+        class="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700"
+      >
+        {{ header.status }}
+      </span>
+    </div>
+    <div class="mt-4 grid gap-4 md:grid-cols-4">
+      <div *ngFor="let item of details">
+        <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          {{ item.label }}
+        </div>
+        <div class="mt-1 text-sm font-semibold text-slate-900">{{ item.value }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-6 rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm">
+    <div class="flex flex-col items-center text-center">
+      <div
+        class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 3L5 14h6l-1 7 8-11h-6z"
+          />
+        </svg>
+      </div>
+      <h2 class="mt-4 text-base font-semibold text-slate-900">Select Settlement Method</h2>
+      <p class="mt-1 text-xs text-slate-500">
+        Choose the appropriate settlement route based on the LC terms and payment conditions. This
+        will determine the processing workflow.
+      </p>
+    </div>
+
+    <div class="mt-6 grid gap-6 lg:grid-cols-2">
+      <div
+        *ngFor="let option of options"
+        class="rounded-2xl border border-slate-200 bg-white px-6 py-6"
+      >
+        <div class="flex items-start gap-3">
+          <div
+            class="flex h-10 w-10 items-center justify-center rounded-lg"
+            [ngClass]="
+              option.highlight === 'green'
+                ? 'bg-emerald-100 text-emerald-700'
+                : 'bg-blue-100 text-blue-700'
+            "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 3L5 14h6l-1 7 8-11h-6z"
+              />
+            </svg>
+          </div>
+          <div>
+            <div class="text-sm font-semibold text-slate-900">{{ option.title }}</div>
+            <div class="text-[11px] text-slate-500">{{ option.subtitle }}</div>
+            <div class="mt-2 flex flex-wrap items-center gap-2">
+              <span
+                *ngFor="let tag of option.tags"
+                class="rounded-full px-2 py-0.5 text-[11px] font-semibold"
+                [ngClass]="
+                  option.highlight === 'green'
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : 'bg-blue-100 text-blue-700'
+                "
+              >
+                {{ tag }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mt-4 rounded-xl border px-4 py-3 text-[11px]"
+          [ngClass]="
+            option.highlight === 'green'
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+              : 'border-blue-200 bg-blue-50 text-blue-700'
+          "
+        >
+          <div class="font-semibold">Processing Details:</div>
+          <ul class="mt-2 space-y-1">
+            <li *ngFor="let bullet of option.bullets">✓ {{ bullet }}</li>
+          </ul>
+        </div>
+
+        <div class="mt-4 space-y-1 text-xs text-slate-600">
+          <div *ngFor="let amount of option.amounts" class="flex items-center justify-between">
+            <span>{{ amount.label }}:</span>
+            <span class="font-semibold text-slate-900">{{ amount.value }}</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="mt-5 w-full rounded-md px-4 py-2 text-xs font-semibold text-white"
+          [ngClass]="
+            option.highlight === 'green'
+              ? 'bg-emerald-600 hover:bg-emerald-700'
+              : 'bg-blue-600 hover:bg-blue-700'
+          "
+          (click)="onOptionClick(option)"
+        >
+          {{ option.action }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-6 py-5 text-xs text-amber-700 shadow-sm"
+  >
+    <div class="font-semibold">{{ guidelines.title }}</div>
+    <p class="mt-1 text-[11px] text-amber-700">{{ guidelines.note }}</p>
+    <div class="mt-4 grid gap-6 md:grid-cols-2">
+      <div>
+        <div class="text-[11px] font-semibold uppercase tracking-wide text-amber-700">
+          Sight Payment Criteria:
+        </div>
+        <ul class="mt-2 space-y-1 text-[11px] text-amber-700">
+          <li *ngFor="let item of guidelines.sight">• {{ item }}</li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-[11px] font-semibold uppercase tracking-wide text-amber-700">
+          Usance Criteria:
+        </div>
+        <ul class="mt-2 space-y-1 text-[11px] text-amber-700">
+          <li *ngFor="let item of guidelines.usance">• {{ item }}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</app-trade-layout>

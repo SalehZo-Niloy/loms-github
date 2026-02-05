@@ -1,0 +1,215 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Discrepancy Record, Review & Rejection"
+  basePath="/trade"
+>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-lg font-semibold text-slate-900">{{ header.title }}</h1>
+        <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+          <span>LC Reference: {{ header.reference }}</span>
+          <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+          <span>LC Amount: {{ header.lcAmount }}</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span
+          class="rounded-full bg-rose-100 px-2.5 py-0.5 text-[11px] font-semibold text-rose-700"
+          >{{ header.status }}</span
+        >
+        <span
+          class="rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700"
+          >{{ header.priority }}</span
+        >
+      </div>
+    </div>
+  </section>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+    <aside class="space-y-6">
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-4 py-3">
+          <h2 class="text-xs font-semibold text-slate-700">Discrepancy List</h2>
+        </div>
+        <div class="space-y-3 px-4 py-4 text-xs text-slate-600">
+          <div
+            *ngFor="let item of discrepancyList"
+            class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2"
+          >
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-900">{{ item.title }}</span>
+              <span
+                class="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                [ngClass]="
+                  item.severity === 'High'
+                    ? 'bg-rose-100 text-rose-700'
+                    : item.severity === 'Medium'
+                      ? 'bg-amber-100 text-amber-700'
+                      : 'bg-emerald-100 text-emerald-700'
+                "
+              >
+                {{ item.severity }}
+              </span>
+            </div>
+            <p class="mt-1 text-[11px] text-slate-500">{{ item.description }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-4 py-3">
+          <h2 class="text-xs font-semibold text-slate-700">Summary</h2>
+        </div>
+        <div class="space-y-2 px-4 py-4 text-xs text-slate-600">
+          <div class="flex items-center justify-between">
+            <span>Total Discrepancies</span>
+            <span class="font-semibold text-slate-900">{{ summary.total }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>High Severity</span>
+            <span class="font-semibold text-rose-700">{{ summary.high }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Medium Severity</span>
+            <span class="font-semibold text-amber-700">{{ summary.medium }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Low Severity</span>
+            <span class="font-semibold text-emerald-700">{{ summary.low }}</span>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <div class="space-y-6">
+      <section class="rounded-2xl border border-rose-200 bg-rose-50 shadow-sm">
+        <div class="border-b border-rose-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-rose-700">Critical Discrepancy</h2>
+        </div>
+        <div class="grid gap-4 px-6 py-5 sm:grid-cols-2">
+          <div *ngFor="let row of criticalDetails">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-rose-400">
+              {{ row.label }}
+            </div>
+            <div class="mt-1 text-sm font-semibold text-rose-700">{{ row.value }}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-amber-200 bg-amber-50 shadow-sm">
+        <div class="border-b border-amber-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-amber-700">Document Details</h2>
+        </div>
+        <div class="grid gap-4 px-6 py-5 sm:grid-cols-2">
+          <div *ngFor="let row of documentDetails">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-amber-500">
+              {{ row.label }}
+            </div>
+            <div class="mt-1 text-sm font-semibold text-amber-700">{{ row.value }}</div>
+          </div>
+        </div>
+        <div class="px-6 pb-5 text-xs text-amber-700">
+          <div class="rounded-lg border border-amber-200 bg-white px-4 py-3">
+            {{ complianceNotes }}
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-blue-200 bg-blue-50 shadow-sm">
+        <div class="border-b border-blue-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-blue-700">Risk Remarks & Analysis</h2>
+        </div>
+        <div class="space-y-3 px-6 py-5 text-xs text-blue-700">
+          <div
+            *ngFor="let item of analysis"
+            class="rounded-lg border border-blue-100 bg-white px-4 py-3"
+          >
+            <div class="font-semibold">{{ item.title }}</div>
+            <p class="mt-1 text-[11px] text-blue-600">{{ item.description }}</p>
+          </div>
+        </div>
+        <div
+          class="grid gap-4 border-t border-blue-100 px-6 py-4 text-xs text-blue-700 sm:grid-cols-2"
+        >
+          <div class="space-y-2">
+            <div *ngFor="let member of team.compliance" class="flex items-center justify-between">
+              <span>{{ member.label }}</span>
+              <span class="font-semibold text-blue-700">{{ member.name }}</span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div *ngFor="let item of team.review" class="flex items-center justify-between">
+              <span>{{ item.label }}</span>
+              <span class="font-semibold text-blue-700">{{ item.name }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-purple-200 bg-purple-50 shadow-sm">
+        <div class="border-b border-purple-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-purple-700">Available Actions</h2>
+        </div>
+        <div class="grid gap-4 px-6 py-5 md:grid-cols-2">
+          <div
+            *ngFor="let action of actions"
+            class="rounded-xl border border-slate-200 bg-white px-4 py-4 text-xs text-slate-700"
+          >
+            <div class="text-sm font-semibold text-slate-900">{{ action.title }}</div>
+            <p class="mt-1 text-[11px] text-slate-500">{{ action.description }}</p>
+            <div class="mt-3">
+              <button
+                type="button"
+                class="rounded-md bg-blue-600 px-3 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+                *ngIf="action.action === 'Send for Confirmation'"
+                (click)="sendForConfirmation()"
+              >
+                {{ action.action }}
+              </button>
+              <button
+                type="button"
+                class="rounded-md bg-blue-600 px-3 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+                *ngIf="action.action === 'Send Notification'"
+                (click)="sendNotification()"
+              >
+                {{ action.action }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 border-t border-purple-100 px-6 py-4 text-xs">
+          <span class="text-slate-500">Additional Options:</span>
+          <button
+            *ngFor="let option of additionalActions"
+            type="button"
+            class="rounded-md border border-slate-200 px-2 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-50"
+          >
+            {{ option }}
+          </button>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-amber-200 bg-amber-50 shadow-sm">
+        <div class="border-b border-amber-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-amber-700">Current Status & Outcome</h2>
+        </div>
+        <div class="space-y-3 px-6 py-5 text-xs text-amber-700">
+          <div class="rounded-lg border border-amber-200 bg-white px-4 py-3">
+            <div class="font-semibold">{{ currentStatus.title }}</div>
+            <p class="mt-1 text-[11px] text-amber-700">{{ currentStatus.note }}</p>
+          </div>
+          <div class="grid gap-2 sm:grid-cols-2">
+            <div
+              *ngFor="let step of currentStatus.steps"
+              class="rounded-lg border border-amber-200 bg-white px-3 py-2 text-[11px]"
+            >
+              {{ step }}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</app-trade-layout>

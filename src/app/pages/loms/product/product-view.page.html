@@ -1,0 +1,268 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Product Configuration"
+  basePath="/loms"
+>
+  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-lg mx-auto">
+    <ng-container *ngIf="product; else notFound">
+      <section class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-semibold text-slate-900">
+            Loan Product Configuration
+          </h1>
+          <p class="text-xs text-slate-500 mt-1">
+            {{ mode === 'review' ? 'Checker Review' : 'Maker View' }} &mdash; full product snapshot
+          </p>
+        </div>
+        <a
+          routerLink="/loms/product"
+          class="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700"
+        >
+          Back to List
+        </a>
+      </section>
+
+      <section class="space-y-4">
+        <div class="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
+          <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div class="space-y-2">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Product Code
+              </div>
+              <div class="text-lg font-semibold text-blue-700">
+                {{ product.code }}
+              </div>
+              <div class="text-sm text-slate-700">
+                {{ product.name }}
+              </div>
+            </div>
+            <div class="space-y-2 text-right">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Status
+              </div>
+              <span
+                class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold"
+                [ngClass]="{
+                  'bg-emerald-50 text-emerald-700': product.status === 'Approved',
+                  'bg-blue-50 text-blue-700': product.status === 'Submitted',
+                  'bg-slate-100 text-slate-700': product.status === 'Draft',
+                  'bg-red-50 text-red-700': product.status === 'Rejected'
+                }"
+              >
+                {{ product.status }}
+              </span>
+              <div class="text-[11px] text-slate-500">
+                Updated on {{ product.updatedOn }}
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-4 text-xs">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Business Line
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                {{ product.businessLine }}
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Version
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                {{ product.version }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <section class="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm text-xs space-y-3">
+            <h2 class="text-sm font-semibold text-slate-900">
+              Product Attributes
+            </h2>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Product Type
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                Term Loan
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Currency
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                BDT, USD, EUR
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Interest / Profit Type
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                Fixed
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm text-xs space-y-3">
+            <h2 class="text-sm font-semibold text-slate-900">
+              Customer Segment &amp; Eligibility
+            </h2>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Segment
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                Mass
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Persona
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                Salaried, Business Owner
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Eligibility Rules
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                Min Age 21, Max Age 60, Min Income BDT 50,000
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm text-xs space-y-3">
+          <h2 class="text-sm font-semibold text-slate-900">
+            Security / Collateral Mapping
+          </h2>
+          <div class="overflow-x-auto rounded-md border border-slate-200">
+            <table class="min-w-full border-collapse text-xs">
+              <thead class="bg-slate-50 text-[11px] font-semibold text-slate-600">
+                <tr>
+                  <th class="px-4 py-2 text-left">Security Type</th>
+                  <th class="px-4 py-2 text-left">Valuation Req?</th>
+                  <th class="px-4 py-2 text-left">Margin %</th>
+                  <th class="px-4 py-2 text-left">LTV %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="px-4 py-2">Cash</td>
+                  <td class="px-4 py-2">No</td>
+                  <td class="px-4 py-2">15%</td>
+                  <td class="px-4 py-2">85%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm text-xs space-y-4">
+          <h2 class="text-sm font-semibold text-slate-900">
+            Terms, Limits, Pricing &amp; Charges
+          </h2>
+          <div class="grid gap-4 md:grid-cols-4">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Min Loan Amount
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                BDT 500,000
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Max Loan Amount
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                BDT 10,000,000
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Min Tenor
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                12 months
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Max Tenor
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                120 months
+              </div>
+            </div>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Interest / Profit Rate
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                9-12%
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Penal Interest Rate
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                +2%
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              Charges
+            </div>
+            <div class="overflow-x-auto rounded-md border border-slate-200">
+              <table class="min-w-full border-collapse text-xs">
+                <thead class="bg-slate-50 text-[11px] font-semibold text-slate-600">
+                  <tr>
+                    <th class="px-4 py-2 text-left">Charge Type</th>
+                    <th class="px-4 py-2 text-left">Type</th>
+                    <th class="px-4 py-2 text-left">Amount/Rate</th>
+                    <th class="px-4 py-2 text-left">VAT?</th>
+                    <th class="px-4 py-2 text-left">Applicability</th>
+                    <th class="px-4 py-2 text-left">Mandatory?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="px-4 py-2">Application Fee</td>
+                    <td class="px-4 py-2">Flat</td>
+                    <td class="px-4 py-2">BDT 5,000</td>
+                    <td class="px-4 py-2">Yes</td>
+                    <td class="px-4 py-2">Always</td>
+                    <td class="px-4 py-2">Yes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </section>
+    </ng-container>
+
+    <ng-template #notFound>
+      <section class="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm text-sm text-slate-700">
+        Product not found.
+        <a routerLink="/loms/product" class="text-blue-600 underline ml-1">Back to list</a>
+      </section>
+    </ng-template>
+  </div>
+</app-loms-layout>
+

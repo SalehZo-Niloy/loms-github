@@ -1,0 +1,52 @@
+<app-trade-layout
+  organisationName="Work Flow"
+  solutionName="Work Flow"
+  breadcrumb="Test Work Flow"
+  basePath="/workflow"
+  primarySectionLabel="Work Flow"
+  [mainMenuItems]="menuItems"
+>
+  <section class="space-y-4">
+    <div
+      class="rounded-2xl border p-6 shadow-sm"
+      [ngClass]="[theme.border.default, theme.surface.card]"
+    >
+      <h1 class="text-lg font-semibold text-slate-900">Test Work Flow</h1>
+
+      <div class="mt-4 flex items-center gap-3">
+        <label class="w-40 text-sm font-medium text-slate-700">URL Input</label>
+        <input
+          class="flex-1 rounded-md border px-3 py-2 text-sm"
+          type="text"
+          name="workflowUrl"
+          [(ngModel)]="workflowUrl"
+        />
+        <button
+          type="button"
+          class="ml-2 inline-flex items-center rounded-md border px-3 py-1.5 text-sm font-medium border"
+          [ngClass]="workflowUrl ? 'bg-blue-600 hover:bg-blue-700 text-white border-transparent cursor-pointer' : 'bg-slate-200 text-slate-400 border-slate-200 cursor-not-allowed'"
+          [disabled]="!workflowUrl"
+          (click)="openWorkflowUrl()"
+        >
+          Go
+        </button>
+      </div>
+      <div class="mt-6">
+        <div class="rounded-md border overflow-hidden" [ngClass]="theme.border.default">
+          <iframe
+            *ngIf="safeUrl; else noLoad"
+            [src]="safeUrl"
+            class="w-full h-[600px] max-h-[600px] min-h-[300px]"
+            frameborder="0"
+            title="Workflow Frame"
+          ></iframe>
+          <ng-template #noLoad>
+            <div class="p-4 text-sm text-slate-500">
+              No workflow loaded. Click Go to open the URL in the frame.
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </section>
+</app-trade-layout>

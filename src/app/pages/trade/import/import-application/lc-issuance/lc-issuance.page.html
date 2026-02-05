@@ -1,0 +1,193 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="LC Issuance, Charge & Margin collection"
+  basePath="/trade"
+>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex items-start gap-3">
+        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M4 4a2 2 0 0 1 2-2h5.2a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4zm6 0v4h4"
+            />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-semibold text-slate-900">{{ header.title }}</h1>
+          <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+            <span id="lc-reference-label">LC Reference:</span>
+            <select
+              [formControl]="lcReferenceControl"
+              class="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-slate-50"
+              aria-labelledby="lc-reference-label"
+              [attr.aria-busy]="lcReferencesLoading ? 'true' : null"
+              [disabled]="lcReferencesLoading || !!lcReferencesError"
+            >
+              <option value="" disabled *ngIf="lcReferencesLoading">Loading references...</option>
+              <option value="" disabled *ngIf="!lcReferencesLoading && lcOptions.length === 0">
+                No references available
+              </option>
+              <ng-container *ngIf="!lcReferencesLoading && lcOptions.length > 0">
+                <option *ngFor="let ref of lcOptions" [value]="ref">
+                  {{ ref }}
+                </option>
+              </ng-container>
+            </select>
+            <span
+              *ngIf="lcReferencesError"
+              class="text-[11px] font-semibold text-red-600"
+              role="alert"
+            >
+              {{ lcReferencesError }}
+            </span>
+            <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+            <span
+              class="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700"
+              >{{ header.status }}</span
+            >
+            <span>Approved by {{ header.approvedBy }} on {{ header.approvedDate }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <app-ui-button variant="secondary" (click)="onSaveDraft()">Save Draft</app-ui-button>
+        <button
+          type="button"
+          class="rounded-md bg-amber-500 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-amber-600"
+          (click)="onValidateLc()"
+        >
+          Validate LC
+        </button>
+        <button
+          type="button"
+          class="rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-700"
+          (click)="onSubmitForIssuance()"
+        >
+          Submit for Issuance
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <div class="space-y-6">
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Applicant & Beneficiary Details</h2>
+        </div>
+        <div class="grid gap-4 px-6 py-5 md:grid-cols-2">
+          <div
+            *ngFor="let party of parties"
+            class="rounded-xl border border-slate-200 bg-slate-50 p-4"
+          >
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              {{ party.label }}
+            </div>
+            <div class="mt-2 text-sm font-semibold text-slate-900">{{ party.name }}</div>
+            <div class="mt-2 whitespace-pre-line text-xs text-slate-600">
+              {{ party.address }}
+            </div>
+            <div class="mt-3 text-xs text-slate-600">
+              <span class="font-semibold text-slate-700">SWIFT:</span> {{ party.swift }}
+            </div>
+            <div *ngIf="party.account" class="mt-1 text-xs text-slate-600">
+              <span class="font-semibold text-slate-700">Account:</span> {{ party.account }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">LC Terms & Conditions</h2>
+        </div>
+        <div class="grid gap-4 px-6 py-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            *ngFor="let term of terms"
+            class="rounded-lg border border-slate-200 bg-slate-50 p-3"
+          >
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              {{ term.label }}
+            </div>
+            <div class="mt-1 text-sm font-semibold text-slate-900">{{ term.value }}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Required Documents</h2>
+        </div>
+        <div class="space-y-3 px-6 py-5">
+          <div
+            *ngFor="let doc of documents"
+            class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
+          >
+            <span
+              class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700"
+            >
+              <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M7.6 13.4 4.2 10l1.2-1.2 2.2 2.2 6-6L15 6.2 7.6 13.4z" />
+              </svg>
+            </span>
+            <div>
+              <div class="text-xs font-semibold text-slate-900">{{ doc.name }}</div>
+              <div class="text-[11px] text-slate-500">{{ doc.description }}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">LC Rules & Regulations</h2>
+        </div>
+        <div class="space-y-3 px-6 py-5">
+          <div
+            *ngFor="let rule of rules"
+            class="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3"
+          >
+            <div class="text-xs font-semibold text-slate-900">{{ rule.title }}</div>
+            <div class="mt-1 text-[11px] text-slate-600">{{ rule.description }}</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="space-y-6">
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+          <div class="flex items-center gap-2 text-sm font-semibold text-slate-900">
+            <span
+              class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-50 text-blue-600"
+            >
+              <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  d="M4 3a2 2 0 0 1 2-2h6.2a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V3zm8 0v4h4"
+                />
+              </svg>
+            </span>
+            MT700 Message Preview
+          </div>
+          <span class="rounded-full bg-blue-100 px-2 py-0.5 text-[11px] font-semibold text-blue-700"
+            >SWIFT Message Format</span
+          >
+        </div>
+        <div class="px-5 py-4">
+          <div
+            class="rounded-xl border border-slate-800 bg-slate-900 p-4 text-[11px] text-emerald-300"
+          >
+            <pre class="whitespace-pre-wrap font-mono">{{ mt700.preview }}</pre>
+          </div>
+          <div
+            class="mt-4 rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-[11px] text-emerald-700"
+          >
+            <span class="font-semibold">{{ validation.status }}</span> · {{ validation.note }}
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+</app-trade-layout>

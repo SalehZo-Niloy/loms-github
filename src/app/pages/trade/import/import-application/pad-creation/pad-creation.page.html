@@ -1,0 +1,300 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="PAD Creation"
+  basePath="/trade"
+>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div class="flex items-start gap-3">
+        <button
+          type="button"
+          class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600"
+        >
+          ←
+        </button>
+        <div>
+          <h1 class="text-lg font-semibold text-slate-900">{{ header.title }}</h1>
+          <p class="mt-1 text-xs text-slate-500">LC Number: {{ header.lcNumber }}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 text-xs text-slate-600">
+        <span class="rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold text-blue-700">
+          {{ header.badge }}
+        </span>
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600"
+        >
+          View LC Document
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-6 rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="text-xs text-slate-500">Progress</div>
+    </div>
+    <div class="mt-4 flex flex-wrap items-center gap-4 text-xs">
+      <div *ngFor="let step of steps; let index = index" class="flex items-center gap-3">
+        <div
+          class="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-semibold"
+          [ngClass]="
+            step.status === 'completed'
+              ? 'bg-emerald-100 text-emerald-700'
+              : step.status === 'current'
+                ? 'bg-blue-600 text-white'
+                : 'bg-slate-100 text-slate-500'
+          "
+        >
+          {{ index + 1 }}
+        </div>
+        <div class="text-[11px] font-semibold text-slate-600">{{ step.label }}</div>
+        <div *ngIf="index < steps.length - 1" class="h-0.5 w-10 bg-slate-200"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-6 rounded-2xl border border-blue-200 bg-blue-50 px-6 py-5 shadow-sm">
+    <div class="flex items-center gap-3">
+      <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
+        <span>LC</span>
+      </div>
+      <div>
+        <div class="text-sm font-semibold text-slate-900">LC Reference Information</div>
+        <div class="text-xs text-slate-500">Source Letter of Credit details for PAD creation</div>
+      </div>
+    </div>
+    <div class="mt-4 grid gap-4 md:grid-cols-4">
+      <div *ngFor="let item of lcInfo" class="rounded-xl border border-blue-100 bg-white px-4 py-3">
+        <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          {{ item.label }}
+        </div>
+        <div class="mt-1 text-sm font-semibold text-slate-900">{{ item.value }}</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div class="flex items-center gap-3 border-b border-slate-100 px-6 py-4">
+        <div
+          class="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-100 text-purple-700"
+        >
+          %
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">PAD Details</div>
+          <div class="text-xs text-slate-500">Configure Payment at Due parameters</div>
+        </div>
+      </div>
+      <div class="space-y-4 px-6 py-5 text-xs text-slate-600">
+        <label>
+          <span class="mb-2 block font-semibold text-slate-700">PAD Reference Number</span>
+          <input
+            type="text"
+            [(ngModel)]="padDetails.reference"
+            class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900"
+          />
+          <span class="mt-1 block text-[11px] text-slate-400">Auto-generated PAD reference</span>
+        </label>
+        <label>
+          <span class="mb-2 block font-semibold text-slate-700">PAD Amount *</span>
+          <input
+            type="text"
+            [(ngModel)]="padDetails.amount"
+            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+          />
+          <span class="mt-1 block text-[11px] text-slate-400">Amount to be paid at maturity</span>
+        </label>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label>
+            <span class="mb-2 block font-semibold text-slate-700">Tenor Period *</span>
+            <input
+              type="number"
+              [(ngModel)]="padDetails.tenor"
+              class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+            />
+            <span class="mt-1 block text-[11px] text-slate-400">Payment deferment period</span>
+          </label>
+          <label>
+            <span class="mb-2 block font-semibold text-slate-700">Tenor Unit</span>
+            <select
+              [(ngModel)]="padDetails.tenorUnit"
+              class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+            >
+              <option>Days</option>
+              <option>Months</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span class="mb-2 block font-semibold text-slate-700">Maturity Date *</span>
+          <input
+            type="date"
+            [(ngModel)]="padDetails.maturityDate"
+            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+          />
+          <span class="mt-1 block text-[11px] text-slate-400">Date when payment becomes due</span>
+        </label>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div class="flex items-center gap-3 border-b border-slate-100 px-6 py-4">
+        <div
+          class="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 text-amber-700"
+        >
+          %
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-slate-900">Interest Terms</div>
+          <div class="text-xs text-slate-500">Configure interest calculation parameters</div>
+        </div>
+      </div>
+      <div class="space-y-4 px-6 py-5 text-xs text-slate-600">
+        <div>
+          <div class="mb-2 font-semibold text-slate-700">Interest Application</div>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2">
+              <input
+                type="radio"
+                value="No Interest"
+                [(ngModel)]="interest.application"
+                class="h-3.5 w-3.5"
+              />
+              <span>No Interest</span>
+            </label>
+            <label class="flex items-center gap-2">
+              <input
+                type="radio"
+                value="Simple Interest"
+                [(ngModel)]="interest.application"
+                class="h-3.5 w-3.5"
+              />
+              <span>Simple Interest</span>
+            </label>
+            <label class="flex items-center gap-2">
+              <input
+                type="radio"
+                value="Compound Interest"
+                [(ngModel)]="interest.application"
+                class="h-3.5 w-3.5"
+              />
+              <span>Compound Interest</span>
+            </label>
+          </div>
+        </div>
+        <label>
+          <span class="mb-2 block font-semibold text-slate-700">Interest Rate (% p.a.)</span>
+          <input
+            type="number"
+            [(ngModel)]="interest.rate"
+            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+          />
+          <span class="mt-1 block text-[11px] text-slate-400">Annual interest rate percentage</span>
+        </label>
+        <label>
+          <span class="mb-2 block font-semibold text-slate-700">Interest Calculation Base</span>
+          <select
+            [(ngModel)]="interest.basis"
+            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900"
+          >
+            <option>360 Days</option>
+            <option>365 Days</option>
+          </select>
+          <span class="mt-1 block text-[11px] text-slate-400"
+            >Day count convention for interest calculation</span
+          >
+        </label>
+        <div
+          class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-700"
+        >
+          <div class="font-semibold">Interest Calculation</div>
+          <div class="mt-2 space-y-1 text-[11px]">
+            <div class="flex items-center justify-between">
+              <span>Principal Amount:</span>
+              <span class="font-semibold text-amber-700">{{ interestSummary.principal }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Interest (90 days @ 5.25%):</span>
+              <span class="font-semibold text-amber-700">{{ interestSummary.interest }}</span>
+            </div>
+            <div class="mt-2 border-t border-amber-200 pt-2 flex items-center justify-between">
+              <span class="font-semibold">Total Amount Due:</span>
+              <span class="font-semibold text-amber-700">{{ interestSummary.total }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="mt-6 rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
+    <div class="flex items-center gap-3">
+      <div
+        class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700"
+      >
+        ✓
+      </div>
+      <div>
+        <div class="text-sm font-semibold text-slate-900">PAD Creation Summary</div>
+        <div class="text-xs text-slate-500">
+          Review all details before creating the Payment at Due
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_220px]">
+      <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600">
+        <div class="font-semibold text-slate-900">PAD Information</div>
+        <div class="mt-2 space-y-1">
+          <div>PAD Reference: {{ padSummary.reference }}</div>
+          <div>LC Reference: {{ padSummary.lcReference }}</div>
+          <div>Creation Date: {{ padSummary.creationDate }}</div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600">
+        <div class="font-semibold text-slate-900">Payment Terms</div>
+        <div class="mt-2 space-y-1">
+          <div>Principal Amount: {{ padSummary.principal }}</div>
+          <div>Interest Amount: {{ padSummary.interest }}</div>
+          <div>Maturity Date: {{ padSummary.maturityDate }}</div>
+        </div>
+      </div>
+      <div
+        class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs text-emerald-700"
+      >
+        <div class="font-semibold">Total Due at Maturity</div>
+        <div class="mt-2 text-2xl font-semibold">{{ padSummary.totalDue }}</div>
+        <div class="text-[11px] text-emerald-600">Due on April 15, 2024</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-6 rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3 text-xs text-slate-600">
+        <span
+          class="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-700"
+        >
+          !
+        </span>
+        <div>
+          <div class="font-semibold text-slate-900">Review all details carefully</div>
+          <div class="text-[11px] text-slate-500">PAD creation cannot be undone once confirmed</div>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <app-ui-button variant="secondary">Save as Draft</app-ui-button>
+        <button
+          type="button"
+          (click)="onCreatePad()"
+          class="rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-700"
+        >
+          Create PAD
+        </button>
+      </div>
+    </div>
+  </section>
+</app-trade-layout>

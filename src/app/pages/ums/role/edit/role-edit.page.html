@@ -1,0 +1,165 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="User Management"
+  breadcrumb="Edit role"
+  basePath="/ums"
+  primarySectionLabel="UMS"
+  [mainMenuItems]="menuItems"
+>
+  <div class="space-y-6">
+    <section class="flex items-center justify-between">
+      <div class="space-y-1">
+        <h1 class="text-lg font-semibold text-slate-900">
+          Edit role
+        </h1>
+        <p class="text-sm text-slate-600">
+          Adjust definition and default permissions for this role.
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <app-ui-button variant="secondary" (click)="goBackToList()">
+          Back to roles
+        </app-ui-button>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-100"
+        >
+          Delete role
+        </button>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-3">
+      <div class="space-y-6 lg:col-span-2">
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+              🧩
+            </div>
+            <div class="space-y-1">
+              <h2 class="text-sm font-semibold text-slate-900">
+                Role details
+              </h2>
+              <p class="text-xs text-slate-500">
+                Role identifier:
+                <span class="font-mono text-slate-700">
+                  {{ roleId || 'N/A' }}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-4">
+            <app-ui-input
+              label="Role name"
+              placeholder="e.g. Trade Operations"
+              [required]="true"
+            ></app-ui-input>
+
+            <app-ui-input
+              label="Description"
+              type="textarea"
+              placeholder="Short description of how this role is used"
+            ></app-ui-input>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+              🔐
+            </div>
+            <div class="space-y-1">
+              <h2 class="text-sm font-semibold text-slate-900">
+                Default permissions
+              </h2>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-3">
+            <div class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-xs font-semibold text-slate-900">
+                Trade workflows
+              </div>
+              <div class="mt-2 space-y-1 text-xs text-slate-700">
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300" checked />
+                  <span>Initiate guarantees</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300" />
+                  <span>Amend guarantees</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300" />
+                  <span>View pipeline</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-xs font-semibold text-slate-900">
+                Approvals
+              </div>
+              <div class="mt-2 space-y-1 text-xs text-slate-700">
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300" checked />
+                  <span>Approve guarantees</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300" />
+                  <span>Override limits</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-xs font-semibold text-slate-900">
+                User management
+              </div>
+              <div class="mt-2 space-y-1 text-xs text-slate-700">
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300" checked />
+                  <span>View users</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300" checked />
+                  <span>Manage roles</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 text-xs text-slate-700 shadow-sm">
+          <div class="text-sm font-semibold text-slate-900">
+            Impact
+          </div>
+          <p class="mt-2">
+            Updating this role will affect all users currently assigned to it. Ensure changes
+            are communicated to business teams.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex items-center justify-between">
+      <a
+        routerLink="/ums/roles"
+        class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+      >
+        Cancel
+      </a>
+      <div class="flex items-center gap-3">
+        <app-ui-button variant="secondary">
+          Save as draft
+        </app-ui-button>
+        <app-ui-button variant="primary" (click)="save()">
+          Save changes
+        </app-ui-button>
+      </div>
+    </section>
+  </div>
+</app-trade-layout>

@@ -1,0 +1,240 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Document Checking"
+  basePath="/trade"
+>
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-lg font-semibold text-slate-900">{{ header.title }}</h1>
+        <p class="mt-1 text-xs text-slate-500">{{ header.subtitle }}</p>
+      </div>
+      <!-- <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+      >
+        <span class="text-base">←</span>
+        Back to LC Details
+      </button> -->
+    </div>
+  </section>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+    <div class="space-y-6">
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">LC Reference Information</h2>
+          <span
+            class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-[11px] font-semibold text-blue-700"
+            >Under Review</span
+          >
+        </div>
+        <div class="grid gap-4 px-6 py-5 sm:grid-cols-2">
+          <div *ngFor="let item of referenceInfo">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              {{ item.label }}
+            </div>
+            <div class="mt-1 text-sm font-semibold text-slate-900">{{ item.value }}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">LC Terms Summary</h2>
+        </div>
+        <div class="grid gap-4 px-6 py-5 sm:grid-cols-2">
+          <div *ngFor="let term of terms">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              {{ term.label }}
+            </div>
+            <div class="mt-1 text-sm font-semibold text-slate-900">{{ term.value }}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Document Checklist & Compliance</h2>
+          <div class="text-xs text-slate-500">Check each document against LC terms</div>
+        </div>
+        <div class="space-y-4 px-6 py-5">
+          <div *ngFor="let doc of documents" class="rounded-xl border border-slate-200 px-4 py-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm font-semibold text-slate-900">{{ doc.name }}</div>
+                <div class="text-[11px] text-slate-500">{{ doc.description }}</div>
+              </div>
+              <button type="button" class="text-xs font-semibold text-blue-600">View</button>
+            </div>
+            <div class="mt-3 space-y-2 text-xs text-slate-600">
+              <div
+                *ngFor="let check of doc.checks; let idx = index"
+                class="flex items-center justify-between"
+              >
+                <span>{{ check.label }}</span>
+                <div class="flex items-center gap-3">
+                  <label class="inline-flex items-center gap-1">
+                    <input
+                      type="radio"
+                      [name]="doc.name + '-' + idx"
+                      value="pass"
+                      [(ngModel)]="doc.checks[idx].status"
+                      class="h-3 w-3"
+                    />
+                    <span class="text-[11px] text-emerald-600">Pass</span>
+                  </label>
+                  <label class="inline-flex items-center gap-1">
+                    <input
+                      type="radio"
+                      [name]="doc.name + '-' + idx"
+                      value="fail"
+                      [(ngModel)]="doc.checks[idx].status"
+                      class="h-3 w-3"
+                    />
+                    <span class="text-[11px] text-rose-600">Fail</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Discrepancy Notes</h2>
+        </div>
+        <div class="space-y-3 px-6 py-5">
+          <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs text-rose-600">
+            <div class="font-semibold">Commodity Description Mismatch</div>
+            <div class="text-[11px] text-rose-600">{{ discrepancyNotes }}</div>
+          </div>
+          <textarea
+            [(ngModel)]="additionalNotes"
+            rows="3"
+            placeholder="Add additional discrepancy notes..."
+            class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400"
+          ></textarea>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-6 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Compliance Decision</h2>
+        </div>
+        <div class="space-y-3 px-6 py-5 text-xs text-slate-700">
+          <label class="flex items-start gap-2 rounded-lg border border-slate-200 p-3">
+            <input
+              type="radio"
+              name="decision"
+              value="clean"
+              [(ngModel)]="decision"
+              class="mt-0.5 h-3.5 w-3.5"
+            />
+            <div>
+              <div class="font-semibold text-slate-900">Documents Clean</div>
+              <div class="text-[11px] text-slate-500">All documents comply with LC terms</div>
+            </div>
+          </label>
+          <label class="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 p-3">
+            <input
+              type="radio"
+              name="decision"
+              value="discrepancies"
+              [(ngModel)]="decision"
+              class="mt-0.5 h-3.5 w-3.5"
+            />
+            <div>
+              <div class="font-semibold text-rose-700">Discrepancies Found</div>
+              <div class="text-[11px] text-rose-600">Documents require clarification</div>
+            </div>
+          </label>
+        </div>
+        <div
+          class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-6 py-4"
+        >
+          <app-ui-button variant="secondary">Cancel Review</app-ui-button>
+          <div class="flex flex-wrap items-center gap-2">
+            <app-ui-button variant="secondary">Save Progress</app-ui-button>
+            <button
+              type="button"
+              (click)="onSubmitReview()"
+              class="rounded-md bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-rose-700"
+            >
+              Submit Review
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="space-y-6">
+      <section class="rounded-2xl bg-rose-600 px-5 py-4 text-white shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-sm font-semibold">Compliance Status</div>
+          </div>
+        </div>
+        <div class="mt-4 space-y-3 text-xs">
+          <div class="flex items-center justify-between border-b border-white/20 pb-2">
+            <span>Documents Checked</span>
+            <span class="font-semibold">{{ compliance.documentsChecked }}</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-white/20 pb-2">
+            <span>Passed Checks</span>
+            <span class="font-semibold">{{ compliance.passedChecks }}</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-white/20 pb-2">
+            <span>Failed Checks</span>
+            <span class="font-semibold">{{ compliance.failedChecks }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Overall Status</span>
+            <span class="font-semibold">{{ compliance.overallStatus }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-100 px-5 py-4">
+          <h2 class="text-sm font-semibold text-slate-900">Next Steps</h2>
+        </div>
+        <div class="space-y-3 px-5 py-4 text-xs text-slate-600">
+          <div *ngFor="let step of nextSteps" class="flex items-start gap-3">
+            <span
+              class="flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold"
+              [ngClass]="
+                step.status === 'completed'
+                  ? 'bg-blue-100 text-blue-700'
+                  : step.status === 'current'
+                    ? 'bg-rose-600 text-white'
+                    : 'bg-slate-100 text-slate-500'
+              "
+            >
+              <span *ngIf="step.status === 'completed'">✓</span>
+              <span *ngIf="step.status !== 'completed'">•</span>
+            </span>
+            <div>
+              <div class="font-semibold text-slate-900">{{ step.title }}</div>
+              <div class="text-[11px] text-slate-400">{{ step.note }}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 text-xs text-blue-700"
+      >
+        <div class="font-semibold">Checking Guidelines</div>
+        <p class="mt-1 text-[11px] text-blue-700">
+          Verify all document details against LC terms carefully before making decision.
+        </p>
+        <button type="button" class="mt-2 text-[11px] font-semibold text-blue-700">
+          View Guidelines
+        </button>
+      </section>
+    </aside>
+  </div>
+</app-trade-layout>

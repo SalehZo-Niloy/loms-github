@@ -1,0 +1,829 @@
+<app-trade-layout
+  organisationName="Trade Finance Operations"
+  solutionName="Guarantee Operations"
+  breadcrumb="Guarantee Issuance"
+  basePath="/trade"
+>
+  <div class="space-y-6">
+    <section class="rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="flex items-start gap-3">
+          <div
+            class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4l7 4v4c0 4-3 7-7 8-4-1-7-4-7-8V8l7-4z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.5 12.5 11 14l3.5-3.5"
+              />
+            </svg>
+          </div>
+          <div class="space-y-1">
+            <h1 class="text-lg font-semibold text-slate-900">
+              Guarantee Issuance &amp; Charges Processing
+            </h1>
+            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600">
+              <span>
+                <span class="font-semibold text-slate-900">Application ID:</span>
+                GTR-2024-001234
+              </span>
+              <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+              <span>
+                <span class="font-semibold text-slate-900">Approval ID:</span>
+                APR-2024-008567
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-2 text-xs">
+          <div class="flex items-center gap-3">
+            <div class="text-right text-slate-600">
+              <div class="font-semibold text-slate-900">Approved By</div>
+              <div>Michael Chen (Checker)</div>
+              <div class="text-[11px] text-slate-500">Jan 11, 2024 14:30</div>
+            </div>
+            <span
+              class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700"
+            >
+              Approved Terms Locked
+            </span>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] text-slate-500">
+            <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+            <span>Pending Issuance</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-slate-200 bg-white px-6 py-4 text-xs shadow-sm">
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-1 items-center gap-6">
+          <ng-container *ngFor="let step of steps; let i = index">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold"
+                [ngClass]="
+                  step.id === activeStep
+                    ? 'bg-blue-700 text-white'
+                    : 'bg-slate-100 text-slate-500'
+                "
+                (click)="setActiveStep(step.id)"
+              >
+                {{ step.id }}
+              </button>
+              <div class="flex flex-col items-start">
+                <button
+                  type="button"
+                  class="text-xs font-semibold"
+                  [ngClass]="step.id === activeStep ? 'text-slate-900' : 'text-slate-600'"
+                  (click)="setActiveStep(step.id)"
+                >
+                  {{ step.title }}
+                </button>
+                <span
+                  class="text-[11px]"
+                  [ngClass]="
+                    step.id === activeStep
+                      ? 'text-blue-600'
+                      : step.id < activeStep
+                        ? 'text-emerald-600'
+                        : 'text-slate-400'
+                  "
+                >
+                  {{
+                    step.id === activeStep
+                      ? 'In progress'
+                      : step.id < activeStep
+                        ? 'Completed'
+                        : 'Pending'
+                  }}
+                </span>
+              </div>
+            </div>
+
+            <div *ngIf="i < steps.length - 1" class="hidden flex-1 items-center md:flex">
+              <div class="h-px w-full bg-slate-200"></div>
+            </div>
+          </ng-container>
+        </div>
+        <div class="text-[11px] text-slate-500">
+          {{ activeStep }}/{{ steps.length }} steps completed
+        </div>
+      </div>
+      <div class="mt-4 h-1 rounded-full bg-slate-100">
+        <div
+          class="h-1 rounded-full bg-blue-700 transition-all"
+          [style.width.%]="progressPercentage"
+        ></div>
+      </div>
+    </section>
+
+    <ng-container *ngIf="activeStep === 1">
+      <section class="space-y-6">
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 text-xs shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                1
+              </div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Guarantee Issuance
+              </h2>
+            </div>
+            <span
+              class="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-[11px] font-semibold text-amber-700"
+            >
+              Pending Issuance
+            </span>
+          </div>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <section class="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="flex items-center justify-between">
+                <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                  Authorized Guarantee Terms
+                </div>
+              </div>
+              <div class="grid gap-3 text-xs md:grid-cols-2">
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Type
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    Performance Guarantee
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Amount
+                  </div>
+                  <div class="text-sm font-semibold text-blue-700">
+                    USD 500,000.00
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Expiry Date
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    Dec 31, 2024
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Claim Period
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    30 Days
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Governing Rules
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    URDG 758
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Margin %
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    15%
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
+              <div class="flex items-center justify-between">
+                <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                  Parties Details
+                </div>
+              </div>
+              <div class="space-y-3 text-xs text-slate-700">
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Applicant
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    John Mitchell Trading LLC
+                  </div>
+                  <div class="text-[11px] text-slate-500">
+                    CIF: 1234567890 • A/C: •••• •••• 4521
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Beneficiary
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    ABC Construction Company
+                  </div>
+                  <div class="text-[11px] text-slate-500">
+                    New York, USA
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Beneficiary Bank
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    Citibank N.A.
+                  </div>
+                  <div class="text-[11px] text-slate-500">
+                    BIC: CITIUS33XXX
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 text-xs shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div
+                class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 5h16v14H4z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m4 5 8 7 8-7"
+                  />
+                </svg>
+              </div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Guarantee Content &amp; Formatting
+              </h2>
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 hover:text-blue-700"
+            >
+              Preview PDF
+            </button>
+          </div>
+
+          <div class="mt-4 grid gap-4 text-xs md:grid-cols-4">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Text Type
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                Standard Bank Text
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Language
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                English
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Issue Date
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                Jan 11, 2024
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Place of Issue
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                Dubai, UAE
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 text-xs text-slate-800">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              PERFORMANCE GUARANTEE NO: GTR-2024-001234
+            </div>
+            <p class="mt-3 leading-relaxed">
+              We hereby irrevocably guarantee payment to ABC Construction Company up to USD 500,000.00 (Five Hundred
+              Thousand United Arab Emirates Dirhams only) against your first written demand stating that John Mitchell
+              Trading LLC has failed to fulfill their obligations under contract dated January 5, 2024.
+            </p>
+            <p class="mt-3 leading-relaxed">
+              This guarantee is issued in accordance with URDG 758 and will remain valid until December 31, 2024, plus
+              a claim period of 30 days thereafter unless released earlier in writing by the beneficiary.
+            </p>
+            <div class="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-slate-600">
+              <span class="font-semibold text-emerald-700">Reference: GTR-2024-001234</span>
+              <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+              <span>Place of Issue: Dubai, UAE</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 text-xs shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                ⚙
+              </div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                SWIFT Configuration
+              </h2>
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 hover:text-blue-700"
+            >
+              View SWIFT MT760 Preview
+            </button>
+          </div>
+
+          <div class="mt-4 grid gap-4 text-xs md:grid-cols-4">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Message Type
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                MT760
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Sender BIC
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                EBILAEAD
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Receiver BIC
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                CITIUS33XXX
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Delivery Channel
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                SWIFT MT760
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="space-y-2">
+              <div class="text-sm font-semibold text-slate-900">
+                Issue Guarantee
+              </div>
+              <label class="flex items-start gap-2 text-[11px] text-slate-700">
+                <input
+                  type="checkbox"
+                  class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600"
+                  [checked]="issueConfirmed"
+                  (change)="toggleIssueConfirmed($event.target.checked)"
+                />
+                <span>
+                  I confirm the guarantee will be issued as per approved terms and SWIFT configuration.
+                </span>
+              </label>
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+              [ngClass]="issueConfirmed ? theme.button.primary : ''"
+              [disabled]="!issueConfirmed"
+              (click)="issueGuarantee()"
+            >
+              Issue Guarantee
+            </button>
+          </div>
+        </section>
+      </section>
+    </ng-container>
+
+    <ng-container *ngIf="activeStep === 2">
+      <section class="space-y-6">
+        <section class="rounded-2xl border border-slate-200 bg-white px-6 py-4 text-xs shadow-sm">
+          <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div class="flex items-start gap-3">
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                ✓
+              </div>
+              <div class="space-y-1">
+                <h2 class="text-sm font-semibold text-slate-900">
+                  Charges &amp; Margin Collection
+                </h2>
+                <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-600">
+                  <span>
+                    <span class="font-semibold text-slate-900">Guarantee Ref:</span>
+                    GTR-2024-001234
+                  </span>
+                  <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+                  <span>
+                    <span class="font-semibold text-slate-900">Issued:</span>
+                    Jan 11, 2024 15:45
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col items-end gap-2 text-[11px]">
+              <div class="flex flex-wrap items-center gap-2">
+                <span
+                  class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700"
+                >
+                  Guarantee Status: Issued &amp; Active
+                </span>
+                <span
+                  class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-[11px] font-semibold text-blue-700"
+                >
+                  SWIFT MT760 Sent
+                </span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-500">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                <span>Ready to Process Charges</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 text-xs shadow-sm">
+          <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div class="space-y-4 md:w-2/3">
+              <h2 class="text-sm font-semibold text-slate-900">
+                Guarantee Financial Snapshot
+              </h2>
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Guarantee Amount
+                  </div>
+                  <div class="text-2xl font-semibold text-slate-900">
+                    USD 500,000
+                  </div>
+                  <div class="text-[11px] text-slate-500">
+                    Currency: USD
+                  </div>
+                </div>
+                <div class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Tenure Period
+                  </div>
+                  <div class="text-lg font-semibold text-slate-900">
+                    355 Days
+                  </div>
+                  <div class="text-[11px] text-slate-500">
+                    Jan 11 – Dec 31, 2024
+                  </div>
+                </div>
+                <div class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Governing Rules
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    URDG 758
+                  </div>
+                  <div class="text-[11px] text-slate-500">
+                    International Standard
+                  </div>
+                </div>
+                <div class="grid gap-4 md:grid-cols-2">
+                  <div class="space-y-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                    <div class="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                      Margin Details
+                    </div>
+                    <div class="text-lg font-semibold text-emerald-900">
+                      USD 75,000.00
+                    </div>
+                    <div class="text-[11px] text-emerald-700">
+                      15% of Guarantee Amount
+                    </div>
+                  </div>
+                  <div class="space-y-2 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                    <div class="text-[11px] font-semibold uppercase tracking-wide text-amber-700">
+                      Commission Rate
+                    </div>
+                    <div class="text-lg font-semibold text-amber-800">
+                      0.75% / Quarter
+                    </div>
+                    <div class="text-[11px] text-amber-700">
+                      Quarterly Deduction
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4 md:w-1/3">
+              <h2 class="text-sm font-semibold text-slate-900">
+                Account Balance Check
+              </h2>
+              <div class="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Margin Debit A/C
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-semibold text-slate-900">
+                      •••• •••• 4521
+                    </div>
+                    <span class="text-[11px] font-semibold text-emerald-600">Sufficient</span>
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Commission A/C
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="text-sm font-semibold text-slate-900">
+                      •••• •••• 4521
+                    </div>
+                    <span class="text-[11px] font-semibold text-emerald-600">Sufficient</span>
+                  </div>
+                </div>
+                <div class="space-y-1 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                    Available Balance
+                  </div>
+                  <div class="text-lg font-semibold text-emerald-900">
+                    USD 1,250,000.00
+                  </div>
+                  <div class="text-[11px] text-emerald-700">
+                    Balance exceeds requirements
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 text-xs shadow-sm">
+          <h2 class="text-sm font-semibold text-slate-900">
+            Charges Breakdown &amp; Calculation
+          </h2>
+          <div class="mt-4 grid gap-4 md:grid-cols-4">
+            <div class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Margin Amount
+              </div>
+              <div class="text-lg font-semibold text-slate-900">
+                USD 75,000.00
+              </div>
+              <div class="text-[11px] text-slate-500">
+                To be blocked
+              </div>
+            </div>
+            <div class="space-y-2 rounded-xl border border-blue-200 bg-blue-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+                Commission (0.75% / Quarter)
+              </div>
+              <div class="text-lg font-semibold text-blue-700">
+                USD 3,750.00
+              </div>
+              <div class="text-[11px] text-blue-700">
+                On guarantee amount
+              </div>
+            </div>
+            <div class="space-y-2 rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-amber-700">
+                VAT (5%)
+              </div>
+              <div class="text-lg font-semibold text-amber-800">
+                USD 187.50
+              </div>
+              <div class="text-[11px] text-amber-700">
+                On commission
+              </div>
+            </div>
+            <div class="space-y-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                Total Charges
+              </div>
+              <div class="text-lg font-semibold text-emerald-900">
+                USD 3,937.50
+              </div>
+              <div class="text-[11px] text-emerald-700">
+                Margin block plus charges
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-[11px] text-blue-800">
+            Charges will be debited quarterly (Q1, Q2, Q3, Q4) based on the guarantee tenure. Subsequent debits will be
+            auto-processed on due dates.
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 text-xs shadow-sm">
+          <h2 class="text-sm font-semibold text-slate-900">
+            Accounting &amp; GL Mapping
+          </h2>
+          <div class="mt-4 grid gap-4 md:grid-cols-4">
+            <div class="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Margin GL Account
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                21801-001
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Commission GL
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                41001-002
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                VAT GL
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                24001-003
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Posting Date
+              </div>
+              <div class="text-sm font-semibold text-slate-900">
+                Jan 11, 2024
+              </div>
+              <div class="text-[11px] text-slate-500">
+                System Date (Today)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 text-xs shadow-sm">
+          <h2 class="text-sm font-semibold text-slate-900">
+            Posting Summary &amp; Journal Entries
+          </h2>
+          <div class="mt-4 overflow-x-auto">
+            <table class="min-w-full text-left text-[11px]">
+              <thead class="bg-slate-50 text-slate-500">
+                <tr class="uppercase tracking-wide">
+                  <th class="px-4 py-2">Entry Type</th>
+                  <th class="px-4 py-2">GL Account</th>
+                  <th class="px-4 py-2 text-right">Debit</th>
+                  <th class="px-4 py-2 text-right">Credit</th>
+                  <th class="px-4 py-2">Narration</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white">
+                <tr class="text-slate-700">
+                  <td class="px-4 py-2">Margin Block</td>
+                  <td class="px-4 py-2">21801-001</td>
+                  <td class="px-4 py-2 text-right text-slate-900">75,000.00</td>
+                  <td class="px-4 py-2 text-right text-slate-400">—</td>
+                  <td class="px-4 py-2">Margin blocked for GTR-2024-001234</td>
+                </tr>
+                <tr class="text-slate-700">
+                  <td class="px-4 py-2">Customer A/C</td>
+                  <td class="px-4 py-2">Customer A/C ••••4521</td>
+                  <td class="px-4 py-2 text-right text-rose-600">75,000.00</td>
+                  <td class="px-4 py-2 text-right text-slate-400">—</td>
+                  <td class="px-4 py-2">Margin debit from customer account</td>
+                </tr>
+                <tr class="text-slate-700">
+                  <td class="px-4 py-2">Commission</td>
+                  <td class="px-4 py-2">41001-002</td>
+                  <td class="px-4 py-2 text-right text-slate-400">—</td>
+                  <td class="px-4 py-2 text-right text-emerald-700">3,750.00</td>
+                  <td class="px-4 py-2">Commission income</td>
+                </tr>
+                <tr class="text-slate-700">
+                  <td class="px-4 py-2">Customer A/C</td>
+                  <td class="px-4 py-2">Customer A/C ••••4521</td>
+                  <td class="px-4 py-2 text-right text-rose-600">3,750.00</td>
+                  <td class="px-4 py-2 text-right text-slate-400">—</td>
+                  <td class="px-4 py-2">Commission debit from customer</td>
+                </tr>
+                <tr class="text-slate-700">
+                  <td class="px-4 py-2">VAT Payable</td>
+                  <td class="px-4 py-2">24001-003</td>
+                  <td class="px-4 py-2 text-right text-slate-400">—</td>
+                  <td class="px-4 py-2 text-right text-emerald-700">187.50</td>
+                  <td class="px-4 py-2">5% VAT on commission</td>
+                </tr>
+                <tr class="text-slate-700">
+                  <td class="px-4 py-2">Customer A/C</td>
+                  <td class="px-4 py-2">Customer A/C ••••4521</td>
+                  <td class="px-4 py-2 text-right text-rose-600">187.50</td>
+                  <td class="px-4 py-2 text-right text-slate-400">—</td>
+                  <td class="px-4 py-2">VAT debit from customer</td>
+                </tr>
+                <tr class="font-semibold text-slate-900">
+                  <td class="px-4 py-2">Totals</td>
+                  <td class="px-4 py-2"></td>
+                  <td class="px-4 py-2 text-right">78,937.50</td>
+                  <td class="px-4 py-2 text-right">78,937.50</td>
+                  <td class="px-4 py-2">Balanced entries</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-xs text-amber-800 shadow-sm">
+          <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div class="space-y-2">
+              <div class="text-sm font-semibold text-amber-900">
+                Final Authorization &amp; Posting
+              </div>
+              <label class="flex items-start gap-2 text-[11px]">
+                <input
+                  type="checkbox"
+                  class="mt-0.5 h-3.5 w-3.5 rounded border-amber-400 text-amber-600"
+                  [checked]="postingConfirmed"
+                  (change)="togglePostingConfirmed($event.target.checked)"
+                />
+                <span>
+                  I confirm charges and margin are to be posted as displayed. This action will debit customer account
+                  and create accounting entries.
+                </span>
+              </label>
+              <div class="text-[11px] text-amber-700">
+                This action is irreversible. Ensure all details are verified before proceeding.
+              </div>
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-md bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300"
+              [disabled]="!postingConfirmed"
+              (click)="postChargesAndBlockMargin()"
+            >
+              Post Charges &amp; Block Margin
+            </button>
+          </div>
+        </section>
+      </section>
+    </ng-container>
+
+    <section class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-xs shadow-sm">
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+        >
+          ← Back to Application
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+        >
+          {{ activeStep === 1 ? 'Print / Download' : 'Download Receipt' }}
+        </button>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-[11px] text-slate-500">
+          {{ currentStageLabel }}
+        </span>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md bg-slate-900 px-4 py-2 text-[11px] font-semibold text-white hover:bg-slate-800"
+        >
+          Exit to Dashboard
+        </button>
+      </div>
+    </section>
+  </div>
+</app-trade-layout>

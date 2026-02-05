@@ -1,0 +1,611 @@
+<app-trade-layout organisationName="Trade Finance" solutionName="Trade Finance" breadcrumb="Guarantee Application" basePath="/trade">
+  <div class="space-y-6">
+    <section class="rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-1 items-center gap-6">
+          <ng-container *ngFor="let step of steps; let i = index">
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                class="flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold"
+                [ngClass]="
+                  step.id === activeStep
+                    ? 'bg-blue-700 text-white'
+                    : 'bg-slate-100 text-slate-500'
+                "
+                (click)="setActiveStep(step.id)"
+              >
+                {{ step.id }}
+              </button>
+              <div class="flex flex-col items-start">
+                <button
+                  type="button"
+                  class="text-xs font-semibold"
+                  [ngClass]="
+                    step.id === activeStep ? 'text-slate-900' : 'text-slate-600'
+                  "
+                  (click)="setActiveStep(step.id)"
+                >
+                  {{ step.title }}
+                </button>
+                <span
+                  class="text-[11px]"
+                  [ngClass]="
+                    step.id === activeStep ? 'text-blue-600' : 'text-slate-400'
+                  "
+                >
+                  {{ step.status }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              *ngIf="i < steps.length - 1"
+              class="hidden flex-1 items-center md:flex"
+            >
+              <div class="h-px w-full bg-slate-200"></div>
+            </div>
+          </ng-container>
+        </div>
+        <div class="text-[11px] text-slate-500">
+          {{ activeStep }}/{{ steps.length }} steps completed
+        </div>
+      </div>
+      <div class="mt-4 h-1 rounded-full bg-slate-100">
+        <div
+          class="h-1 rounded-full bg-blue-700 transition-all"
+          [style.width.%]="progressPercentage"
+        ></div>
+      </div>
+    </section>
+
+    <ng-container *ngIf="activeStep === 1">
+      <section class="grid gap-6 lg:grid-cols-3">
+        <div class="space-y-6 lg:col-span-2">
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17 11a3 3 0 1 0 0-6"
+                    />
+                  </svg>
+                </div>
+                <div class="space-y-1">
+                  <h2 class="text-sm font-semibold text-slate-900">
+                    Applicant Information
+                  </h2>
+                </div>
+              </div>
+              <span class="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-medium text-blue-700">
+                Auto-fetched
+              </span>
+            </div>
+
+            <div class="mt-4 rounded-xl bg-slate-50 px-5 py-4">
+              <div class="grid gap-y-4 gap-x-8 md:grid-cols-2">
+                <div>
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Customer Name
+                  </div>
+                  <div class="mt-1 text-sm font-semibold text-slate-900">
+                    Mitchell Trading Corporation
+                  </div>
+                </div>
+                <div>
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    CIF Number
+                  </div>
+                  <div class="mt-1 text-sm font-semibold text-slate-900">
+                    CIF-2024-00789
+                  </div>
+                </div>
+                <div>
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Customer Type
+                  </div>
+                  <div class="mt-1 text-sm font-semibold text-slate-900">
+                    Corporate
+                  </div>
+                </div>
+                <div>
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Primary Account
+                  </div>
+                  <div class="mt-1 flex items-center gap-2 text-sm font-semibold text-slate-900">
+                    <span>•••• •••• 4521</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Branch
+                  </div>
+                  <div class="mt-1 text-sm font-semibold text-slate-900">
+                    Main Branch - Dubai
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 flex items-center gap-2 text-[11px] text-slate-500">
+                <span class="flex h-4 w-4 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-3 w-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 18v-6m0-4h.01"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z"
+                    />
+                  </svg>
+                </span>
+                <span>Applicant details are retrieved from bank records.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div
+                class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 11h6m-6 4h4"
+                  />
+                </svg>
+              </div>
+              <div class="space-y-1">
+                <h2 class="text-sm font-semibold text-slate-900">
+                  Guarantee Selection
+                </h2>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-md border border-blue-100 bg-blue-50 px-4 py-2 text-xs text-blue-900">
+              Selecting a type will automatically adjust required fields and documents.
+            </div>
+
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div class="space-y-1.5">
+                <label class="text-xs font-medium text-slate-700">
+                  Guarantee Category <span class="text-red-500">*</span>
+                </label>
+                <div class="flex items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+                  <span>Select Guarantee Category</span>
+                  <span>▾</span>
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <label class="text-xs font-medium text-slate-700">
+                  Guarantee Text Type <span class="text-red-500">*</span>
+                </label>
+                <div class="flex items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+                  <span>Select Governing Rules</span>
+                  <span>▾</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div class="space-y-1.5">
+                <label class="text-xs font-medium text-slate-700">
+                  Governing Rules <span class="text-red-500">*</span>
+                </label>
+                <div class="flex items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+                  <span>Select Governing Rules</span>
+                  <span>▾</span>
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <label class="text-xs font-medium text-slate-700">
+                  Guarantee Text Type <span class="text-red-500">*</span>
+                </label>
+                <div class="space-y-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700">
+                  <label class="flex items-start gap-2">
+                    <span class="mt-0.5 inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border border-blue-600">
+                      <span class="h-2 w-2 rounded-full bg-blue-600"></span>
+                    </span>
+                    <span>
+                      <span class="font-semibold">Standard Bank Text</span>
+                      <span class="block text-[11px] text-slate-500">
+                        Recommended for faster processing.
+                      </span>
+                    </span>
+                  </label>
+                  <label class="flex items-start gap-2">
+                    <span class="mt-0.5 inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border border-slate-300"></span>
+                    <span>
+                      <span class="font-semibold">Customized Text</span>
+                      <span class="block text-[11px] text-slate-500">
+                        Upload custom wording (Step 3).
+                      </span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div
+                class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.5 12h19"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 3a14 14 0 0 1 4 9 14 14 0 0 1-4 9 14 14 0 0 1-4-9 14 14 0 0 1 4-9z"
+                  />
+                </svg>
+              </div>
+              <div class="space-y-1">
+                <h2 class="text-sm font-semibold text-slate-900">
+                  Jurisdiction &amp; Delivery
+                </h2>
+              </div>
+            </div>
+
+            <div class="mt-4 space-y-4">
+              <div class="space-y-1.5">
+                <div class="text-xs font-medium text-slate-700">
+                  Guarantee Scope <span class="text-red-500">*</span>
+                </div>
+                <div class="grid gap-3 md:grid-cols-2">
+                  <button
+                    type="button"
+                    class="flex flex-col items-start rounded-md border border-blue-600 bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700"
+                  >
+                    <span>Domestic</span>
+                    <span class="text-[11px] font-normal text-blue-600">
+                      Within country
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    class="flex flex-col items-start rounded-md border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-700"
+                  >
+                    <span>Cross-border</span>
+                    <span class="text-[11px] font-normal text-slate-500">
+                      International
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <label class="text-xs font-medium text-slate-700">
+                  Delivery Channel <span class="text-red-500">*</span>
+                </label>
+                <div class="flex items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+                  <span>Select Delivery Channel</span>
+                  <span>▾</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div
+                class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 20a6 6 0 0 1 12 0"
+                  />
+                </svg>
+              </div>
+              <div class="space-y-1">
+                <h2 class="text-sm font-semibold text-slate-900">
+                  Beneficiary Details
+                </h2>
+              </div>
+            </div>
+
+            <div class="mt-4 space-y-4">
+              <app-ui-input label="Beneficiary Name" placeholder="Enter beneficiary name"></app-ui-input>
+
+              <app-ui-input
+                label="Beneficiary Address"
+                type="textarea"
+                placeholder="Enter complete address"
+              ></app-ui-input>
+
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-1.5">
+                  <label class="text-xs font-medium text-slate-700">
+                    Beneficiary Country
+                  </label>
+                  <div class="flex items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+                    <span>Select Country</span>
+                    <span>▾</span>
+                  </div>
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-xs font-medium text-slate-700">
+                    Beneficiary Bank Country
+                  </label>
+                  <div class="flex items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+                    <span>Select Country</span>
+                    <span>▾</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid gap-4 md:grid-cols-2">
+                <app-ui-input label="Beneficiary Bank Name" placeholder="Enter bank name"></app-ui-input>
+                <app-ui-input label="Beneficiary Bank BIC" placeholder="e.g., CIFRUS33"></app-ui-input>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-center gap-2">
+              <div
+                class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-blue-600"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 18v-6m0-4h.01"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z"
+                  />
+                </svg>
+              </div>
+              <h2 class="text-sm font-semibold text-slate-900">
+                Help &amp; Guidance
+              </h2>
+            </div>
+            <div class="mt-4 space-y-3 text-xs text-slate-700">
+              <div class="rounded-lg bg-blue-50 px-3 py-3">
+                <div class="font-semibold text-slate-900">
+                  What is a Bank Guarantee?
+                </div>
+                <p class="mt-1 text-slate-700">
+                  A bank guarantee is a commitment by the bank to pay a specified amount
+                  to a beneficiary if the applicant fails to fulfill their obligations.
+                </p>
+              </div>
+              <div class="rounded-lg bg-green-50 px-3 py-3">
+                <div class="font-semibold text-slate-900">
+                  SWIFT Processing
+                </div>
+                <p class="mt-1 text-slate-700">
+                  Cross-border guarantees require SWIFT messaging (MT760). Additional bank
+                  details will be required.
+                </p>
+              </div>
+              <div class="rounded-lg bg-amber-50 px-3 py-3">
+                <div class="font-semibold text-slate-900">
+                  Governing Rules
+                </div>
+                <p class="mt-1 text-slate-700">
+                  URDG 758 applies to demand guarantees. ISP98 is used for standby letters
+                  of credit.
+                </p>
+              </div>
+              <div class="mt-3 border-t border-slate-200 pt-3">
+                <div class="text-xs font-semibold text-slate-900">
+                  Need Assistance?
+                </div>
+                <div class="mt-2 space-y-1 text-xs text-slate-700">
+                  <div class="flex items-center gap-2">
+                    <span class="text-blue-600">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V5z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 7h12M6 11h8"
+                        />
+                      </svg>
+                    </span>
+                    <span>+971 4 123 4567</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-blue-600">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 5h16v14H4z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="m4 5 8 7 8-7"
+                        />
+                      </svg>
+                    </span>
+                    <span>tradefinance@bank.com</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-blue-700">
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 11h6m-6 4h4"
+                        />
+                      </svg>
+                    </span>
+                    <span>View Documentation</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="flex items-center justify-between">
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Back
+        </button>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            Save as Draft
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            Next
+          </button>
+        </div>
+      </section>
+    </ng-container>
+
+    <ng-container *ngIf="activeStep === 2">
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-700 shadow-sm">
+        Amount &amp; Contract Details content will go here.
+      </section>
+    </ng-container>
+
+    <ng-container *ngIf="activeStep === 3">
+      <section class="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-700 shadow-sm">
+        Documents &amp; Review content will go here.
+      </section>
+    </ng-container>
+  </div>
+</app-trade-layout>

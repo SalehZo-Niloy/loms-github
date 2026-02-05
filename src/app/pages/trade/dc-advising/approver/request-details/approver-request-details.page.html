@@ -1,0 +1,187 @@
+<app-trade-layout
+  organisationName="Trade Platform"
+  solutionName="Trade Finance"
+  breadcrumb="Request Details"
+  basePath="/trade"
+>
+  <div class="details-container" *ngIf="request">
+    <!-- Header -->
+    <div class="header-card">
+      <div class="header-top flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <h1>{{ request.id }}</h1>
+          <span class="status-badge" [ngClass]="getStatusClass(request.status)">
+            {{ getStatusLabel(request.status) }}
+          </span>
+        </div>
+        <button (click)="goBack()" class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors border border-transparent hover:border-slate-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Back
+        </button>
+      </div>
+      <div class="header-sub">
+        Applicant: {{ request.applicant.name }} • LC: {{ request.exportLC.lcNo }}
+      </div>
+    </div>
+
+    <!-- Approval Required Section -->
+    <div class="section-card approval-section" *ngIf="request.status === 'PENDING_APPROVAL'">
+      <div class="section-title">Approval Required</div>
+      <p class="section-desc">Review the request and charges.</p>
+      
+      <div class="action-buttons">
+        <button class="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors shadow-sm" (click)="approveRequest()">Approve</button>
+        <button class="rounded-lg border border-red-200 bg-white px-6 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors shadow-sm" (click)="rejectRequest()">Reject</button>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="left-column">
+        <!-- Documents -->
+        <div class="section-card">
+          <div class="section-title">Documents</div>
+          <div class="document-list">
+            <div class="document-item" *ngFor="let doc of request.documents">
+              <div class="doc-icon">
+                <i class="far fa-file-pdf"></i>
+              </div>
+              <div class="doc-info">
+                <div class="doc-name">{{ doc.name }}</div>
+                <div class="doc-meta">
+                  {{ (doc.size || 0) / 1024 | number:'1.0-0' }} KB • {{ doc.uploadDate }}
+                  <span [class.text-danger]="doc.status === 'INVALID'" [class.text-success]="doc.status === 'VALID'">
+                    {{ doc.status }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="no-docs" *ngIf="request.documents.length === 0">
+              No documents uploaded
+            </div>
+          </div>
+        </div>
+
+        <!-- LC Details -->
+        <div class="section-card">
+          <div class="section-title">LC & Advice Details</div>
+          <div class="details-grid">
+            <div class="detail-item">
+              <label>LC Number</label>
+              <div>{{ request.exportLC.lcNo }}</div>
+            </div>
+            <div class="detail-item">
+              <label>LC Type</label>
+              <div>{{ request.exportLC.lcType }}</div>
+            </div>
+            <div class="detail-item">
+              <label>Issuing Bank</label>
+              <div>{{ request.exportLC.issuingBank }}</div>
+            </div>
+            <div class="detail-item">
+              <label>Beneficiary</label>
+              <div>{{ request.exportLC.beneficiaryName }}</div>
+            </div>
+            <div class="detail-item">
+              <label>Amount (FCY)</label>
+              <div>{{ request.exportLC.currency }} {{ request.exportLC.amount | number }}</div>
+            </div>
+            <div class="detail-item">
+              <label>Exchange Rate</label>
+              <div>{{ request.exportLC.exchangeRate }}</div>
+            </div>
+            <div class="detail-item">
+              <label>Amount (LCY)</label>
+              <div>{{ request.exportLC.amountLcy | number }}</div>
+            </div>
+            <div class="detail-item">
+              <label>Shipment Date</label>
+              <div>{{ request.dcAdvice?.shipmentDate || '-' }}</div>
+            </div>
+            <div class="detail-item">
+              <label>Expiry Date</label>
+              <div>{{ request.exportLC.expiryDate }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charges Display Section (Read Only) -->
+        <div class="section-card">
+          <div class="section-title">Charges</div>
+          <div class="charges-list" *ngIf="request.charges && request.charges.length > 0; else noCharges">
+            <div class="charge-item" *ngFor="let charge of request.charges">
+              <span>{{ charge.description }}</span>
+              <span>{{ charge.currency }} {{ charge.amount | number:'1.2-2' }}</span>
+            </div>
+            <div class="charge-total">
+              <strong>Total (Inc VAT)</strong>
+              <strong>{{ request.exportLC.currency }} {{ getTotalCharges() | number:'1.2-2' }}</strong>
+            </div>
+            <div class="debit-account">
+              Debit Account: {{ request.applicant.account }}
+            </div>
+          </div>
+          <ng-template #noCharges>
+            <div class="no-charges">No charges applied yet.</div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <!-- Applicant -->
+        <div class="section-card">
+          <div class="section-title">Applicant</div>
+          <div class="applicant-info">
+            <div><strong>Name:</strong> {{ request.applicant.name }}</div>
+            <div><strong>CIF:</strong> {{ request.applicant.cif }}</div>
+            <div><strong>Account:</strong> {{ request.applicant.account }}</div>
+          </div>
+        </div>
+
+        <!-- Portfolio Summary -->
+        <div class="section-card">
+          <div class="section-title">Portfolio Summary</div>
+          <div class="portfolio-list">
+            <div class="portfolio-item">
+              <span>AML Screening</span>
+              <span class="text-success">Pass (Score: 100)</span>
+            </div>
+            <div class="portfolio-item">
+              <span>Export Overdue</span>
+              <span>2</span>
+            </div>
+            <div class="portfolio-item">
+              <span>Loan Overdue</span>
+              <span>0</span>
+            </div>
+            <div class="portfolio-item">
+              <span>Export (Last 1 Year)</span>
+              <span>$1,250,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="section-card">
+          <div class="section-title">Request History</div>
+          <div class="history-timeline">
+            <div class="timeline-item" *ngFor="let event of request.history">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <strong>{{ event.status.replace('_', ' ') }}</strong>
+                  <span class="timeline-date">{{ event.date }}, {{ event.time }}</span>
+                </div>
+                <div class="timeline-actor">by {{ event.actor }}</div>
+                <div class="timeline-comment" *ngIf="event.comment">
+                  {{ event.comment }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-trade-layout>

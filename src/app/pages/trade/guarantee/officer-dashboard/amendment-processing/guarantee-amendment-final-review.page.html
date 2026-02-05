@@ -1,0 +1,604 @@
+<app-trade-layout
+  organisationName="Trade Finance Operations"
+  solutionName="Guarantee Officer"
+  breadcrumb="Final Amendment Review"
+  basePath="/trade"
+>
+  <div class="space-y-6">
+    <section class="rounded-2xl bg-gradient-to-r from-blue-200 to-blue-500 px-6 py-4 text-[11px] text-blue-100 shadow-sm">
+      <div class="grid gap-4 md:grid-cols-6">
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Amendment Request ID
+          </div>
+          <div class="text-sm font-semibold text-white">
+            AMD-2024-00789
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Original Guarantee Ref
+          </div>
+          <div class="text-sm font-semibold text-white">
+            GTR-2024-001234
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Guarantee Type
+          </div>
+          <div class="text-sm font-semibold text-white">
+            Performance Guarantee
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Original Amount
+          </div>
+          <div class="text-sm font-semibold text-white">
+            USD 500,000
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Submitted By
+          </div>
+          <div class="text-sm font-semibold text-white">
+            Al Khaleej Trading LLC
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold uppercase tracking-wide">
+            Submission Date
+          </div>
+          <div class="text-sm font-semibold text-white">
+            15-Jan-2024 14:32
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-[2.4fr,1.1fr]">
+      <div class="space-y-5">
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                📄
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-slate-900">
+                  Original Guarantee (Before Amendment)
+                </div>
+              </div>
+            </div>
+            <span class="inline-flex items-center rounded-full border border-blue-200 bg-white px-3 py-1 text-[11px] font-semibold text-blue-700">
+              ACTIVE
+            </span>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Guarantee Reference
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                GTR-2024-001234
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Guarantee Type
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                Performance Guarantee
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Original Amount
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                USD 500,000
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Current Expiry Date
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                31-Dec-2024
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Claim Period
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                30 Days
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                Governing Rules
+              </div>
+              <div class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900">
+                URDG 758
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-blue-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                🔁
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-slate-900">
+                  Proposed Amendment Summary (Delta View)
+                </div>
+                <div class="text-[11px] text-slate-600">
+                  Final position after applying approved amendments.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 overflow-x-auto rounded-xl border border-blue-100 bg-white">
+            <table class="min-w-full text-left text-[11px]">
+              <thead class="bg-slate-50 text-slate-500">
+                <tr class="uppercase tracking-wide">
+                  <th class="px-4 py-2">
+                    Field
+                  </th>
+                  <th class="px-4 py-2">
+                    Current Value
+                  </th>
+                  <th class="px-4 py-2">
+                    Proposed Value
+                  </th>
+                  <th class="px-4 py-2">
+                    Change
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="bg-blue-50">
+                  <td class="px-4 py-2 font-semibold text-slate-900">
+                    Guarantee Amount
+                  </td>
+                  <td class="px-4 py-2 text-slate-700">
+                    USD 500,000
+                  </td>
+                  <td class="px-4 py-2 font-semibold text-blue-700">
+                    USD 750,000
+                  </td>
+                  <td class="px-4 py-2">
+                    <span
+                      class="inline-flex items-center rounded-full bg-blue-600 px-3 py-1 text-[11px] font-semibold text-white"
+                    >
+                      + 50%
+                    </span>
+                  </td>
+                </tr>
+                <tr class="bg-blue-50">
+                  <td class="px-4 py-2 font-semibold text-slate-900">
+                    Expiry Date
+                  </td>
+                  <td class="px-4 py-2 text-slate-700">
+                    31-Dec-2024
+                  </td>
+                  <td class="px-4 py-2 font-semibold text-blue-700">
+                    30-Jun-2025
+                  </td>
+                  <td class="px-4 py-2">
+                    <span
+                      class="inline-flex items-center rounded-full bg-blue-600 px-3 py-1 text-[11px] font-semibold text-white"
+                    >
+                      + 6 Months
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 font-semibold text-slate-900">
+                    Claim Period
+                  </td>
+                  <td class="px-4 py-2 text-slate-700">
+                    30 Days
+                  </td>
+                  <td class="px-4 py-2 text-slate-700">
+                    30 Days
+                  </td>
+                  <td class="px-4 py-2">
+                    <span
+                      class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-700"
+                    >
+                      No Change
+                    </span>
+                  </td>
+                </tr>
+                <tr class="border-t border-slate-100">
+                  <td class="px-4 py-2 font-semibold text-slate-900">
+                    Beneficiary
+                  </td>
+                  <td class="px-4 py-2 text-slate-700">
+                    Emirates Construction LLC
+                  </td>
+                  <td class="px-4 py-2 text-slate-700">
+                    Emirates Construction LLC
+                  </td>
+                  <td class="px-4 py-2">
+                    <span
+                      class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-700"
+                    >
+                      No Change
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+              💰
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">
+                Financial Impact Assessment
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 grid gap-4 md:grid-cols-4">
+            <div class="space-y-1 rounded-xl border border-blue-100 bg-white p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Additional Margin Required
+              </div>
+              <div class="text-lg font-semibold text-slate-900">
+                USD 25,000
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-blue-100 bg-white p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Revised Commission
+              </div>
+              <div class="text-lg font-semibold text-slate-900">
+                USD 3,750
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-blue-100 bg-white p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Amendment Fee
+              </div>
+              <div class="text-lg font-semibold text-slate-900">
+                USD 500
+              </div>
+            </div>
+            <div class="space-y-1 rounded-xl border border-blue-100 bg-white p-4">
+              <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Total Additional Charges
+              </div>
+              <div class="text-lg font-semibold text-slate-900">
+                USD 4,250
+              </div>
+            </div>
+          </div>
+          <div
+            class="mt-3 flex items-center gap-2 rounded-lg border border-blue-100 bg-white px-3 py-2 text-[11px] text-blue-800"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+            <span>Final amounts subject to approval and posting.</span>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-blue-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+              💬
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">
+                Amendment Reason &amp; Customer Remarks
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 rounded-md bg-white px-4 py-3 text-[11px] text-slate-800">
+            <span class="font-semibold text-blue-700">
+              Amendment Reason:
+            </span>
+            Contract value increased due to additional scope of work. Project timeline extended by 6 months
+            as per revised agreement with the client. Additional performance guarantee coverage required to
+            match the revised contract value of USD 1,500,000.
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-blue-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+              📎
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">
+                Supporting Documents
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 space-y-2 text-[11px] text-slate-800">
+            <div class="flex items-center justify-between rounded-lg bg-white px-4 py-3">
+              <div class="flex items-center gap-3">
+                <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-[11px] font-semibold text-blue-700">
+                  PDF
+                </span>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    Amendment Instruction Letter
+                  </div>
+                  <div class="text-[10px] text-slate-500">
+                    Uploaded: 15-Jan-2024 · Size: 245 KB
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="inline-flex items-center rounded-full bg-blue-600 px-4 py-1.5 text-[11px] font-semibold text-white hover:bg-blue-700"
+              >
+                Preview
+              </button>
+            </div>
+            <div class="flex items-center justify-between rounded-lg bg-white px-4 py-3">
+              <div class="flex items-center gap-3">
+                <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-[11px] font-semibold text-blue-700">
+                  PDF
+                </span>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    Revised Contract Agreement
+                  </div>
+                  <div class="text-[10px] text-slate-500">
+                    Uploaded: 15-Jan-2024 · Size: 1.2 MB
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="inline-flex items-center rounded-full bg-blue-600 px-4 py-1.5 text-[11px] font-semibold text-white hover:bg-blue-700"
+              >
+                Preview
+              </button>
+            </div>
+            <div class="flex items-center justify-between rounded-lg bg-white px-4 py-3">
+              <div class="flex items-center gap-3">
+                <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-[11px] font-semibold text-blue-700">
+                  PDF
+                </span>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    Board Resolution
+                  </div>
+                  <div class="text-[10px] text-slate-500">
+                    Uploaded: 15-Jan-2024 · Size: 180 KB
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="inline-flex items-center rounded-full bg-blue-600 px-4 py-1.5 text-[11px] font-semibold text-white hover:bg-blue-700"
+              >
+                Preview
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="space-y-4">
+        <section class="rounded-2xl bg-gradient-to-r from-blue-700 to-blue-500 p-5 text-xs text-blue-50 shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-400/30 text-lg">
+                📨
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-white">
+                  SWIFT MT767 Status
+                </div>
+                <div class="mt-1 grid gap-4 text-[11px] md:grid-cols-3">
+                  <div>
+                    <div class="uppercase tracking-wide text-blue-100">
+                      Message ID
+                    </div>
+                    <div class="text-sm font-semibold text-white">
+                      MT767-240119-001
+                    </div>
+                  </div>
+                  <div>
+                    <div class="uppercase tracking-wide text-blue-100">
+                      Generated By
+                    </div>
+                    <div class="text-sm font-semibold text-white">
+                      Sarah Mitchell
+                    </div>
+                  </div>
+                  <div>
+                    <div class="uppercase tracking-wide text-blue-100">
+                      Generated At
+                    </div>
+                    <div class="text-sm font-semibold text-white">
+                      19-Jan-2024 10:45
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span class="inline-flex items-center rounded-full bg-blue-500 px-3 py-1 text-[11px] font-semibold text-white">
+              Generated
+            </span>
+          </div>
+          <div class="mt-4">
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md border border-blue-100 bg-white/5 px-4 py-2 text-[11px] font-semibold text-blue-50 hover:bg-white/10"
+            >
+              View SWIFT MT767 Message
+            </button>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 text-xs shadow-sm">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+              ✅
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">
+                Review &amp; Decision Panel
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 space-y-3 text-[11px] text-slate-700">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              Review Checklist
+            </div>
+            <label class="flex items-start gap-2">
+              <input type="checkbox" class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600" />
+              <span>Amendment request complete</span>
+            </label>
+            <label class="flex items-start gap-2">
+              <input type="checkbox" class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600" />
+              <span>Amendment within policy limits</span>
+            </label>
+            <label class="flex items-start gap-2">
+              <input type="checkbox" class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600" />
+              <span>Financial impact acceptable</span>
+            </label>
+            <label class="flex items-start gap-2">
+              <input type="checkbox" class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600" />
+              <span>Required documents uploaded</span>
+            </label>
+            <label class="flex items-start gap-2">
+              <input type="checkbox" class="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-blue-600" />
+              <span>SWIFT MT767 generated</span>
+            </label>
+          </div>
+
+          <div class="mt-4 space-y-2">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              Validation Status
+            </div>
+            <div class="space-y-1 text-[11px] text-slate-700">
+              <div class="flex items-center justify-between rounded-md bg-blue-50 px-3 py-1.5">
+                <span>Policy Compliance</span>
+                <span class="text-[11px] font-semibold text-blue-700">
+                  ✔ Pass
+                </span>
+              </div>
+              <div class="flex items-center justify-between rounded-md bg-blue-50 px-3 py-1.5">
+                <span>Limit Check</span>
+                <span class="text-[11px] font-semibold text-blue-700">
+                  ✔ Pass
+                </span>
+              </div>
+              <div class="flex items-center justify-between rounded-md bg-blue-50 px-3 py-1.5">
+                <span>Data Validation</span>
+                <span class="text-[11px] font-semibold text-blue-700">
+                  ✔ Pass
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-1">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              Internal Review Notes
+            </div>
+            <textarea
+              rows="3"
+              class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-xs text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              placeholder="Add your review remarks here..."
+            ></textarea>
+            <div class="text-[10px] text-slate-500">
+              Mandatory for Send Back / Reject, optional for Approval.
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-2">
+            <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              Final Decision
+            </div>
+            <div class="space-y-2">
+              <label class="block">
+                <div class="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2">
+                  <input type="radio" name="finalDecision" class="mt-1 h-3.5 w-3.5 border-blue-400 text-blue-600" />
+                  <div>
+                    <div class="text-[11px] font-semibold text-blue-700">
+                      Send Back for Correction
+                    </div>
+                    <div class="text-[10px] text-blue-600">
+                      Return to customer with deficiency notes.
+                    </div>
+                  </div>
+                </div>
+              </label>
+              <label class="block">
+                <div class="flex items-start gap-3 rounded-lg border border-blue-400 bg-blue-50 px-3 py-2">
+                  <input type="radio" name="finalDecision" class="mt-1 h-3.5 w-3.5 border-blue-500 text-blue-600" />
+                  <div>
+                    <div class="text-[11px] font-semibold text-blue-800">
+                      Approval Amendment
+                    </div>
+                    <div class="text-[10px] text-blue-700">
+                      Forward to Guarantee Checker for final approval.
+                    </div>
+                  </div>
+                </div>
+              </label>
+              <label class="block">
+                <div class="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                  <input type="radio" name="finalDecision" class="mt-1 h-3.5 w-3.5 border-slate-400 text-slate-600" />
+                  <div>
+                    <div class="text-[11px] font-semibold text-slate-800">
+                      Reject Amendment
+                    </div>
+                    <div class="text-[10px] text-slate-600">
+                      Decline the amendment request.
+                    </div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-3">
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white hover:bg-blue-700"
+              (click)="submitDecision()"
+            >
+              Submit Decision
+            </button>
+            <button
+              type="button"
+              class="inline-flex w-full items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+              (click)="goBackToDashboard()"
+            >
+              ← Back to Dashboard
+            </button>
+            <div class="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-[11px] text-slate-700">
+              <div class="font-semibold text-blue-800">
+                What happens next?
+              </div>
+              <ul class="mt-1 list-disc space-y-0.5 pl-4">
+                <li>Checker reviews and approves/rejects.</li>
+                <li>Amendment is issued if approved.</li>
+                <li>Customer receives notification.</li>
+                <li>SWIFT MT767 is transmitted.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </section>
+    </section>
+  </div>
+</app-trade-layout>
