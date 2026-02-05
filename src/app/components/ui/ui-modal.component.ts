@@ -8,10 +8,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   template: `
     <div
       *ngIf="open"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
     >
       <div
-        class="relative w-full rounded-md bg-white shadow-lg"
+        class="relative flex w-full max-h-[calc(100vh-2rem)] flex-col rounded-md bg-white shadow-lg"
         [ngClass]="sizeClass"
       >
         <div class="flex items-center justify-between border-b px-6 py-4">
@@ -26,7 +26,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
             ✕
           </button>
         </div>
-        <div class="px-6 py-4 text-xs text-slate-700">
+        <div class="px-6 py-4 text-xs text-slate-700 overflow-y-auto">
           <ng-content></ng-content>
         </div>
       </div>

@@ -1,7 +1,16 @@
 import { Routes } from '@angular/router';
 import { TradeDashboardPageComponent } from '../pages/loms/dashboard/loms-dashboard.page';
+import { LomsDedupApplicationPageComponent } from '../pages/loms/de-dup/de-dup-application.page';
+import { LomsLoanApplicationPageComponent } from '../pages/loms/loan-application/loan-application.page';
+import { LomsDemographicApplicationPageComponent } from '../pages/loms/demographic-application/demographic-application.page';
+import { LomsProductApplicationPageComponent } from '../pages/loms/product-application/product-application.page';
+import { LomsFinancialApplicationPageComponent } from '../pages/loms/financial-application/financial-application.page';
+import { LomsSecurityApplicationPageComponent } from '../pages/loms/security-application/security-application.page';
+import { LomsDocumentApplicationPageComponent } from '../pages/loms/document-application/document-application.page';
+import { LomsApplicationPreviewPageComponent } from '../pages/loms/application-preview/application-preview.page';
 import { CpvDashboardPageComponent } from '../pages/loms/cpv/dashboard/cpv-dashboard.page';
 import { CpvInitiationAssignPageComponent } from '../pages/loms/cpv/initiation-assign/cpv-initiation-assign.page';
+import { CpvFinalizationPageComponent } from '../pages/loms/cpv/finalization/cpv-finalization.page';
 import { LomsProductDashboardPageComponent } from '../pages/loms/product/product-dashboard.page';
 import { LomsProductWizardPageComponent } from '../pages/loms/product/product-wizard.page';
 import { LomsProductViewPageComponent } from '../pages/loms/product/product-view.page';
@@ -18,12 +27,48 @@ export const lomsRoutes: Routes = [
     component: TradeDashboardPageComponent
   },
   {
+    path: 'de-dup/application',
+    component: LomsDedupApplicationPageComponent
+  },
+  {
+    path: 'loan-application/application',
+    component: LomsLoanApplicationPageComponent
+  },
+  {
+    path: 'demographic-application/application',
+    component: LomsDemographicApplicationPageComponent
+  },
+  {
+    path: 'product-application/application',
+    component: LomsProductApplicationPageComponent
+  },
+  {
+    path: 'financial-application/application',
+    component: LomsFinancialApplicationPageComponent
+  },
+  {
+    path: 'security-application/application',
+    component: LomsSecurityApplicationPageComponent
+  },
+  {
+    path: 'document-application/application',
+    component: LomsDocumentApplicationPageComponent
+  },
+  {
+    path: 'application-preview',
+    component: LomsApplicationPreviewPageComponent
+  },
+  {
     path: 'cpv/dashboard',
     component: CpvDashboardPageComponent
   },
   {
     path: 'cpv/initiation-assign',
     component: CpvInitiationAssignPageComponent
+  },
+  {
+    path: 'cpv/finalization',
+    component: CpvFinalizationPageComponent
   },
   {
     path: 'product',

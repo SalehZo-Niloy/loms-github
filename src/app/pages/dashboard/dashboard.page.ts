@@ -57,25 +57,25 @@ export class DashboardPageComponent {
     {
       name: 'Rahim Uddin',
       email: 'rahim.uddin@example.com',
-      role: 'User',
+      role: 'Relationship Manager',
       status: 'Active',
     },
     {
       name: 'Fatema Begum',
       email: 'fatema.begum@example.com',
-      role: 'Admin',
+      role: 'Branch Manager',
       status: 'Active',
     },
     {
       name: 'Sajib Ahmed',
       email: 'sajib.ahmed@example.com',
-      role: 'User',
+      role: 'Central Processing Unit',
       status: 'Invited',
     },
     {
       name: 'Nusrat Jahan',
       email: 'nusrat.jahan@example.com',
-      role: 'User',
+      role: 'Credit Risk Analyst',
       status: 'Suspended',
     },
   ];

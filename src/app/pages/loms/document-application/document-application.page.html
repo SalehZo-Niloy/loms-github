@@ -1,0 +1,422 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Document Application"
+  basePath="/loms"
+>
+  <div class="space-y-6">
+    <section class="border border-blue-100 bg-white p-6 shadow-sm">
+      <div class="space-y-4">
+        <div>
+          <h1 class="text-xl font-semibold text-slate-900">
+            Document Information
+          </h1>
+          <p class="text-xs text-slate-500">
+            Upload all required documents for loan processing.
+          </p>
+        </div>
+
+        <nav
+          class="mt-1 overflow-x-auto"
+          aria-label="Loan application steps"
+        >
+          <div
+            class="flex min-w-[520px] flex-wrap items-center gap-2 text-xs text-slate-600"
+          >
+            <button
+              *ngFor="let stepTitle of stepTitles; let i = index"
+              #stepButton
+              type="button"
+              class="focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-white"
+              [ngClass]="getStepCircleClasses(i)"
+              [attr.aria-current]="currentStep === i ? 'step' : null"
+              [attr.aria-label]="'Step ' + (i + 1) + ': ' + stepTitle"
+              (click)="goToStep(i)"
+              (keydown)="onStepKeydown($event, i)"
+            >
+              <span class="truncate">
+                {{ stepTitle }}
+              </span>
+            </button>
+          </div>
+        </nav>
+        <div class="mt-3 flex justify-end">
+          <app-ui-button
+            type="button"
+            (click)="onRefreshSteps()"
+          >
+            Refresh
+          </app-ui-button>
+        </div>
+      </div>
+    </section>
+
+    <section class="border border-blue-100 bg-white p-6 shadow-sm">
+      <div class="space-y-6">
+        <div class="border border-blue-100 bg-blue-50/70 px-4 py-3 text-xs text-slate-700">
+          <div class="flex items-center gap-3">
+            <div class="flex h-7 w-7 items-center justify-center rounded bg-blue-600 text-white">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="h-4 w-4"
+                fill="none"
+              >
+                <path
+                  d="M5 5h14v14H5z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M8 9h8M8 12h5M8 15h6"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-xs font-semibold text-slate-900">
+                Document Upload Center
+              </div>
+              <div class="text-[11px] text-slate-600">
+                Select document type and upload all required files.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-md border border-blue-100 bg-blue-50/30 p-4 space-y-4">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="space-y-0.5">
+              <div class="text-xs font-semibold text-slate-900">
+                Select Document Type
+              </div>
+              <div class="text-[11px] text-slate-600">
+                Choose the document type you want to add to this application.
+              </div>
+            </div>
+            <div>
+              <app-ui-button
+                type="button"
+                (click)="addDocumentFromSelector()"
+              >
+                + Add Document
+              </app-ui-button>
+            </div>
+          </div>
+
+          <div class="max-w-md">
+            <app-ui-dropdown
+              label="Select Document Type"
+              [options]="documentTypeOptions"
+              [(value)]="selectedDocumentType"
+            ></app-ui-dropdown>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <section
+            *ngFor="let document of form.documents"
+            class="border border-blue-100 bg-white"
+          >
+            <div class="flex items-start justify-between gap-3 border-b border-blue-100 px-5 py-3">
+              <div class="flex items-center gap-3">
+                <div class="flex h-7 w-7 items-center justify-center rounded bg-blue-600 text-white">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    class="h-4 w-4"
+                    fill="none"
+                  >
+                    <path
+                      d="M7 4h7l4 4v12H7z"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M14 4v4h4"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">
+                    {{ document.typeLabel }}
+                  </div>
+                  <div class="text-[11px] text-slate-600">
+                    Upload required files for this document type.
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="text-xs text-red-500 hover:text-red-600"
+                (click)="removeDocument(document.id)"
+              >
+                Remove
+              </button>
+            </div>
+
+            <div class="grid gap-4 border-t border-blue-50 px-5 py-4 md:grid-cols-2">
+              <div class="space-y-3">
+                <div class="text-[11px] font-semibold text-slate-700">
+                  Upload File
+                </div>
+
+                <div class="relative rounded-md border border-dashed border-blue-200 bg-blue-50/60 px-4 py-6 text-center">
+                  <input
+                    type="file"
+                    class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                    (change)="onFileSelected($event, document.id)"
+                  />
+                  <div class="space-y-2 pointer-events-none">
+                    <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        class="h-5 w-5"
+                        fill="none"
+                      >
+                        <path
+                          d="M12 16V8"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M9 11l3-3 3 3"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M6.75 18.5a4.75 4.75 0 01-1.48-9.213A5.5 5.5 0 0116.5 6.5a3.5 3.5 0 013.6 4.37A3.877 3.877 0 0118.25 18.5z"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="text-xs font-medium text-slate-800">
+                      Drag &amp; drop or click to upload
+                    </div>
+                    <div class="text-[11px] text-slate-500">
+                      PDF, JPG, PNG up to 10MB
+                    </div>
+                    <div class="pt-1">
+                      <span class="inline-flex items-center rounded border border-blue-500 bg-blue-600 px-3 py-1 text-[11px] font-semibold text-white shadow-sm">
+                        Browse Files
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between text-[11px] text-slate-500">
+                  <div>
+                    <span class="font-medium text-slate-700">File Name:</span>
+                    <span class="ml-1">
+                      {{ document.fileName || 'Not uploaded yet' }}
+                    </span>
+                  </div>
+                  <div *ngIf="document.fileSizeBytes">
+                    <span class="font-medium text-slate-700">File Size:</span>
+                    <span class="ml-1">
+                      {{ getFileSizeLabel(document) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="text-[11px] font-semibold text-slate-700">
+                    Upload Status
+                  </div>
+                  <div
+                    class="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-[11px] font-semibold text-blue-700"
+                  >
+                    <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                    <span>{{ getUploadStatusLabel(document) }}</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">
+                  {{ getUploadStatusDescription(document) }}
+                </div>
+
+                <div class="space-y-1.5">
+                  <app-ui-input
+                    label="Document Description (Optional)"
+                    type="textarea"
+                    [rows]="3"
+                    [(value)]="document.description"
+                    placeholder="Add any notes or description about this document..."
+                  ></app-ui-input>
+                </div>
+
+                <div class="text-[11px] text-slate-500">
+                  <span class="font-medium text-slate-700">Uploaded on:</span>
+                  <span class="ml-1">
+                    {{ getUploadedAtLabel(document) || '--' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="border border-blue-100 bg-blue-50/30 p-4">
+          <div class="flex items-center justify-between gap-3 border-b border-blue-100 pb-3">
+            <div class="flex items-center gap-2">
+              <div class="flex h-6 w-6 items-center justify-center rounded bg-blue-600 text-white">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  class="h-3.5 w-3.5"
+                  fill="none"
+                >
+                  <path
+                    d="M5 5h14v14H5z"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M9 9h6v2H9z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-slate-900">
+                  Upload Progress &amp; Preview
+                </div>
+                <div class="text-[11px] text-slate-600">
+                  Review uploaded documents and their current status.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 overflow-x-auto">
+            <table class="min-w-full border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-blue-100 bg-blue-50/60 text-[11px] text-slate-600">
+                  <th class="whitespace-nowrap px-3 py-2 text-left font-medium">
+                    Document Type
+                  </th>
+                  <th class="whitespace-nowrap px-3 py-2 text-left font-medium">
+                    File Name
+                  </th>
+                  <th class="whitespace-nowrap px-3 py-2 text-left font-medium">
+                    File Size
+                  </th>
+                  <th class="whitespace-nowrap px-3 py-2 text-left font-medium">
+                    Upload Status
+                  </th>
+                  <th class="whitespace-nowrap px-3 py-2 text-left font-medium">
+                    Upload Date
+                  </th>
+                  <th class="whitespace-nowrap px-3 py-2 text-left font-medium">
+                    Progress
+                  </th>
+                  <th class="whitespace-nowrap px-3 py-2 text-left font-medium">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let document of form.documents"
+                  class="border-b border-blue-50 bg-white text-[11px] text-slate-700"
+                >
+                  <td class="px-3 py-2 align-top">
+                    {{ document.typeLabel }}
+                  </td>
+                  <td class="px-3 py-2 align-top">
+                    {{ document.fileName || '--' }}
+                  </td>
+                  <td class="px-3 py-2 align-top">
+                    {{ document.fileSizeBytes ? getFileSizeLabel(document) : '--' }}
+                  </td>
+                  <td class="px-3 py-2 align-top">
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700"
+                    >
+                      <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                      <span>{{ getUploadStatusLabel(document) }}</span>
+                    </span>
+                  </td>
+                  <td class="px-3 py-2 align-top">
+                    {{ getUploadedAtLabel(document) || '--' }}
+                  </td>
+                  <td class="px-3 py-2 align-top">
+                    <div class="flex items-center gap-2">
+                      <div class="h-1.5 w-20 rounded-full bg-blue-100">
+                        <div
+                          class="h-1.5 rounded-full bg-blue-600"
+                          [style.width.%]="getUploadProgress(document)"
+                        ></div>
+                      </div>
+                      <span class="text-[10px] text-slate-600">
+                        {{ getUploadProgress(document) }}%
+                      </span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-2 align-top">
+                    <div class="flex items-center gap-2">
+                      <button
+                        type="button"
+                        class="text-[10px] font-medium text-blue-600 hover:text-blue-700"
+                      >
+                        View
+                      </button>
+                      <button
+                        type="button"
+                        class="text-[10px] font-medium text-red-500 hover:text-red-600"
+                        (click)="removeDocument(document.id)"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="flex items-center justify-between gap-3 pt-2 border-t border-blue-100">
+          <app-ui-button
+            type="button"
+            variant="secondary"
+            (click)="goBackToFinancial()"
+          >
+            Previous Step
+          </app-ui-button>
+          <div class="flex items-center gap-2">
+            <app-ui-button
+              type="button"
+              variant="secondary"
+              (click)="saveDraftWithAlert()"
+            >
+              Save as Draft
+            </app-ui-button>
+            <app-ui-button
+              type="button"
+              (click)="proceedToNextStep()"
+            >
+              Submit Application
+            </app-ui-button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</app-loms-layout>

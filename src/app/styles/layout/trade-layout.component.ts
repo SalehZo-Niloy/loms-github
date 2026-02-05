@@ -444,11 +444,11 @@ export class TradeLayoutComponent implements OnInit {
               route: ['/trade', 'dc-advising', 'approver', 'dashboard']
             },
             {
-          label: 'DC Amendment',
+              label: 'DC Amendment',
             },
             {
-          label: 'DC Transfer',
-           },
+              label: 'DC Transfer',
+            },
           ]
         },
         {
@@ -486,13 +486,12 @@ export class TradeLayoutComponent implements OnInit {
             {
               label: 'Customer Dashboard',
               route: ['/trade', 'export-proceed', 'customer', 'dashboard']
-            },   
+            },
             {
-          label: 'ARV Process',
+              label: 'ARV Process',
             },
           ]
         },
-        
         {
           label: 'Master LC',
           children: [
@@ -509,11 +508,11 @@ export class TradeLayoutComponent implements OnInit {
               route: ['/trade', 'master-lc', 'manager', 'dashboard']
             },
             {
-          label: 'Master LC Replace',
+              label: 'Master LC Replace',
             },
-           {
-          label: 'Cost Sheet',
-           },
+            {
+              label: 'Cost Sheet',
+            },
           ]
         },
       ]

@@ -1,0 +1,202 @@
+<app-loms-layout
+  organisationName="Loan Origination and Monitoring System"
+  solutionName="LOMS"
+  breadcrumb="CPV Finalization"
+  basePath="/loms"
+>
+  <div class="space-y-6">
+    <section class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-1">
+        <h1 class="text-lg font-semibold text-slate-900">
+          CPV Finalization
+        </h1>
+        <p class="text-sm text-slate-600">
+          Update CPV status, remarks, and supporting documents
+        </p>
+      </div>
+    </section>
+
+    <section class="rounded-md border border-slate-200 bg-white px-6 py-4 text-xs shadow-sm">
+      <div
+        class="grid gap-4 text-xs text-slate-800 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1.5fr)_minmax(0,1.5fr)] md:items-center"
+      >
+        <div class="space-y-1">
+          <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Application ID
+          </div>
+          <div class="text-[13px] font-semibold text-blue-700">
+            {{ applicationId }}
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Requested Loan Amount
+          </div>
+          <div class="text-[13px] text-slate-900">
+            {{ requestedLoanAmount }}
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            Product Type
+          </div>
+          <div class="text-[13px] text-slate-900">
+            {{ productType }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-md border border-slate-200 bg-white px-6 py-5 text-xs shadow-sm">
+      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="space-y-1">
+          <h2 class="text-sm font-semibold text-slate-900">
+            CPV Task List
+          </h2>
+        </div>
+      </div>
+
+      <div class="mt-4 overflow-x-auto">
+        <table class="min-w-full border-separate border-spacing-0 text-[11px]">
+          <thead>
+            <tr class="bg-slate-50 text-left font-semibold uppercase tracking-wide text-slate-500">
+              <th class="px-4 py-2">
+                Application ID
+              </th>
+              <th class="px-4 py-2">
+                CPV Type
+              </th>
+              <th class="px-4 py-2">
+                Related Persona
+              </th>
+              <th class="px-4 py-2">
+                Status
+              </th>
+              <th class="px-4 py-2">
+                Remarks
+              </th>
+              <th class="px-4 py-2">
+                Doc Upload
+              </th>
+              <th class="px-4 py-2">
+                Preview
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 bg-white">
+            <tr *ngFor="let row of rows" class="text-xs">
+              <td class="px-4 py-3 align-top text-blue-700 font-semibold">
+                {{ row.applicationId }}
+              </td>
+              <td class="px-4 py-3 align-top text-slate-900">
+                {{ row.cpvType }}
+              </td>
+              <td class="px-4 py-3 align-top text-slate-700">
+                {{ row.persona }}
+              </td>
+              <td class="px-4 py-3 align-top">
+                <select
+                  class="h-8 w-40 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  [ngModel]="row.status"
+                  (ngModelChange)="onStatusChange(row, $event)"
+                >
+                  <option value="">Select...</option>
+                  <option
+                    *ngFor="let option of getStatusOptions(row)"
+                    [value]="option"
+                  >
+                    {{ option }}
+                  </option>
+                </select>
+              </td>
+              <td class="px-4 py-3 align-top">
+                <input
+                  type="text"
+                  class="h-8 w-64 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  [ngModel]="row.remarks"
+                  (ngModelChange)="onRemarksChange(row, $event)"
+                  placeholder="Enter remarks..."
+                />
+              </td>
+              <td class="px-4 py-3 align-top">
+                <div class="flex items-center gap-2">
+                  <input
+                    #fileInput
+                    type="file"
+                    class="hidden"
+                    accept="application/pdf"
+                    (change)="onUploadDocument(row, $event)"
+                  />
+                  <button
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-md bg-slate-100 px-3 py-1.5 text-[11px] font-medium text-slate-800 hover:bg-slate-200"
+                    (click)="fileInput.click()"
+                  >
+                    Upload
+                  </button>
+                  <span
+                    *ngIf="row.fileName"
+                    class="max-w-[120px] truncate text-[10px] text-slate-500"
+                  >
+                    {{ row.fileName }}
+                  </span>
+                </div>
+              </td>
+              <td class="px-4 py-3 align-top">
+                <button
+                  type="button"
+                  class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:bg-slate-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-300"
+                  [disabled]="!canPreview(row)"
+                  (click)="previewDocument(row)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    class="h-4 w-4"
+                    fill="none"
+                  >
+                    <path
+                      d="M2.5 12s3-6.5 9.5-6.5S21.5 12 21.5 12s-3 6.5-9.5 6.5S2.5 12 2.5 12Z"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="2.5"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
+        <div class="flex gap-3">
+          <!-- <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-5 py-2 text-[11px] font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+            (click)="saveDraft()"
+          >
+            Save
+          </button> -->
+          <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-md bg-blue-600 px-5 py-2 text-[11px] font-semibold text-white shadow-sm hover:bg-blue-700"
+            (click)="submitFinalization()"
+          >
+            Submit CPV Finalization
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</app-loms-layout>

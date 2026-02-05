@@ -1,20 +1,29 @@
-<app-loms-layout
-  organisationName="Loan Origination and Monitoring System"
-  solutionName="LOMS"
-  breadcrumb="CPV Initiation & Assign"
-  basePath="/loms"
->
-  <div class="space-y-6">
-    <section class="rounded-md border border-slate-200 bg-white px-6 py-4 shadow-sm">
-      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div class="space-y-1">
-          <div class="text-sm font-semibold text-slate-900">
-            CPV Initiation & Assign
-          </div>
-        </div>
-      </div>
+<app-loms-layout organisationName="Loan Origination and Monitoring System" solutionName="LOMS"
+  breadcrumb="CPV Initiation & Assign" basePath="/loms">
+  <section class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div class="space-y-1">
+      <h1 class="text-lg font-semibold text-slate-900">
+        CPV Initiation & Assign
+      </h1>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <button type="button"
+        class="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+        (click)="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7 7-7" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18" />
+        </svg>
+        <span>Back</span>
+      </button>
+    </div>
+  </section>
 
-      <div class="mt-4 grid gap-4 text-xs text-slate-800 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1.5fr)_minmax(0,1.5fr)_auto] md:items-center">
+  <div class="space-y-6 mt-4">
+    <section class="rounded-md border border-slate-200 bg-white px-6 py-4 shadow-sm">
+      <div
+        class=" grid gap-4 text-xs text-slate-800 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1.5fr)_minmax(0,1.5fr)_auto] md:items-center">
         <div class="space-y-1">
           <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
             Application ID
@@ -22,6 +31,7 @@
           <button
             type="button"
             class="text-[13px] font-semibold text-blue-700 hover:underline"
+            (click)="openApplicationDetails()"
           >
             {{ applicationId }}
           </button>
@@ -46,6 +56,7 @@
           <button
             type="button"
             class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white shadow-sm hover:bg-blue-700"
+            (click)="openApplicationDetails()"
           >
             Application Details
           </button>
@@ -62,26 +73,29 @@
         </div>
         <div class="flex flex-wrap items-center gap-2">
           <select
-            class="h-8 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            class="h-8 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50 disabled:text-slate-400 disabled:border-slate-200"
             [(ngModel)]="bulkAction"
+            [disabled]="!anyRowSelected"
           >
             <option value="None">Bulk Actions…</option>
             <option value="Forward">Forward</option>
             <option value="Hold">Hold</option>
           </select>
           <select
-            class="h-8 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            class="h-8 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50 disabled:text-slate-400 disabled:border-slate-200"
             [(ngModel)]="bulkForwardTo"
+            [disabled]="isBulkForwardDisabled"
           >
             <option value="">Bulk Forward To…</option>
-            <option value="RM">RM</option>
-            <option value="Branch Operations">Branch Operations</option>
-            <option value="CPV Team">CPV Team</option>
+            <option value="Self">Self</option>
+            <option value="CPU">CPU</option>
+            <option value="CPV Officer">CPV Officer</option>
           </select>
           <button
             type="button"
-            class="inline-flex h-8 items-center justify-center rounded-md bg-blue-600 px-4 text-[11px] font-semibold text-white shadow-sm hover:bg-blue-700"
+            class="inline-flex h-8 items-center justify-center rounded-md bg-blue-600 px-4 text-[11px] font-semibold text-white shadow-sm hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-500 disabled:hover:bg-slate-200"
             (click)="applyBulk()"
+            [disabled]="isBulkApplyDisabled"
           >
             Apply to Selected
           </button>
@@ -93,11 +107,8 @@
           <thead>
             <tr class="bg-slate-50 text-left font-semibold uppercase tracking-wide text-slate-500">
               <th class="px-4 py-2">
-                <input
-                  type="checkbox"
-                  class="h-3.5 w-3.5 rounded border-slate-300"
-                  (change)="toggleAll($any($event.target).checked)"
-                />
+                <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300"
+                  (change)="toggleAll($any($event.target).checked)" />
               </th>
               <th class="px-4 py-2">
                 CPV Type
@@ -117,16 +128,9 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 bg-white">
-            <tr
-              *ngFor="let row of cpvRows"
-              class="text-xs"
-            >
+            <tr *ngFor="let row of cpvRows" class="text-xs">
               <td class="px-4 py-3 align-top">
-                <input
-                  type="checkbox"
-                  class="h-3.5 w-3.5 rounded border-slate-300"
-                  [(ngModel)]="row.selected"
-                />
+                <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300" [(ngModel)]="row.selected" />
               </td>
               <td class="px-4 py-3 align-top text-slate-900">
                 {{ row.cpvType }}
@@ -138,27 +142,32 @@
                 <select
                   class="h-8 w-32 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   [(ngModel)]="row.action"
+                  (ngModelChange)="onRowActionChange(row)"
                 >
+                  <option value="">Actions…</option>
                   <option value="Forward">Forward</option>
                   <option value="Hold">Hold</option>
                 </select>
               </td>
               <td class="px-4 py-3 align-top">
                 <select
-                  class="h-8 w-40 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  class="h-8 w-40 rounded-md border border-slate-200 bg-white px-2 text-[11px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50 disabled:text-slate-400 disabled:border-slate-200"
                   [(ngModel)]="row.forwardTo"
+                  [disabled]="isRowForwardDisabled(row)"
+                  (ngModelChange)="onRowForwardToChange(row)"
                 >
                   <option value="">Select…</option>
-                  <option value="RM">RM</option>
-                  <option value="Branch Operations">Branch Operations</option>
-                  <option value="CPV Team">CPV Team</option>
+                  <option value="Self">Self</option>
+                  <option value="CPU">CPU</option>
+                  <option value="CPV Officer">CPV Officer</option>
                 </select>
               </td>
               <td class="px-4 py-3 align-top">
                 <span
-                  class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-700"
+                  class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold"
+                  [ngClass]="getStatusBadgeClasses(row.status)"
                 >
-                  Pending
+                  {{ row.status }}
                 </span>
               </td>
             </tr>
@@ -172,6 +181,7 @@
           <button
             type="button"
             class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white shadow-sm hover:bg-blue-700"
+            (click)="confirmCpvSetup()"
           >
             Confirm CPV Setup
           </button>
@@ -179,5 +189,249 @@
       </div>
     </section>
   </div>
-</app-loms-layout>
 
+  <app-ui-modal
+    [open]="showApplicationDetails"
+    title="Application Details"
+    size="lg"
+    (close)="closeApplicationDetails()"
+  >
+    <ng-container *ngIf="applicationDetails as app">
+      <div class="space-y-6">
+        <section class="space-y-3">
+          <div
+            class="inline-flex items-center rounded-md bg-slate-50 px-3 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-slate-600"
+          >
+            Application Information
+          </div>
+          <div class="grid gap-y-4 gap-x-10 text-[11px] text-slate-700 md:grid-cols-3">
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Application ID
+              </div>
+              <div class="font-semibold text-slate-900">
+                {{ app.applicationId }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Application Date
+              </div>
+              <div>
+                {{ app.applicationDate }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Application Status
+              </div>
+              <div>
+                {{ app.applicationStatus }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Originating Branch
+              </div>
+              <div>
+                {{ app.originatingBranch }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Relationship Manager
+              </div>
+              <div>
+                {{ app.relationshipManager }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <div
+            class="inline-flex items-center rounded-md bg-slate-50 px-3 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-slate-600"
+          >
+            Applicant Information
+          </div>
+          <div class="grid gap-y-4 gap-x-10 text-[11px] text-slate-700 md:grid-cols-3">
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Applicant Name
+              </div>
+              <div class="font-semibold text-slate-900">
+                {{ app.applicantName }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                National ID Number
+              </div>
+              <div>
+                {{ app.nationalIdNumber }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Mobile Number
+              </div>
+              <div>
+                {{ app.mobileNumber }}
+              </div>
+            </div>
+            <div class="space-y-0.5 md:col-span-3">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Present Address
+              </div>
+              <div>
+                {{ app.presentAddress }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <div
+            class="inline-flex items-center rounded-md bg-slate-50 px-3 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-slate-600"
+          >
+            Loan Information
+          </div>
+          <div class="grid gap-y-4 gap-x-10 text-[11px] text-slate-700 md:grid-cols-3">
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Loan Type
+              </div>
+              <div>
+                {{ app.loanType }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Product Name
+              </div>
+              <div>
+                {{ app.productName }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Requested Loan Amount
+              </div>
+              <div>
+                {{ app.requestedLoanAmount }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Loan Tenure
+              </div>
+              <div>
+                {{ app.loanTenure }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <div
+            class="inline-flex items-center rounded-md bg-slate-50 px-3 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-slate-600"
+          >
+            Guarantor Information
+          </div>
+          <div class="grid gap-y-4 gap-x-10 text-[11px] text-slate-700 md:grid-cols-3">
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Guarantor Name
+              </div>
+              <div class="font-semibold text-slate-900">
+                {{ app.guarantorName }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Relationship with Applicant
+              </div>
+              <div>
+                {{ app.guarantorRelation }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                National ID Number
+              </div>
+              <div>
+                {{ app.guarantorNationalIdNumber }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Mobile Number
+              </div>
+              <div>
+                {{ app.guarantorMobileNumber }}
+              </div>
+            </div>
+            <div class="space-y-0.5 md:col-span-3">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Present Address
+              </div>
+              <div>
+                {{ app.guarantorAddress }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <div
+            class="inline-flex items-center rounded-md bg-slate-50 px-3 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-slate-600"
+          >
+            Nominee Information
+          </div>
+          <div class="grid gap-y-4 gap-x-10 text-[11px] text-slate-700 md:grid-cols-3">
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Nominee Name
+              </div>
+              <div class="font-semibold text-slate-900">
+                {{ app.nomineeName }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Relationship with Applicant
+              </div>
+              <div>
+                {{ app.nomineeRelation }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                National ID Number
+              </div>
+              <div>
+                {{ app.nomineeNationalIdNumber }}
+              </div>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Mobile Number
+              </div>
+              <div>
+                {{ app.nomineeMobileNumber }}
+              </div>
+            </div>
+            <div class="space-y-0.5 md:col-span-3">
+              <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                Present Address
+              </div>
+              <div>
+                {{ app.nomineeAddress }}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </ng-container>
+  </app-ui-modal>
+</app-loms-layout>

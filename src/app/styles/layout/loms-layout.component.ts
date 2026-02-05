@@ -23,33 +23,33 @@ interface LomsMenuItem {
   standalone: true,
   imports: [CommonModule, RouterLink, CommonFooterComponent, UserMenuComponent, ...HlmSidebarImports],
   template: `
-    <div class="flex h-screen flex-col text-slate-900" [ngClass]="theme.page.background">
+      <div class="flex h-screen flex-col overflow-hidden text-slate-900" [ngClass]="theme.page.background">
       <div hlmSidebarWrapper class="flex flex-1 overflow-hidden">
-        <hlm-sidebar>
-          <div
-            class="flex flex-col border-r overflow-hidden transition-all duration-300 ease-in-out"
-            [ngClass]="[theme.border.default, theme.surface.card]"
-          >
-            <div class="flex h-16 items-center gap-3 border-b px-4" [ngClass]="theme.border.default">
-              <img src="era_logo.svg" alt="ERA InfoTech Limited" class="h-8 w-auto" />
-              <div class="flex flex-col">
-                <span class="text-sm font-semibold">LOMS</span>
-              </div>
-            </div>
-
-            <nav class="flex-1 overflow-y-auto space-y-6 px-3 py-4 text-sm">
-              <div>
-                <div class="px-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                  {{ primarySectionLabel }}
+          <hlm-sidebar>
+            <div
+            class="flex h-full flex-col border-r overflow-hidden bg-white transition-all duration-300 ease-in-out"
+              [ngClass]="[theme.border.default, theme.surface.card]"
+            >
+              <div class="flex h-16 items-center gap-3 border-b px-4" [ngClass]="theme.border.default">
+                <img src="era_logo.svg" alt="ERA InfoTech Limited" class="h-8 w-auto" />
+                <div class="flex flex-col">
+                  <span class="text-sm font-semibold">LOMS</span>
                 </div>
-                <div class="mt-2 space-y-1">
-                  <ng-container *ngFor="let item of mainMenuItems">
-                    <ng-container *ngIf="!item.children || item.children.length === 0">
-                      <a
-                        [routerLink]="item.route"
-                        class="flex items-center justify-between rounded-md border border-transparent px-3 py-2 text-sm font-medium text-slate-700 hover:border-slate-200 hover:bg-slate-50"
-                        [ngClass]="getActiveClassForRoute(item.route)"
-                      >
+              </div>
+  
+              <nav class="flex-1 overflow-y-auto space-y-6 px-3 py-4 text-sm">
+                <div>
+                  <div class="px-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    {{ primarySectionLabel }}
+                  </div>
+                  <div class="mt-2 space-y-1">
+                    <ng-container *ngFor="let item of mainMenuItems">
+                      <ng-container *ngIf="!item.children || item.children.length === 0">
+                        <a
+                          [routerLink]="item.route"
+                          class="flex items-center justify-between rounded-md border border-transparent px-3 py-2 text-sm font-medium text-slate-700 hover:border-slate-200 hover:bg-slate-50"
+                          [ngClass]="getActiveClassForRoute(item.route)"
+                        >
                         <span class="flex items-center gap-2">
                           <span
                             class="flex h-4 w-4 items-center justify-center text-slate-400"
@@ -58,6 +58,33 @@ interface LomsMenuItem {
                             <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
                               <path
                                 d="M4 9.5 10 4l6 5.5V16a1 1 0 0 1-1 1h-3.5v-4H8.5v4H5a1 1 0 0 1-1-1V9.5Z"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="flex h-4 w-4 items-center justify-center text-slate-400"
+                            *ngIf="item.label === 'Submission'"
+                          >
+                            <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                              <path
+                                d="M5 11v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M10 4v8"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                              />
+                              <path
+                                d="M7.5 7.5 10 5l2.5 2.5"
                                 stroke="currentColor"
                                 stroke-width="1.4"
                                 stroke-linecap="round"
@@ -88,239 +115,324 @@ interface LomsMenuItem {
                               />
                             </svg>
                           </span>
-                          <span [ngClass]="item.label === 'Report Builder' ? 'text-xs font-medium' : ''">
-                            {{ item.label }}
+                            <span [ngClass]="item.label === 'Report Builder' ? 'text-xs font-medium' : ''">
+                              {{ item.label }}
+                            </span>
                           </span>
-                        </span>
-                      </a>
-                    </ng-container>
-                    <ng-container *ngIf="item.children && item.children.length > 0">
-                      <button
-                        type="button"
-                        class="flex w-full items-center justify-between rounded-md border border-transparent px-3 py-2 text-left text-slate-700 hover:border-slate-200 hover:bg-slate-50"
-                        (click)="toggleGroup(item.label)"
-                      >
-                        <span class="flex items-center gap-2">
-                          <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'Guarantee'">
-                            <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
-                              <path
-                                d="M10 3 5 5v5c0 3.038 1.94 5.824 5 7 3.06-1.176 5-3.962 5-7V5l-5-2Z"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                              <path
-                                d="m7.5 9.75 1.75 1.75 3.25-3.25"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
+                        </a>
+                      </ng-container>
+                      <ng-container *ngIf="item.children && item.children.length > 0">
+                        <button
+                          type="button"
+                          class="flex w-full items-center justify-between rounded-md border border-transparent px-3 py-2 text-left text-slate-700 hover:border-slate-200 hover:bg-slate-50"
+                          (click)="toggleGroup(item.label)"
+                        >
+                          <span class="flex items-center gap-2">
+                            <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'DE-DUP'">
+                              <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                                <rect
+                                  x="4"
+                                  y="5"
+                                  width="7"
+                                  height="7"
+                                  rx="1.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                />
+                                <rect
+                                  x="9"
+                                  y="8"
+                                  width="7"
+                                  height="7"
+                                  rx="1.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                />
+                              </svg>
+                            </span>
+                            <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'LOAN APPLICATION'">
+                              <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                                <rect
+                                  x="4"
+                                  y="3.5"
+                                  width="9"
+                                  height="13"
+                                  rx="1.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                />
+                                <path
+                                  d="M7 7h5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                />
+                                <path
+                                  d="M7 10h3.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                />
+                                <path
+                                  d="M13 4.5 16 7.5v8a1 1 0 0 1-1 1h-3"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </span>
+                            <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'Product Configuration'">
+                              <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                                <circle
+                                  cx="7"
+                                  cy="7"
+                                  r="2"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                />
+                                <path
+                                  d="M4 7h-1.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                />
+                                <path
+                                  d="M10.5 7H16"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                />
+                                <circle
+                                  cx="12.5"
+                                  cy="13"
+                                  r="2"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                />
+                                <path
+                                  d="M4 13h6.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                />
+                                <path
+                                  d="M15 13h1"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                />
+                              </svg>
+                            </span>
+                            <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'Query Management'">
+                              <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                                <path
+                                  d="M4.5 4.5h11v7.5h-4L8 16l-.5-4H4.5v-7.5Z"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M9 7.5a2 2 0 0 1 3.5 1.2c0 1.3-1.5 1.5-1.5 2.3"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <circle
+                                  cx="11"
+                                  cy="12.5"
+                                  r="0.6"
+                                  fill="currentColor"
+                                />
+                              </svg>
+                            </span>
+                            <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'KYC Management'">
+                              <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                                <circle
+                                  cx="10"
+                                  cy="7"
+                                  r="2.5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                />
+                                <path
+                                  d="M5.5 15.5c.7-2 2.3-3.2 4.5-3.2s3.8 1.2 4.5 3.2"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </span>
+                            <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'CPV'">
+                              <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                                <rect
+                                  x="4"
+                                  y="4"
+                                  width="12"
+                                  height="12"
+                                  rx="2"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                />
+                                <path
+                                  d="M7 8.5 8.5 10l3-3"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M7 12.5h5"
+                                  stroke="currentColor"
+                                  stroke-width="1.4"
+                                  stroke-linecap="round"
+                                />
+                              </svg>
+                            </span>
+                            <span class="text-xs font-medium text-slate-800">
+                              {{ item.label }}
+                            </span>
                           </span>
-                          <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'Import'">
-                            <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
-                              <path
-                                d="M10 4h-4"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                              />
-                              <path
-                                d="M6 4v4"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                              />
-                              <path
-                                d="M10 4 6 8"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                              <path
-                                d="M7 8.5h7a2 2 0 0 1 2 2v4.5H8a2 2 0 0 1-2-2V8.5Z"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
-                          </span>
-                          <span class="flex h-4 w-4 items-center justify-center text-slate-400" *ngIf="item.label === 'Export'">
-                            <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
-                              <path
-                                d="M10 4h4"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                              />
-                              <path
-                                d="M14 4v4"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                              />
-                              <path
-                                d="M10 4 14 8"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                              <path
-                                d="M6 8.5h7a2 2 0 0 1 2 2v4.5H7a2 2 0 0 1-2-2V8.5Z"
-                                stroke="currentColor"
-                                stroke-width="1.4"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
-                          </span>
-                          <span class="text-xs font-medium text-slate-800">
-                            {{ item.label }}
-                          </span>
-                        </span>
-                        <span class="flex h-4 w-4 items-center justify-center text-slate-400">
-                          <svg
-                            viewBox="0 0 20 20"
-                            class="h-3.5 w-3.5"
-                            [style.transform]="isGroupExpanded(item.label) ? 'rotate(90deg)' : 'rotate(0deg)'"
-                          >
-                            <path
-                              d="M7 5l5 5-5 5"
-                              stroke="currentColor"
-                              stroke-width="1.7"
-                              fill="none"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
-                          </svg>
-                        </span>
-                      </button>
-                      <div *ngIf="isGroupExpanded(item.label)" class="space-y-1 pl-4 ml-1 border-l border-slate-200">
-                        <ng-container *ngFor="let child of item.children">
-                          <ng-container
-                            *ngIf="!child.children || child.children.length === 0; else childGroup"
-                          >
-                            <a
-                              [routerLink]="child.route"
-                              class="flex items-center rounded-lg border border-transparent px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-blue-200 hover:bg-blue-50"
-                              [ngClass]="getActiveClassForRoute(child.route)"
+                          <span class="flex h-4 w-4 items-center justify-center text-slate-400">
+                            <svg
+                              viewBox="0 0 20 20"
+                              class="h-3.5 w-3.5"
+                              [style.transform]="isGroupExpanded(item.label) ? 'rotate(90deg)' : 'rotate(0deg)'"
                             >
-                              <span>{{ child.label }}</span>
-                            </a>
-                          </ng-container>
-                          <ng-template #childGroup>
-                            <button
-                              type="button"
-                              class="flex w-full items-center justify-between rounded-md border border-transparent px-3 py-1.5 text-left text-slate-700 hover:border-slate-200 hover:bg-slate-50"
-                              (click)="toggleGroup(child.label)"
+                              <path
+                                d="M7 5l5 5-5 5"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </span>
+                        </button>
+                        <div *ngIf="isGroupExpanded(item.label)" class="space-y-1 pl-4 ml-1 border-l border-slate-200">
+                          <ng-container *ngFor="let child of item.children">
+                            <ng-container
+                              *ngIf="!child.children || child.children.length === 0; else childGroup"
                             >
-                              <span class="text-[11px] font-semibold uppercase tracking-wide">
-                                {{ child.label }}
-                              </span>
-                              <span class="flex h-4 w-4 items-center justify-center text-slate-400">
-                                <svg
-                                  viewBox="0 0 20 20"
-                                  class="h-3.5 w-3.5"
-                                  [style.transform]="isGroupExpanded(child.label) ? 'rotate(90deg)' : 'rotate(0deg)'"
-                                >
-                                  <path
-                                    d="M7 5l5 5-5 5"
-                                    stroke="currentColor"
-                                    stroke-width="1.7"
-                                    fill="none"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                  />
-                                </svg>
-                              </span>
-                            </button>
-                            <div *ngIf="isGroupExpanded(child.label)" class="space-y-1 pl-4 ml-4 border-l border-slate-200">
                               <a
-                                *ngFor="let grand of child.children"
-                                [routerLink]="grand.route"
+                                [routerLink]="child.route"
                                 class="flex items-center rounded-lg border border-transparent px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-blue-200 hover:bg-blue-50"
-                                [ngClass]="getActiveClassForRoute(grand.route)"
+                                [ngClass]="getActiveClassForRoute(child.route)"
                               >
-                                <span>{{ grand.label }}</span>
+                                <span>{{ child.label }}</span>
                               </a>
-                            </div>
-                          </ng-template>
-                        </ng-container>
-                      </div>
+                            </ng-container>
+                            <ng-template #childGroup>
+                              <button
+                                type="button"
+                                class="flex w-full items-center justify-between rounded-md border border-transparent px-3 py-1.5 text-left text-slate-700 hover:border-slate-200 hover:bg-slate-50"
+                                (click)="toggleGroup(child.label)"
+                              >
+                                <span class="text-[11px] font-semibold uppercase tracking-wide">
+                                  {{ child.label }}
+                                </span>
+                                <span class="flex h-4 w-4 items-center justify-center text-slate-400">
+                                  <svg
+                                    viewBox="0 0 20 20"
+                                    class="h-3.5 w-3.5"
+                                    [style.transform]="isGroupExpanded(child.label) ? 'rotate(90deg)' : 'rotate(0deg)'"
+                                  >
+                                    <path
+                                      d="M7 5l5 5-5 5"
+                                      stroke="currentColor"
+                                      stroke-width="1.7"
+                                      fill="none"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                    />
+                                  </svg>
+                                </span>
+                              </button>
+                              <div *ngIf="isGroupExpanded(child.label)" class="space-y-1 pl-4 ml-4 border-l border-slate-200">
+                                <a
+                                  *ngFor="let grand of child.children"
+                                  [routerLink]="grand.route"
+                                  class="flex items-center rounded-lg border border-transparent px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-blue-200 hover:bg-blue-50"
+                                  [ngClass]="getActiveClassForRoute(grand.route)"
+                                >
+                                  <span>{{ grand.label }}</span>
+                                </a>
+                              </div>
+                            </ng-template>
+                          </ng-container>
+                        </div>
+                      </ng-container>
                     </ng-container>
-                  </ng-container>
+                  </div>
+                </div>
+  
+                <!-- <div>
+                  <div class="px-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    Other Solutions
+                  </div>
+                  <div class="mt-2 space-y-1">
+                    <button
+                      type="button"
+                      class="flex w-full items-center justify-between rounded-md border border-dashed border-slate-200 px-3 py-2 text-left text-slate-400"
+                    >
+                      <span>Corporate Internet Banking</span>
+                      <span class="text-[10px] uppercase tracking-wide">Soon</span>
+                    </button>
+                  </div>
+                </div> -->
+              </nav>
+            </div>
+          </hlm-sidebar>
+  
+            <section class="flex flex-1 flex-col">
+            <header
+              class="flex h-16 items-center justify-between border-b px-6"
+              [ngClass]="[theme.border.default, theme.surface.card]"
+            >
+              <div class="flex items-center gap-3">
+                <button
+                  hlmSidebarTrigger
+                  type="button"
+                  class="flex h-8 w-8 items-center justify-center rounded-md border text-sm text-slate-700 shadow-sm hover:bg-slate-50"
+                  [ngClass]="[theme.border.default, theme.surface.card]"
+                ></button>
+                <div class="flex flex-col">
+                  <span class="text-sm font-semibold text-blue-700">
+                    {{ breadcrumb }}
+                  </span>
                 </div>
               </div>
-
-              <!-- <div>
-                <div class="px-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                  Other Solutions
-                </div>
-                <div class="mt-2 space-y-1">
-                  <button
-                    type="button"
-                    class="flex w-full items-center justify-between rounded-md border border-dashed border-slate-200 px-3 py-2 text-left text-slate-400"
-                  >
-                    <span>Corporate Internet Banking</span>
-                    <span class="text-[10px] uppercase tracking-wide">Soon</span>
-                  </button>
-                </div>
-              </div> -->
-            </nav>
-          </div>
-        </hlm-sidebar>
-
-          <section class="flex flex-1 flex-col">
-          <header
-            class="flex h-16 items-center justify-between border-b px-6"
-            [ngClass]="[theme.border.default, theme.surface.card]"
-          >
-            <div class="flex items-center gap-3">
-              <button
-                hlmSidebarTrigger
-                type="button"
-                class="flex h-8 w-8 items-center justify-center rounded-md border text-sm text-slate-700 shadow-sm hover:bg-slate-50"
-                [ngClass]="[theme.border.default, theme.surface.card]"
-              ></button>
-              <div class="flex flex-col">
-                <span class="text-sm font-semibold text-blue-700">
-                  {{ breadcrumb }}
-                </span>
+              <div class="flex items-center gap-3">
+                <app-user-menu></app-user-menu>
               </div>
-            </div>
-            <div class="flex items-center gap-3">
-              <app-user-menu></app-user-menu>
-            </div>
-          </header>
-
-          <main class="flex-1 w-full overflow-y-auto px-6 py-6">
-            <div class="mb-4 flex justify-end">
-              <button
-                hlmBtn
-                variant="outline"
-                size="xs"
-                type="button"
-                class="inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-xs font-medium text-blue-700 shadow-sm hover:bg-blue-50"
-                [ngClass]="theme.border.accent"
-                (click)="goBack()"
-              >
-                <span>←</span>
-                <span>Back to main dashboard</span>
-              </button>
-            </div>
-            <ng-content></ng-content>
-          </main>
-        </section>
+            </header>
+  
+            <main class="flex-1 min-h-0 w-full overflow-y-auto px-6 py-6">
+              <div class="mb-4 flex justify-end">
+                <button
+                  hlmBtn
+                  variant="outline"
+                  size="xs"
+                  type="button"
+                  class="inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-xs font-medium text-blue-700 shadow-sm hover:bg-blue-50"
+                  [ngClass]="theme.border.accent"
+                  (click)="goBack()"
+                >
+                  <span>←</span>
+                  <span>Back to main dashboard</span>
+                </button>
+              </div>
+              <ng-content></ng-content>
+            </main>
+          </section>
+        </div>
+        <app-common-footer></app-common-footer>
       </div>
-
-      <app-common-footer></app-common-footer>
-    </div>
-  `,
+    `,
 })
 export class LomsLayoutComponent implements OnInit {
   @Input() organisationName = 'Loan Origination and Management System';
@@ -333,6 +445,24 @@ export class LomsLayoutComponent implements OnInit {
     {
       label: 'Dashboard',
       route: ['/loms', 'dashboard'],
+    },
+    {
+      label: 'DE-DUP',
+      children: [
+        {
+          label: 'DE-DUP application',
+          route: ['/loms', 'de-dup', 'application']
+        }
+      ]
+    },
+    {
+      label: 'LOAN APPLICATION',
+      children: [
+        {
+          label: 'Loan Application',
+          route: ['/loms', 'loan-application', 'application']
+        }
+      ]
     },
     {
       label: 'Product Configuration',
@@ -378,6 +508,10 @@ export class LomsLayoutComponent implements OnInit {
         {
           label: 'Dashboard',
           route: ['/loms', 'cpv', 'dashboard'],
+        },
+        {
+          label: 'Finalization',
+          route: ['/loms', 'cpv', 'finalization'],
         },
       ],
     },

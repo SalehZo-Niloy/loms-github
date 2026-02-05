@@ -42,11 +42,14 @@ export class UserCreatePageComponent {
   department = '';
 
   roleOptions = [
-    { label: 'Customer', value: 'customer' },
-    { label: 'Relationship Officer', value: 'relationship-officer' },
-    { label: 'Trade Officer', value: 'trade-officer' },
-    { label: 'Manager', value: 'manager' },
-    { label: 'Super Admin', value: 'super-admin' }
+    { label: 'Relationship Manager', value: 'relationship-manager' },
+    { label: 'Sub-Manager', value: 'sub-manager' },
+    { label: 'Branch Manager', value: 'branch-manager' },
+    { label: 'Central Processing Unit', value: 'central-processing-unit' },
+    { label: 'Credit Risk Analyst', value: 'credit-risk-analyst' },
+    { label: 'Credit Approver', value: 'credit-approver' },
+    { label: 'Chief Risk Officer', value: 'chief-risk-officer' },
+    { label: 'MD', value: 'md' }
   ];
 
   designationOptions = [

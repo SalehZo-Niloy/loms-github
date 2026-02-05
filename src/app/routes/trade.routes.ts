@@ -128,224 +128,221 @@ export const tradeRoutes: Routes = [
     component: CreateSwiftMessagePageComponent
   },
   {
-        path: 'import',
-        component: ImportApplicationPageComponent,
-      },
-      {
-        path: 'import/submitting',
-        component: ImportSubmittingViewPageComponent,
-      },
-      {
-        path: 'import/submitting/create',
-        component: ImportSubmittingPageComponent,
-      },
-      {
-        path: 'import/customer-view',
-        component: ImportCustomerViewPageComponent,
-      },
-      {
-        path: 'import/document-handover',
-        component: ImportDocumentHandoverPageComponent,
-      },
-      {
-        path: 'import/document-handover/view/:reference',
-        component: DocumentHandoverViewComponent,
-      },
-      {
-        path: 'import/pending-review',
-        component: ImportPendingReviewPageComponent,
-      },
-      {
-        path: 'import/pending-review/view/:reference',
-        component: PendingReviewViewComponent,
-      },
-      {
-        path: 'import/lc-issuance',
-        component: ImportLcIssuancePageComponent,
-      },
-      {
-        path: 'import/lc-charge-collection',
-        component: LcChargeCollectionPageComponent,
-      },
-      {
-        path: 'import/lc-margin-collection',
-        component: LcMarginCollectionPageComponent,
-      },
-      {
-        path: 'import/lc-acceptance',
-        component: LcAcceptancePageComponent,
-      },
-      {
-        path: 'import/lc-amendment-request',
-        component: LcAmendmentRequestPageComponent,
-      },
-      {
-        path: 'import/document-receive',
-        component: DocumentReceivePageComponent,
-      },
-      {
-        path: 'import/document-checking',
-        component: DocumentCheckingPageComponent,
-      },
-      {
-        path: 'import/discrepancy-record',
-        component: DiscrepancyRecordPageComponent,
-      },
-      {
-        path: 'import/discrepancy-record/confirmation',
-        component: DiscrepancyRecordConfirmationComponent,
-      },
-      {
-        path: 'import/discrepancy-record/notification',
-        component: DiscrepancyRecordNotificationComponent,
-      },
-      {
-        path: 'import/discrepancy-record/reject',
-        component: DiscrepancyRecordRejectComponent,
-      },
-      {
-        path: 'import/lc-settlement-decision',
-        component: LcSettlementDecisionPageComponent,
-      },
-      {
-        path: 'import/pad-creation',
-        component: PadCreationPageComponent,
-      },
-      {
-        path: 'import/execute-payment',
-        component: ExecutePaymentPageComponent,
-      },
-      {
-        path: 'import/lc-closure',
-        component: LcClosurePageComponent,
-      },
-      {
-        path: 'dc-advising/customer/dashboard',
-        component: CustomerDashboardPageComponent
-      },
-      {
-        path: 'dc-advising/customer/create-request',
-        component: CreateRequestPageComponent
-      },
-      {
-        path: 'dc-advising/customer/request/:id',
-        component: RequestDetailsPageComponent
-      },
-      {
-        path: 'dc-advising/ro/dashboard',
-        component: RODashboardPageComponent
-      },
-      {
-        path: 'dc-advising/ro/request/:id',
-        component: RORequestDetailsPageComponent
-      },
-      {
-        path: 'dc-advising/to/dashboard',
-        component: TradeOfficerDashboardPageComponent
-      },
-      {
-        path: 'dc-advising/to/request/:id',
-        component: TradeOfficerRequestDetailsPageComponent
-      },
-      {
-        path: 'dc-advising/approver/dashboard',
-        component: ApproverDashboardPageComponent
-      },
-      {
-        path: 'dc-advising/approver/request/:id',
-        component: ApproverRequestDetailsPageComponent
-      },
-      // Export Bill Collection Routes
-      {
-        path: 'export-bill/customer/dashboard',
-        component: ExportBillCustomerDashboardPageComponent
-      },
-      {
-        path: 'export-bill/customer/request/:id',
-        component: ExportBillCustomerRequestDetailsPageComponent
-      },
-      {
-        path: 'export-bill/customer/create',
-        component: CreateExportBillPageComponent
-      },
-      {
-        path: 'export-bill/ro/dashboard',
-        component: ExportBillRoDashboardPageComponent
-      },
-      {
-        path: 'export-bill/ro/request/:id',
-        component: ExportBillRORequestDetailsPageComponent
-      },
-      {
-        path: 'export-bill/to/dashboard',
-        component: ExportBillToDashboardPageComponent
-      },
-      {
-        path: 'export-bill/to/request/:id',
-        component: ExportBillToRequestDetailsPageComponent
-      },
-      {
-        path: 'export-bill/approver/dashboard',
-        component: ExportBillApproverDashboardPageComponent
-      },
-      {
-        path: 'export-bill/approver/request/:id',
-        component: ExportBillApproverRequestDetailsPageComponent
-      },
-      // Export Proceed Routes
-      {
-        path: 'export-proceed/to/dashboard',
-        component: ExportProceedToDashboardPageComponent
-      },
-      {
-        path: 'export-proceed/to/request/:id',
-        component: ExportProceedToRequestDetailsPageComponent
-      },
-      {
-        path: 'export-proceed/approver/dashboard',
-        component: ExportProceedApproverDashboardPageComponent
-      },
-      {
-        path: 'export-proceed/approver/request/:id',
-        component: ExportProceedApproverRequestDetailsPageComponent
-      },
-      {
-        path: 'export-proceed/customer/dashboard',
-        component: ExportProceedCustomerDashboardPageComponent
-      },
-      {
-        path: 'export-proceed/customer/request/:id',
-        component: ExportProceedCustomerRequestDetailsPageComponent
-      },
-      // Master LC Routes
-      {
-        path: 'master-lc/customer/dashboard',
-        component: MasterLCCustomerDashboardPageComponent
-      },
-      {
-        path: 'master-lc/customer/create',
-        component: MasterLCCreatePageComponent
-      },
-      {
-        path: 'master-lc/to/dashboard',
-        component: MasterLCToDashboardPageComponent
-      },
-      {
-        path: 'master-lc/to/request/:id',
-        component: MasterLCToRequestDetailsPageComponent
-      },
-      {
-        path: 'master-lc/manager/dashboard',
-        component: MasterLCManagerDashboardPageComponent
-      },
-      {
-        path: 'master-lc/manager/request/:id',
-        component: MasterLCManagerRequestDetailsPageComponent
-      },
-      {
-        path: 'report-builder',
-        component: ReportBuilderPageComponent
-      },
+    path: 'import',
+    component: ImportApplicationPageComponent
+  },
+  {
+    path: 'import/submitting',
+    component: ImportSubmittingViewPageComponent
+  },
+  {
+    path: 'import/submitting/create',
+    component: ImportSubmittingPageComponent
+  },
+  {
+    path: 'import/customer-view',
+    component: ImportCustomerViewPageComponent
+  },
+  {
+    path: 'import/document-handover',
+    component: ImportDocumentHandoverPageComponent
+  },
+  {
+    path: 'import/document-handover/view/:reference',
+    component: DocumentHandoverViewComponent
+  },
+  {
+    path: 'import/pending-review',
+    component: ImportPendingReviewPageComponent
+  },
+  {
+    path: 'import/pending-review/view/:reference',
+    component: PendingReviewViewComponent
+  },
+  {
+    path: 'import/lc-issuance',
+    component: ImportLcIssuancePageComponent
+  },
+  {
+    path: 'import/lc-charge-collection',
+    component: LcChargeCollectionPageComponent
+  },
+  {
+    path: 'import/lc-margin-collection',
+    component: LcMarginCollectionPageComponent
+  },
+  {
+    path: 'import/lc-acceptance',
+    component: LcAcceptancePageComponent
+  },
+  {
+    path: 'import/lc-amendment-request',
+    component: LcAmendmentRequestPageComponent
+  },
+  {
+    path: 'import/document-receive',
+    component: DocumentReceivePageComponent
+  },
+  {
+    path: 'import/document-checking',
+    component: DocumentCheckingPageComponent
+  },
+  {
+    path: 'import/discrepancy-record',
+    component: DiscrepancyRecordPageComponent
+  },
+  {
+    path: 'import/discrepancy-record/confirmation',
+    component: DiscrepancyRecordConfirmationComponent
+  },
+  {
+    path: 'import/discrepancy-record/notification',
+    component: DiscrepancyRecordNotificationComponent
+  },
+  {
+    path: 'import/discrepancy-record/reject',
+    component: DiscrepancyRecordRejectComponent
+  },
+  {
+    path: 'import/lc-settlement-decision',
+    component: LcSettlementDecisionPageComponent
+  },
+  {
+    path: 'import/pad-creation',
+    component: PadCreationPageComponent
+  },
+  {
+    path: 'import/execute-payment',
+    component: ExecutePaymentPageComponent
+  },
+  {
+    path: 'import/lc-closure',
+    component: LcClosurePageComponent
+  },
+  {
+    path: 'dc-advising/customer/dashboard',
+    component: CustomerDashboardPageComponent
+  },
+  {
+    path: 'dc-advising/customer/create-request',
+    component: CreateRequestPageComponent
+  },
+  {
+    path: 'dc-advising/customer/request/:id',
+    component: RequestDetailsPageComponent
+  },
+  {
+    path: 'dc-advising/ro/dashboard',
+    component: RODashboardPageComponent
+  },
+  {
+    path: 'dc-advising/ro/request/:id',
+    component: RORequestDetailsPageComponent
+  },
+  {
+    path: 'dc-advising/to/dashboard',
+    component: TradeOfficerDashboardPageComponent
+  },
+  {
+    path: 'dc-advising/to/request/:id',
+    component: TradeOfficerRequestDetailsPageComponent
+  },
+  {
+    path: 'dc-advising/approver/dashboard',
+    component: ApproverDashboardPageComponent
+  },
+  {
+    path: 'dc-advising/approver/request/:id',
+    component: ApproverRequestDetailsPageComponent
+  },
+  {
+    path: 'export-bill/customer/dashboard',
+    component: ExportBillCustomerDashboardPageComponent
+  },
+  {
+    path: 'export-bill/customer/request/:id',
+    component: ExportBillCustomerRequestDetailsPageComponent
+  },
+  {
+    path: 'export-bill/customer/create',
+    component: CreateExportBillPageComponent
+  },
+  {
+    path: 'export-bill/ro/dashboard',
+    component: ExportBillRoDashboardPageComponent
+  },
+  {
+    path: 'export-bill/ro/request/:id',
+    component: ExportBillRORequestDetailsPageComponent
+  },
+  {
+    path: 'export-bill/to/dashboard',
+    component: ExportBillToDashboardPageComponent
+  },
+  {
+    path: 'export-bill/to/request/:id',
+    component: ExportBillToRequestDetailsPageComponent
+  },
+  {
+    path: 'export-bill/approver/dashboard',
+    component: ExportBillApproverDashboardPageComponent
+  },
+  {
+    path: 'export-bill/approver/request/:id',
+    component: ExportBillApproverRequestDetailsPageComponent
+  },
+  {
+    path: 'export-proceed/to/dashboard',
+    component: ExportProceedToDashboardPageComponent
+  },
+  {
+    path: 'export-proceed/to/request/:id',
+    component: ExportProceedToRequestDetailsPageComponent
+  },
+  {
+    path: 'export-proceed/approver/dashboard',
+    component: ExportProceedApproverDashboardPageComponent
+  },
+  {
+    path: 'export-proceed/approver/request/:id',
+    component: ExportProceedApproverRequestDetailsPageComponent
+  },
+  {
+    path: 'export-proceed/customer/dashboard',
+    component: ExportProceedCustomerDashboardPageComponent
+  },
+  {
+    path: 'export-proceed/customer/request/:id',
+    component: ExportProceedCustomerRequestDetailsPageComponent
+  },
+  {
+    path: 'master-lc/customer/dashboard',
+    component: MasterLCCustomerDashboardPageComponent
+  },
+  {
+    path: 'master-lc/customer/create',
+    component: MasterLCCreatePageComponent
+  },
+  {
+    path: 'master-lc/to/dashboard',
+    component: MasterLCToDashboardPageComponent
+  },
+  {
+    path: 'master-lc/to/request/:id',
+    component: MasterLCToRequestDetailsPageComponent
+  },
+  {
+    path: 'master-lc/manager/dashboard',
+    component: MasterLCManagerDashboardPageComponent
+  },
+  {
+    path: 'master-lc/manager/request/:id',
+    component: MasterLCManagerRequestDetailsPageComponent
+  },
+  {
+    path: 'report-builder',
+    component: ReportBuilderPageComponent
+  },
   {
     path: '',
     redirectTo: 'dashboard',

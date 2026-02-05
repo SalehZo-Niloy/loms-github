@@ -24,37 +24,58 @@ export class RoleViewPageComponent {
 
   roles = [
     {
-      id: 'customer',
-      name: 'Customer',
-      description: 'Corporate customer initiating trade requests and viewing status.',
+      id: 'relationship-manager',
+      name: 'Relationship Manager',
+      description: 'Manages customer relationships and leads loan origination activities.',
       users: 24,
       status: 'Active'
     },
     {
-      id: 'relationship-officer',
-      name: 'Relationship Officer',
-      description: 'Front-office officer managing customer relationships and requests.',
+      id: 'sub-manager',
+      name: 'Sub-Manager',
+      description: 'Supports branch manager in supervising lending and operations.',
       users: 10,
       status: 'Active'
     },
     {
-      id: 'trade-officer',
-      name: 'Trade Officer',
-      description: 'Operations user processing and verifying guarantees and SWIFT messages.',
+      id: 'branch-manager',
+      name: 'Branch Manager',
+      description: 'Leads branch business, approvals and overall performance.',
       users: 8,
       status: 'Active'
     },
     {
-      id: 'manager',
-      name: 'Manager',
-      description: 'Manager overseeing trade volumes, approvals and workflows.',
+      id: 'central-processing-unit',
+      name: 'Central Processing Unit',
+      description: 'Central team handling documentation, verification and processing.',
+      users: 6,
+      status: 'Active'
+    },
+    {
+      id: 'credit-risk-analyst',
+      name: 'Credit Risk Analyst',
+      description: 'Analyzes credit risk, prepares assessments and recommendations.',
       users: 4,
       status: 'Active'
     },
     {
-      id: 'super-admin',
-      name: 'Super Admin',
-      description: 'Full access across trade and user management modules.',
+      id: 'credit-approver',
+      name: 'Credit Approver',
+      description: 'Approves credit proposals within delegated authority limits.',
+      users: 3,
+      status: 'Active'
+    },
+    {
+      id: 'chief-risk-officer',
+      name: 'Chief Risk Officer',
+      description: 'Oversees enterprise credit risk and policy governance.',
+      users: 1,
+      status: 'Active'
+    },
+    {
+      id: 'md',
+      name: 'MD',
+      description: 'Overall head of the institution with final decision authority.',
       users: 1,
       status: 'Active'
     }
