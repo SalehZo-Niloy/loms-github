@@ -32,9 +32,16 @@ export class DashboardPageComponent {
     // },
     {
       id: 'loms',
-      label: 'Loan Origination and Management System',
+      label: 'Loan Origination System',
       category: 'Core Solution',
-      description: 'Loan origination, processing, and management in one place.',
+      description: 'Loan origination and processing in one place.',
+      accent: 'bg-emerald-50 text-emerald-700',
+    },
+    {
+      id: 'loms-mon',
+      label: 'Loan Management System',
+      category: 'Core Solution',
+      description: 'Loan management in one place.',
       accent: 'bg-emerald-50 text-emerald-700',
     },
     {
@@ -44,13 +51,13 @@ export class DashboardPageComponent {
       description: 'Manage users, roles and access across all trade solutions.',
       accent: 'bg-indigo-50 text-indigo-700',
     },
-    // {
-    //   id: 'work-flow',
-    //   label: 'Workflow',
-    //   category: 'Operations',
-    //   description: 'Configure and monitor approval workflows across modules.',
-    //   accent: 'bg-amber-50 text-amber-700',
-    // },
+    {
+      id: 'work-flow',
+      label: 'Workflow',
+      category: 'Operations',
+      description: 'Configure and monitor approval workflows across modules.',
+      accent: 'bg-amber-50 text-amber-700',
+    },
   ];
 
   users = [
@@ -148,7 +155,11 @@ export class DashboardPageComponent {
     }
 
     if (solution === 'work-flow') {
-      this.router.navigate(['/workflow/work-flow']);
+      // this.router.navigate(['/workflow/work-flow']);
+      // return;
+       if (typeof window !== 'undefined') {
+        window.open('https://workflow-amn-fe.vercel.app/', '_blank');
+      }
       return;
     }
 
@@ -163,6 +174,10 @@ export class DashboardPageComponent {
     }
     if (solution === 'loms') {
       this.router.navigate(['/loms/dashboard']);
+      return;
+    }
+    if (solution === 'loms-mon') {
+      // this.router.navigate(['/loms-mon/dashboard']);
       return;
     }
   }

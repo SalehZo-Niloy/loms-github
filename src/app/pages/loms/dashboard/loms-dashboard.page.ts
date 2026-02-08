@@ -8,6 +8,9 @@ import { ExportBillService } from '../../../services/export-bill.service';
 import { ExportProceedService } from '../../../services/export-proceed.service';
 import { TradeStatus } from '../../../services/workflow.service';
 import { combineLatest, map } from 'rxjs';
+import { BaseChartDirective } from 'ng2-charts';
+import { UiSideModalComponent } from '../../../components/ui/ui-side-modal.component';
+import { ChartConfiguration, ChartOptions, ChartType } from 'chart.js';
 
 interface HistoryEvent {
   status: string;
@@ -101,7 +104,7 @@ interface FilterChip {
 @Component({
   selector: 'app-trade-dashboard-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, LomsLayoutComponent, RouterLink],
+  imports: [CommonModule, FormsModule, LomsLayoutComponent, RouterLink, BaseChartDirective, UiSideModalComponent],
   templateUrl: './loms-dashboard.page.html'
 })
 export class TradeDashboardPageComponent implements OnInit {
@@ -417,6 +420,67 @@ export class TradeDashboardPageComponent implements OnInit {
   selectedRow: UnifiedTransactionRow | null = null;
 
   activeDetailTab: 'summary' | 'timeline' | 'flags' = 'summary';
+
+  slaBarChartType: 'bar' = 'bar';
+  slaBarChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: [],
+    datasets: []
+  };
+  slaBarChartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: {
+          precision: 0
+        }
+      }
+    }
+  };
+
+  stageLineChartType: 'line' = 'line';
+  stageLineChartData: ChartConfiguration<'line'>['data'] = {
+    labels: [],
+    datasets: []
+  };
+  stageLineChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: {
+          precision: 0
+        }
+      }
+    }
+  };
+
+  get slaFilterOptions(): FilterOption[] {
+    const group = this.filterGroups.find(g => g.key === 'sla');
+    return group ? group.options : [];
+  }
 
   constructor(
     private requestService: TradeRequestService,
@@ -787,6 +851,53 @@ export class TradeDashboardPageComponent implements OnInit {
         options: this.mapCountMapToOptions(slaCounts)
       }
     ];
+
+    this.updateChartsFromCounts(stageCounts, slaCounts);
+  }
+
+  private updateChartsFromCounts(
+    stageCounts: Record<string, number>,
+    slaCounts: Record<string, number>
+  ): void {
+    const slaLabels = Object.keys(slaCounts);
+    const slaData = Object.values(slaCounts);
+
+    this.slaBarChartData = {
+      labels: slaLabels,
+      datasets: [
+        {
+          data: slaData,
+          backgroundColor: slaLabels.map(label =>
+            label === 'Overdue' ? '#1d4ed8' : '#60a5fa'
+          ),
+          hoverBackgroundColor: slaLabels.map(label =>
+            label === 'Overdue' ? '#1e40af' : '#3b82f6'
+          ),
+          borderRadius: 4,
+          borderWidth: 0
+        }
+      ]
+    };
+
+    const stageLabels = Object.keys(stageCounts);
+    const stageData = Object.values(stageCounts);
+
+    this.stageLineChartData = {
+      labels: stageLabels,
+      datasets: [
+        {
+          data: stageData,
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.10)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 3,
+          pointBackgroundColor: '#1d4ed8',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 1.5
+        }
+      ]
+    };
   }
 
   buildCountMap(values: string[]): Record<string, number> {

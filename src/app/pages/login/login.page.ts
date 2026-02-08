@@ -36,6 +36,7 @@ export class LoginPageComponent implements OnInit {
     const credentials: Array<{ username: string; password: string; role: string }> = [
       { username: 'customer', password: '123456', role: 'customer' },
       { username: 'ro', password: '123456', role: 'relationship-officer' },
+      { username: 'rm', password: '123456', role: 'relationship-manager' },
       { username: 'to', password: '123456', role: 'trade-officer' },
       { username: 'manager', password: '123456', role: 'manager' },
       { username: 'admin', password: '123456', role: 'super-admin' }
