@@ -32,6 +32,7 @@ interface DedupResult {
   applyStatus: 'approved' | 'pending' | 'active';
   remarks: string;
   nid: string;
+  mobileNumber: string;
 }
 
 @Component({
@@ -53,7 +54,7 @@ interface DedupResult {
       :host ::ng-deep textarea,
       :host ::ng-deep button,
       :host ::ng-deep select {
-        border-radius: 0.25rem !important;
+       
       }
     `
   ]
@@ -92,7 +93,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 5,00,000',
       applyStatus: 'approved',
       remarks: 'Active customer with good repayment history',
-      nid: '1985123456789'
+      nid: '1985123456789',
+      mobileNumber: '01712345678'
     },
     {
       id: 'CIF-2024-00123-2',
@@ -105,7 +107,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 8,00,000',
       applyStatus: 'pending',
       remarks: 'Pending credit assessment',
-      nid: '1985123456790'
+      nid: '1985123456790',
+      mobileNumber: '01723456789'
     },
     {
       id: 'CIF-2024-00123-3',
@@ -118,7 +121,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 1,50,000',
       applyStatus: 'active',
       remarks: 'Multiple active products under same customer code',
-      nid: '1985123456791'
+      nid: '1985123456791',
+      mobileNumber: '01734567890'
     },
     {
       id: 'CIF-2024-00789-1',
@@ -131,7 +135,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 25,00,000',
       applyStatus: 'active',
       remarks: 'Partial match with similar identity information',
-      nid: '197912345678901'
+      nid: '197912345678901',
+      mobileNumber: '01812345678'
     },
     {
       id: 'CIF-2024-00789-2',
@@ -144,7 +149,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 3,00,000',
       applyStatus: 'pending',
       remarks: 'Same identity with different name spelling',
-      nid: '197912345678902'
+      nid: '197912345678902',
+      mobileNumber: '01823456789'
     },
     {
       id: 'CIF-2024-00901-1',
@@ -157,7 +163,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 12,00,000',
       applyStatus: 'active',
       remarks: 'Clean repayment history, medium risk profile',
-      nid: '199009876543210'
+      nid: '199009876543210',
+      mobileNumber: '01912345678'
     },
     {
       id: 'CIF-2024-00901-2',
@@ -170,7 +177,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 2,50,000',
       applyStatus: 'approved',
       remarks: 'Recent loan with same mobile and NID',
-      nid: '199009876543211'
+      nid: '199009876543211',
+      mobileNumber: '01923456789'
     },
     {
       id: 'CIF-2024-01567-1',
@@ -183,7 +191,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 30,00,000',
       applyStatus: 'approved',
       remarks: 'High value customer with collateral',
-      nid: '1988067890123'
+      nid: '1988067890123',
+      mobileNumber: '01612345678'
     },
     {
       id: 'CIF-2024-01567-2',
@@ -196,7 +205,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 9,50,000',
       applyStatus: 'active',
       remarks: 'Secondary product under same CIF code',
-      nid: '1988067890124'
+      nid: '1988067890124',
+      mobileNumber: '01623456789'
     },
     {
       id: 'CIF-2024-02010-1',
@@ -209,7 +219,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 4,00,000',
       applyStatus: 'pending',
       remarks: 'Verification in progress due to similar identity match',
-      nid: '19951230000001'
+      nid: '19951230000001',
+      mobileNumber: '01512345678'
     },
     {
       id: 'CIF-2024-02010-2',
@@ -222,7 +233,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 80,000',
       applyStatus: 'approved',
       remarks: 'Same NID with different short name',
-      nid: '19951230000002'
+      nid: '19951230000002',
+      mobileNumber: '01523456789'
     },
     {
       id: 'CIF-2024-03025-1',
@@ -235,7 +247,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 6,50,000',
       applyStatus: 'active',
       remarks: 'Similar mobile and address to another customer',
-      nid: '19920315012345'
+      nid: '19920315012345',
+      mobileNumber: '01312345678'
     },
     {
       id: 'CIF-2024-03025-2',
@@ -248,7 +261,8 @@ export class LomsDedupApplicationPageComponent implements OnInit {
       approvedAmount: '+ 18,00,000',
       applyStatus: 'pending',
       remarks: 'Under review for possible duplicate CIF',
-      nid: '19920315012346'
+      nid: '19920315012346',
+      mobileNumber: '01323456789'
     }
   ];
 

@@ -410,6 +410,10 @@ export class LomsLoanApplicationPageComponent {
     this.router.navigate(['/loms', 'demographic-application', 'application']);
   }
 
+  goToQueryDashboard(): void {
+    this.router.navigate(['/loms', 'query']);
+  }
+
   goToDedupCheck(): void {
     const customerType = this.form.businessType === 'individual' ? 'individual' : 'business';
 

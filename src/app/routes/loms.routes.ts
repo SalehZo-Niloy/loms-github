@@ -8,6 +8,7 @@ import { LomsFinancialApplicationPageComponent } from '../pages/loms/financial-a
 import { LomsSecurityApplicationPageComponent } from '../pages/loms/security-application/security-application.page';
 import { LomsDocumentApplicationPageComponent } from '../pages/loms/document-application/document-application.page';
 import { LomsApplicationPreviewPageComponent } from '../pages/loms/application-preview/application-preview.page';
+import { LomsFinancialAssessmentPageComponent } from '../pages/loms/financial-assessment/financial-assessment.page';
 import { CpvDashboardPageComponent } from '../pages/loms/cpv/dashboard/cpv-dashboard.page';
 import { CpvInitiationAssignPageComponent } from '../pages/loms/cpv/initiation-assign/cpv-initiation-assign.page';
 import { CpvFinalizationPageComponent } from '../pages/loms/cpv/finalization/cpv-finalization.page';
@@ -34,159 +35,198 @@ import { CreditRiskWizardPage } from '../pages/loms/credit-risk/credit-risk-wiza
 import { CreditRiskScoringDashboardPage } from '../pages/loms/credit-risk/credit-risk-scoring-dashboard.page';
 import { CreditRiskScoringAssessmentPage } from '../pages/loms/credit-risk/credit-risk-scoring-assessment.page';
 import { LomsFormBuilderPageComponent } from '../pages/loms/form-builder/form-builder.page';
+import { LomsCibInitiationPageComponent } from '../pages/loms/cib-initiation/cib-initiation.page';
+import { LomsCibPersonaDetailsPageComponent } from '../pages/loms/cib-initiation/cib-persona-details.page';
+import { LomsCibOfficerAssignmentPageComponent } from '../pages/loms/cib-initiation/cib-officer-assignment.page';
+import { LomsCibOfficerPersonaDetailsPageComponent } from '../pages/loms/cib-initiation/cib-officer-persona-details.page';
+import { LomsCibFinalizationPageComponent } from '../pages/loms/cib-initiation/cib-finalization.page';
+import { LomsVettingValuationPageComponent } from '../pages/loms/vetting-valuation/vetting-valuation.page';
+import { LomsVettingValuationAssetDetailsPageComponent } from '../pages/loms/vetting-valuation-asset-details/vetting-valuation-asset-details.page';
 
 export const lomsRoutes: Routes = [
   {
     path: 'dashboard',
-    component: TradeDashboardPageComponent
+    component: TradeDashboardPageComponent,
   },
   {
     path: 'de-dup/application',
-    component: LomsDedupApplicationPageComponent
+    component: LomsDedupApplicationPageComponent,
   },
   {
     path: 'loan-application/application',
-    component: LomsLoanApplicationPageComponent
+    component: LomsLoanApplicationPageComponent,
   },
   {
     path: 'demographic-application/application',
-    component: LomsDemographicApplicationPageComponent
+    component: LomsDemographicApplicationPageComponent,
   },
   {
     path: 'product-application/application',
-    component: LomsProductApplicationPageComponent
+    component: LomsProductApplicationPageComponent,
   },
   {
     path: 'financial-application/application',
-    component: LomsFinancialApplicationPageComponent
+    component: LomsFinancialApplicationPageComponent,
   },
   {
     path: 'security-application/application',
-    component: LomsSecurityApplicationPageComponent
+    component: LomsSecurityApplicationPageComponent,
   },
   {
     path: 'document-application/application',
-    component: LomsDocumentApplicationPageComponent
+    component: LomsDocumentApplicationPageComponent,
   },
   {
     path: 'application-preview',
-    component: LomsApplicationPreviewPageComponent
+    component: LomsApplicationPreviewPageComponent,
+  },
+  {
+    path: 'financial-assessment/application',
+    component: LomsFinancialAssessmentPageComponent,
   },
   {
     path: 'cpv/dashboard',
-    component: CpvDashboardPageComponent
+    component: CpvDashboardPageComponent,
   },
   {
     path: 'cpv/initiation-assign',
-    component: CpvInitiationAssignPageComponent
+    component: CpvInitiationAssignPageComponent,
   },
   {
     path: 'cpv/finalization',
-    component: CpvFinalizationPageComponent
+    component: CpvFinalizationPageComponent,
   },
   {
     path: 'product',
-    component: LomsProductDashboardPageComponent
+    component: LomsProductDashboardPageComponent,
   },
   {
     path: 'product/create',
-    component: LomsProductWizardPageComponent
+    component: LomsProductWizardPageComponent,
   },
   {
     path: 'product/view/:code',
-    component: LomsProductViewPageComponent
+    component: LomsProductViewPageComponent,
   },
   {
     path: 'query',
-    component: LomsQueryDashboardPageComponent
+    component: LomsQueryDashboardPageComponent,
   },
   {
     path: 'query/create',
-    component: LomsQueryCreatePageComponent
+    component: LomsQueryCreatePageComponent,
   },
   {
     path: 'query/:id',
-    component: LomsQueryDashboardPageComponent
+    component: LomsQueryDashboardPageComponent,
   },
   {
     path: 'kyc',
-    component: LomsKycDashboardPageComponent
+    component: LomsKycDashboardPageComponent,
   },
   {
     path: 'kyc/setup/create',
-    component: LomsKycSetupWizardPageComponent
+    component: LomsKycSetupWizardPageComponent,
   },
   {
     path: 'kyc/profiling/:appId',
-    component: LomsKycProfilingPageComponent
+    component: LomsKycProfilingPageComponent,
+  },
+  {
+    path: 'cib-initiation/application',
+    component: LomsCibInitiationPageComponent,
+  },
+  {
+    path: 'cib-initiation/officer-assignment',
+    component: LomsCibOfficerAssignmentPageComponent,
+  },
+  {
+    path: 'cib-initiation/officer-assignment/persona/:appId',
+    component: LomsCibOfficerPersonaDetailsPageComponent,
+  },
+  {
+    path: 'cib-initiation/persona/:appId',
+    component: LomsCibPersonaDetailsPageComponent,
+  },
+  {
+    path: 'cib-initiation/finalization',
+    component: LomsCibFinalizationPageComponent,
   },
   {
     path: 'submission',
-    component: LomsSubmissionPageComponent
+    component: LomsSubmissionPageComponent,
   },
   {
     path: 'product',
-    component: LomsProductDashboardPageComponent
+    component: LomsProductDashboardPageComponent,
   },
   {
     path: 'product/create',
-    component: LomsProductWizardPageComponent
+    component: LomsProductWizardPageComponent,
   },
   {
     path: 'product/view/:code',
-    component: LomsProductViewPageComponent
+    component: LomsProductViewPageComponent,
   },
   {
     path: 'query',
-    component: LomsQueryDashboardPageComponent
+    component: LomsQueryDashboardPageComponent,
   },
   {
     path: 'query/create',
-    component: LomsQueryCreatePageComponent
+    component: LomsQueryCreatePageComponent,
   },
   {
     path: 'query/:id',
-    component: LomsQueryDashboardPageComponent
+    component: LomsQueryDashboardPageComponent,
   },
   {
     path: 'kyc',
-    component: LomsKycDashboardPageComponent
+    component: LomsKycDashboardPageComponent,
   },
   {
     path: 'kyc/setup/create',
-    component: LomsKycSetupWizardPageComponent
+    component: LomsKycSetupWizardPageComponent,
   },
   {
     path: 'kyc/profiling/:appId',
-    component: LomsKycProfilingPageComponent
+    component: LomsKycProfilingPageComponent,
   },
   {
     path: 'submission',
-    component: LomsSubmissionPageComponent
+    component: LomsSubmissionPageComponent,
   },
   {
     path: 'credit-risk',
-    component: CreditRiskDashboardPage
+    component: CreditRiskDashboardPage,
   },
   {
     path: 'credit-risk/create',
-    component: CreditRiskWizardPage
+    component: CreditRiskWizardPage,
   },
   {
     path: 'credit-risk/scoring',
-    component: CreditRiskScoringDashboardPage
+    component: CreditRiskScoringDashboardPage,
   },
   {
     path: 'credit-risk/scoring/:appId',
-    component: CreditRiskScoringAssessmentPage
+    component: CreditRiskScoringAssessmentPage,
   },
   {
     path: 'form-builder',
-    component: LomsFormBuilderPageComponent
+    component: LomsFormBuilderPageComponent,
+  },
+  {
+    path: 'vetting-valuation/application',
+    component: LomsVettingValuationPageComponent,
+  },
+  {
+    path: 'vetting-valuation/asset-details',
+    component: LomsVettingValuationAssetDetailsPageComponent,
   },
   {
     path: '',
     redirectTo: 'product',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];

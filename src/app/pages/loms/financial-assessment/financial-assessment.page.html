@@ -1,0 +1,892 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Financial Assessment"
+  basePath="/loms"
+>
+  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-4 w-full flex-1 max-w-screen-xl mx-auto">
+    <section class="rounded-md border border-blue-100 bg-white px-4 py-3 shadow-sm flex flex-col gap-3 md:flex-row md:items-end md:justify-between text-xs">
+      <div class="grid gap-3 md:grid-cols-4 w-full md:max-w-3xl">
+        <label class="space-y-1">
+          <span class="text-[11px] font-medium text-slate-700">
+            Scheme / Program
+          </span>
+          <input
+            type="text"
+            [(ngModel)]="form.schemeName"
+            (ngModelChange)="onSimpleFieldChange()"
+            class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+            placeholder="Select scheme"
+          />
+        </label>
+        <label class="space-y-1">
+          <span class="text-[11px] font-medium text-slate-700">
+            Product
+          </span>
+          <input
+            type="text"
+            [(ngModel)]="form.productName"
+            (ngModelChange)="onSimpleFieldChange()"
+            class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+            placeholder="Product name"
+          />
+        </label>
+        <label class="space-y-1">
+          <span class="text-[11px] font-medium text-slate-700">
+            Request Type
+          </span>
+          <select
+            [(ngModel)]="form.requestType"
+            (ngModelChange)="onSimpleFieldChange()"
+            class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+          >
+            <option value="" disabled>Select</option>
+            <option value="New">New</option>
+            <option value="Renewal">Renewal</option>
+            <option value="Enhancement">Enhancement</option>
+          </select>
+        </label>
+        <label class="space-y-1">
+          <span class="text-[11px] font-medium text-slate-700">
+            Review Type
+          </span>
+          <select
+            [(ngModel)]="form.reviewType"
+            (ngModelChange)="onSimpleFieldChange()"
+            class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+          >
+            <option value="" disabled>Select</option>
+            <option value="Fresh">Fresh</option>
+            <option value="Annual Review">Annual Review</option>
+            <option value="Interim Review">Interim Review</option>
+          </select>
+        </label>
+      </div>
+      <div class="flex w-full flex-col gap-2 md:w-64 md:items-end">
+        <label class="w-full space-y-1">
+          <span class="text-[11px] font-medium text-slate-700">
+            Persona
+          </span>
+          <select
+            [ngModel]="activePersonaIndex"
+            (ngModelChange)="onPersonaChange($event)"
+            class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+          >
+            <option
+              *ngFor="let option of personaOptions; index as i"
+              [ngValue]="i"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </label>
+        <div class="flex w-full items-center justify-end gap-2">
+          <input
+            #excelInput
+            type="file"
+            class="hidden"
+            accept=".xlsx,.xls,.csv"
+            (change)="onExcelSelected($event)"
+          />
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 text-[11px] font-medium text-blue-700 hover:bg-blue-100"
+            (click)="excelInput.click()"
+          >
+            Excel Upload
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 rounded-md border border-emerald-600 bg-emerald-600 px-3 py-1.5 text-[11px] font-medium text-white hover:bg-emerald-700"
+            (click)="onAddCoApplicantClick()"
+          >
+            Add Co-Applicant
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-1">
+        <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">
+          Financial Assessment
+        </p>
+        <h1 class="text-xl font-semibold text-slate-900">
+          Financial Assessment &amp; Repayment Capacity Analysis
+        </h1>
+        <p class="text-xs text-slate-500">
+          Carry out detailed financial evaluation of the applicant and credit risk rating.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-white px-3 py-1.5 text-xs font-medium text-blue-700 shadow-sm hover:bg-blue-50"
+          (click)="onSaveDraftClick()"
+        >
+          Save as Draft
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-white px-3 py-1.5 text-xs font-medium text-blue-700 shadow-sm hover:bg-blue-50"
+          (click)="onRefreshClick()"
+        >
+          Refresh
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-md border border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-blue-700"
+          (click)="onAmountFieldChange()"
+        >
+          Recalculate
+        </button>
+      </div>
+    </section>
+
+    <div class="grid gap-4 lg:grid-cols-[minmax(0,2.4fr)_minmax(0,1.1fr)]">
+      <div class="space-y-4">
+        <!-- Section 1: Income Assessment -->
+        <section class="rounded-md border border-blue-100 bg-white shadow-sm">
+          <div class="border-b border-blue-50 bg-blue-50/60 px-4 py-2.5 flex items-center justify-between">
+            <div>
+              <p class="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+                Section 1: Income Assessment
+              </p>
+              <p class="text-[11px] text-slate-600">
+                Capture monthly income details of the applicant.
+              </p>
+            </div>
+          </div>
+          <div class="p-4 space-y-4 text-xs text-slate-800">
+            <div class="grid gap-3 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)_minmax(0,1.1fr)]">
+              <div class="space-y-1">
+                <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                  Income Source Type
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border px-3 py-1.5 text-[11px] font-medium"
+                    [ngClass]="form.incomeProfile === 'Salaried'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-slate-200 bg-white text-slate-700'"
+                    (click)="form.incomeProfile = 'Salaried'; onSimpleFieldChange()"
+                  >
+                    Salaried
+                  </button>
+                  <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border px-3 py-1.5 text-[11px] font-medium"
+                    [ngClass]="form.incomeProfile === 'Business'
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-slate-200 bg-white text-slate-700'"
+                    (click)="form.incomeProfile = 'Business'; onSimpleFieldChange()"
+                  >
+                    Business / Self-employed
+                  </button>
+                </div>
+              </div>
+              <div class="space-y-1">
+                <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                  Industry Segment
+                </div>
+                <input
+                  type="text"
+                  [(ngModel)]="form.industrySegment"
+                  (ngModelChange)="onSimpleFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  placeholder="e.g. Service, Trading, Manufacturing"
+                />
+              </div>
+              <div class="space-y-1">
+                <div class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                  Income Category
+                </div>
+                <select
+                  [(ngModel)]="form.incomeCategory"
+                  (ngModelChange)="onSimpleFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                >
+                  <option value="" disabled>Select</option>
+                  <option value="Professional">Professional</option>
+                  <option value="Service">Service</option>
+                  <option value="Business Owner">Business Owner</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="rounded-md border border-blue-100 bg-blue-50/40 p-3 space-y-3">
+              <div class="flex items-center justify-between">
+                <p class="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+                  Standard Income Details
+                </p>
+              </div>
+              <div class="grid gap-3 md:grid-cols-2">
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Basic Salary
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.basicSalary"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Enter basic salary"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    House Rent Allowance
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.houseRentAllowance"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Enter house rent allowance"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Gross Monthly Income
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.grossMonthlyIncome"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Enter gross income"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Variable / Bonus Income
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.variableMonthlyIncome"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Enter variable income"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Rental Income
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.rentalIncome"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Enter rental income"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Conveyance Allowance
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.conveyanceAllowance"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Enter conveyance allowance"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Other Income / Allowances
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.otherIncome"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Enter other income"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Other Allowance
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.otherAllowance"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Enter other allowance"
+                  />
+                </label>
+              </div>
+              <div class="grid gap-3 md:grid-cols-2">
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Salary Credit Mode
+                  </span>
+                  <select
+                    [(ngModel)]="form.salaryCreditMode"
+                    (ngModelChange)="onSimpleFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  >
+                    <option value="" disabled>Select</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Mixed">Mixed</option>
+                  </select>
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Employer Category
+                  </span>
+                  <select
+                    [(ngModel)]="form.employerCategory"
+                    (ngModelChange)="onSimpleFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  >
+                    <option value="" disabled>Select</option>
+                    <option value="Government">Government</option>
+                    <option value="Private">Private</option>
+                    <option value="Multinational">Multinational</option>
+                    <option value="Self Employed">Self Employed</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </label>
+              </div>
+              <div class="rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-[11px] text-blue-900 flex items-center justify-between">
+                <span class="font-semibold">
+                  Total Monthly Income
+                </span>
+                <span class="text-xs font-semibold">
+                  {{ form.totalMonthlyIncome || '0.00' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2: Monthly Expense Assessment -->
+        <section class="rounded-md border border-blue-100 bg-white shadow-sm">
+          <div class="border-b border-blue-50 bg-blue-50/60 px-4 py-2.5">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+              Section 2: Monthly Expense Assessment
+            </p>
+          </div>
+          <div class="p-4 space-y-3 text-xs text-slate-800">
+            <div class="grid gap-3 md:grid-cols-3">
+              <label class="space-y-1">
+                <span class="text-[11px] font-medium text-slate-700">
+                  Living Expenses
+                </span>
+                <input
+                  type="text"
+                  [(ngModel)]="form.livingExpenses"
+                  (ngModelChange)="onAmountFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  placeholder="Household, utilities, etc."
+                />
+              </label>
+              <label class="space-y-1">
+                <span class="text-[11px] font-medium text-slate-700">
+                  Liability Expenses (EMIs)
+                </span>
+                <input
+                  type="text"
+                  [(ngModel)]="form.liabilityExpenses"
+                  (ngModelChange)="onAmountFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  placeholder="Existing EMIs, card payments"
+                />
+              </label>
+              <label class="space-y-1">
+                <span class="text-[11px] font-medium text-slate-700">
+                  Other Expenses
+                </span>
+                <input
+                  type="text"
+                  [(ngModel)]="form.otherExpenses"
+                  (ngModelChange)="onAmountFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  placeholder="Education, insurance, etc."
+                />
+              </label>
+            </div>
+            <div class="rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-[11px] text-blue-900 flex items-center justify-between">
+              <span class="font-semibold">
+                Total Monthly Expenses
+              </span>
+              <span class="text-xs font-semibold">
+                {{ form.totalMonthlyExpenses || '0.00' }}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: Existing Loan & Liability Assessment -->
+        <section class="rounded-md border border-blue-100 bg-white shadow-sm">
+          <div class="border-b border-blue-50 bg-blue-50/60 px-4 py-2.5 flex items-center justify-between">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+              Section 3: Existing Loan &amp; Liability Assessment
+            </p>
+            <div class="flex items-center gap-2">
+              <input
+                #ocrPdfInput
+                type="file"
+                class="hidden"
+                accept="application/pdf"
+                (change)="onOcrPdfSelected($event)"
+              />
+              <button
+                type="button"
+                class="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 text-[11px] font-medium text-blue-700 hover:bg-blue-100"
+                (click)="ocrPdfInput.click()"
+              >
+                OCR Upload
+              </button>
+              <button
+                type="button"
+                class="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 text-[11px] font-medium text-blue-700 hover:bg-blue-100"
+                (click)="addExistingFacility()"
+              >
+                Add Facility
+              </button>
+            </div>
+          </div>
+          <div class="p-4 space-y-4 text-xs text-slate-800">
+            <div class="overflow-x-auto rounded-md border border-blue-100 bg-blue-50/40">
+              <table class="min-w-full border-collapse text-[11px]">
+                <thead class="bg-blue-50">
+                  <tr>
+                    <th class="px-3 py-2 text-left font-semibold text-slate-700 border-b border-blue-100">
+                      Facility Name
+                    </th>
+                    <th class="px-3 py-2 text-left font-semibold text-slate-700 border-b border-blue-100">
+                      Institution
+                    </th>
+                    <th class="px-3 py-2 text-left font-semibold text-slate-700 border-b border-blue-100">
+                      Facility Type
+                    </th>
+                    <th class="px-3 py-2 text-right font-semibold text-slate-700 border-b border-blue-100">
+                      Outstanding Balance
+                    </th>
+                    <th class="px-3 py-2 text-right font-semibold text-slate-700 border-b border-blue-100">
+                      Monthly EMI
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let facility of existingFacilities; index as i"
+                    class="bg-white even:bg-blue-50/40"
+                  >
+                    <td class="px-3 py-2 border-t border-blue-50 align-top">
+                      <input
+                        type="text"
+                        [(ngModel)]="existingFacilities[i].facilityName"
+                        (ngModelChange)="onExistingFacilityChange()"
+                        class="w-full rounded-md border border-blue-100 bg-white px-2 py-1 text-[11px] text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-400"
+                        placeholder="e.g. Home Loan"
+                      />
+                    </td>
+                    <td class="px-3 py-2 border-t border-blue-50 align-top">
+                      <input
+                        type="text"
+                        [(ngModel)]="existingFacilities[i].institution"
+                        (ngModelChange)="onExistingFacilityChange()"
+                        class="w-full rounded-md border border-blue-100 bg-white px-2 py-1 text-[11px] text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-400"
+                        placeholder="Bank / NBFI"
+                      />
+                    </td>
+                    <td class="px-3 py-2 border-t border-blue-50 align-top">
+                      <input
+                        type="text"
+                        [(ngModel)]="existingFacilities[i].facilityType"
+                        (ngModelChange)="onExistingFacilityChange()"
+                        class="w-full rounded-md border border-blue-100 bg-white px-2 py-1 text-[11px] text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-400"
+                        placeholder="Term Loan / OD"
+                      />
+                    </td>
+                    <td class="px-3 py-2 border-t border-blue-50 align-top text-right">
+                      <input
+                        type="text"
+                        [(ngModel)]="existingFacilities[i].outstanding"
+                        (ngModelChange)="onExistingFacilityChange()"
+                        class="w-full rounded-md border border-blue-100 bg-white px-2 py-1 text-[11px] text-right text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-400"
+                        placeholder="0.00"
+                      />
+                    </td>
+                    <td class="px-3 py-2 border-t border-blue-50 align-top text-right">
+                      <input
+                        type="text"
+                        [(ngModel)]="existingFacilities[i].emi"
+                        (ngModelChange)="onExistingFacilityChange()"
+                        class="w-full rounded-md border border-blue-100 bg-white px-2 py-1 text-[11px] text-right text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-200 focus:border-blue-400"
+                        placeholder="0.00"
+                      />
+                    </td>
+                  </tr>
+                  <tr class="bg-blue-50/60">
+                    <td class="px-3 py-2 border-t border-blue-100 text-[11px] font-semibold text-slate-700" colspan="3">
+                      Total Existing Facilities
+                    </td>
+                    <td class="px-3 py-2 border-t border-blue-100 text-right text-[11px] font-semibold text-slate-900">
+                      {{ form.existingLoanOutstanding || '0.00' }}
+                    </td>
+                    <td class="px-3 py-2 border-t border-blue-100 text-right text-[11px] font-semibold text-slate-900">
+                      {{ form.existingLoanEmi || '0.00' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="rounded-md border border-blue-100 bg-blue-50/40 p-3 space-y-2">
+              <p class="text-[11px] font-semibold text-slate-700">
+                Credit Card / Revolving Liabilities
+              </p>
+              <div class="grid gap-3 md:grid-cols-3">
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Credit Card Limit
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.creditCardLimit"
+                    (ngModelChange)="onSimpleFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Total limit"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Credit Card Outstanding
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.creditCardOutstanding"
+                    (ngModelChange)="onSimpleFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Current outstanding"
+                  />
+                </label>
+                <label class="space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Minimum Monthly Payment
+                  </span>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.creditCardMinPayment"
+                    (ngModelChange)="onAmountFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Minimum due"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 4: Net Disposable Income Calculation -->
+        <section class="rounded-md border border-blue-100 bg-white shadow-sm">
+          <div class="border-b border-blue-50 bg-blue-50/60 px-4 py-2.5">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+              Section 4: Net Disposable Income Calculation
+            </p>
+          </div>
+          <div class="p-4 grid gap-3 md:grid-cols-3 text-xs text-slate-800">
+            <div class="space-y-1">
+              <p class="text-[11px] font-medium text-slate-600">
+                Total Monthly Income
+              </p>
+              <div class="rounded-md border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-900">
+                {{ form.totalMonthlyIncome || '0.00' }}
+              </div>
+            </div>
+            <div class="space-y-1">
+              <p class="text-[11px] font-medium text-slate-600">
+                Total Monthly Expenses
+              </p>
+              <div class="rounded-md border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-900">
+                {{ form.totalMonthlyExpenses || '0.00' }}
+              </div>
+            </div>
+            <div class="space-y-1">
+              <p class="text-[11px] font-medium text-slate-600">
+                Net Disposable Income
+              </p>
+              <div class="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">
+                {{ form.netDisposableIncome || '0.00' }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 5: Loan Repayment Capacity Analysis -->
+        <section class="rounded-md border border-blue-100 bg-white shadow-sm">
+          <div class="border-b border-blue-50 bg-blue-50/60 px-4 py-2.5">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+              Section 5: Loan Repayment Capacity Analysis
+            </p>
+          </div>
+          <div class="p-4 space-y-3 text-xs text-slate-800">
+            <div class="grid gap-3 md:grid-cols-3">
+              <label class="space-y-1">
+                <span class="text-[11px] font-medium text-slate-700">
+                  Proposed Loan Amount
+                </span>
+                <input
+                  type="text"
+                  [(ngModel)]="form.proposedLoanAmount"
+                  (ngModelChange)="onSimpleFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  placeholder="Loan amount"
+                />
+              </label>
+              <label class="space-y-1">
+                <span class="text-[11px] font-medium text-slate-700">
+                  Proposed Tenor (Months)
+                </span>
+                <input
+                  type="text"
+                  [(ngModel)]="form.proposedTenorMonths"
+                  (ngModelChange)="onSimpleFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  placeholder="Tenor in months"
+                />
+              </label>
+              <label class="space-y-1">
+                <span class="text-[11px] font-medium text-slate-700">
+                  Proposed Monthly Installment
+                </span>
+                <input
+                  type="text"
+                  [(ngModel)]="form.proposedEmi"
+                  (ngModelChange)="onAmountFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  placeholder="Proposed EMI"
+                />
+              </label>
+            </div>
+
+            <div class="grid gap-3 md:grid-cols-2">
+              <div class="rounded-md border border-blue-100 bg-blue-50/60 px-3 py-2">
+                <p class="text-[11px] font-semibold text-slate-700">
+                  Debt Burden Ratio (Before New Loan)
+                </p>
+                <p class="mt-1 text-xs font-semibold text-slate-800">
+                  {{ form.dbrBefore || '--' }}
+                </p>
+              </div>
+              <div class="rounded-md border border-blue-100 bg-blue-50/60 px-3 py-2">
+                <p class="text-[11px] font-semibold text-slate-700">
+                  Debt Burden Ratio (After New Loan)
+                </p>
+                <p class="mt-1 text-xs font-semibold" [ngClass]="dbrAfterClass">
+                  {{ form.dbrAfter || '--' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 6: System Credit Opinion -->
+        <section class="rounded-md border border-blue-100 bg-white shadow-sm">
+          <div class="border-b border-blue-50 bg-blue-50/60 px-4 py-2.5">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+              Section 6: System Credit Opinion
+            </p>
+          </div>
+          <div class="p-4 space-y-3 text-xs text-slate-800">
+            <div class="grid gap-3 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1.2fr)]">
+              <div class="space-y-2">
+                <p class="text-[11px] font-medium text-slate-700">
+                  Primary System Opinion
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border px-3 py-1.5 text-[11px] font-medium"
+                    [ngClass]="form.systemOpinion === 'FAVOURABLE'
+                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                      : 'border-slate-200 bg-white text-slate-700'"
+                    (click)="form.systemOpinion = 'FAVOURABLE'; onSimpleFieldChange()"
+                  >
+                    Favourable
+                  </button>
+                  <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border px-3 py-1.5 text-[11px] font-medium"
+                    [ngClass]="form.systemOpinion === 'MARGINAL'
+                      ? 'border-amber-500 bg-amber-50 text-amber-700'
+                      : 'border-slate-200 bg-white text-slate-700'"
+                    (click)="form.systemOpinion = 'MARGINAL'; onSimpleFieldChange()"
+                  >
+                    Marginal
+                  </button>
+                  <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border px-3 py-1.5 text-[11px] font-medium"
+                    [ngClass]="form.systemOpinion === 'UNFAVOURABLE'
+                      ? 'border-red-500 bg-red-50 text-red-700'
+                      : 'border-slate-200 bg-white text-slate-700'"
+                    (click)="form.systemOpinion = 'UNFAVOURABLE'; onSimpleFieldChange()"
+                  >
+                    Unfavourable
+                  </button>
+                </div>
+                <label class="block space-y-1">
+                  <span class="text-[11px] font-medium text-slate-700">
+                    Opinion Rationale / Comments
+                  </span>
+                  <textarea
+                    rows="3"
+                    [(ngModel)]="form.systemOpinionReason"
+                    (ngModelChange)="onSimpleFieldChange()"
+                    class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                    placeholder="Capture key reasons behind the system opinion."
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="space-y-3">
+                <div class="rounded-md border border-amber-200 bg-amber-50 px-3 py-2">
+                  <p class="text-[11px] font-semibold text-amber-800">
+                    Suggested Loan Adjustments
+                  </p>
+                  <div class="mt-2 space-y-2">
+                    <label class="block space-y-1">
+                      <span class="text-[11px] font-medium text-slate-700">
+                        Suggested Loan Amount Adjustment
+                      </span>
+                      <input
+                        type="text"
+                        [(ngModel)]="form.suggestedLoanAdjustment"
+                        (ngModelChange)="onSimpleFieldChange()"
+                        class="mt-1 w-full rounded-md border border-amber-200 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-400"
+                        placeholder="e.g. Reduce to 900,000"
+                      />
+                    </label>
+                    <label class="block space-y-1">
+                      <span class="text-[11px] font-medium text-slate-700">
+                        Suggested Tenor Adjustment
+                      </span>
+                      <input
+                        type="text"
+                        [(ngModel)]="form.suggestedTenorAdjustment"
+                        (ngModelChange)="onSimpleFieldChange()"
+                        class="mt-1 w-full rounded-md border border-amber-200 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-400"
+                        placeholder="e.g. Extend to 84 months"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right side: Financial Summary & Governance -->
+      <aside class="space-y-3">
+        <section class="rounded-xl border border-blue-900 bg-blue-900 text-blue-50 shadow-md">
+          <div class="border-b border-blue-700/70 px-4 py-3 flex items-center justify-between">
+            <p class="text-[11px] font-semibold uppercase tracking-wide">
+              Financial Summary
+            </p>
+            <span class="rounded-full bg-blue-800 px-2 py-0.5 text-[10px] font-medium">
+              Read-only from application
+            </span>
+          </div>
+          <div class="px-4 py-3 space-y-3 text-xs">
+            <div class="space-y-1">
+              <p class="text-[11px] text-blue-100">
+                Requested Amount
+              </p>
+              <p class="text-lg font-semibold">
+                {{ requestedAmountDisplay || '—' }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-[11px] text-blue-100">
+                Total Security Value
+              </p>
+              <p class="text-sm font-semibold">
+                {{ totalSecurityValueDisplay || '—' }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-[11px] text-blue-100">
+                Loan-to-Value Ratio
+              </p>
+              <p class="text-sm font-semibold" [ngClass]="ltvRatioClass">
+                {{ loanToValueRatioDisplay || '—' }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-[11px] text-blue-100">
+                Net Disposable Income
+              </p>
+              <p class="text-sm font-semibold">
+                {{ form.netDisposableIncome || '0.00' }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-[11px] text-blue-100">
+                Debt Burden Ratio (After)
+              </p>
+              <p class="text-sm font-semibold" [ngClass]="dbrAfterClass">
+                {{ form.dbrAfter || '--' }}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-lg border border-blue-100 bg-white shadow-sm text-xs text-slate-800">
+          <div class="border-b border-blue-50 bg-blue-50/70 px-4 py-2 flex items-center justify-between">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-blue-800">
+              Quick Actions
+            </p>
+          </div>
+          <div class="p-3 space-y-2">
+            <button
+              type="button"
+              class="w-full rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 text-[11px] font-medium text-blue-800 hover:bg-blue-100"
+              (click)="onAmountFieldChange()"
+            >
+              Refresh Assessment
+            </button>
+            <button
+              type="button"
+              class="w-full rounded-md border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-medium text-emerald-800 hover:bg-emerald-100"
+              (click)="onSimpleFieldChange()"
+            >
+              Save &amp; Keep Editing
+            </button>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="flex flex-col gap-2 border-t border-slate-200 pt-3 mt-2 text-xs sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex flex-wrap gap-2">
+        <!-- <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Previous Section
+        </button> -->
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-md border border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+          (click)="onAmountFieldChange()"
+        >
+          Finalize Assessment
+        </button>
+      </div>
+    </section>
+  </div>
+</app-loms-layout>
+

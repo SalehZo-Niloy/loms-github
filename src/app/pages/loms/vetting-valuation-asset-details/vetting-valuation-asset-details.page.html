@@ -1,0 +1,254 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Vetting & Valuation"
+  basePath="/loms"
+>
+  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-xl mx-auto">
+    <section class="flex flex-col gap-3">
+      <div class="flex items-center gap-2 text-xs text-slate-500">
+        <a
+          class="inline-flex items-center gap-2 text-blue-700 font-semibold"
+          routerLink="/loms/vetting-valuation/application"
+        >
+          <span class="text-base">←</span>
+          Back to Work Queue
+        </a>
+      </div>
+      <h1 class="text-2xl font-semibold text-slate-900">
+        Vetting &amp; Valuation - Asset Details
+      </h1>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
+      <div class="grid grid-cols-1 md:grid-cols-6 gap-4 text-xs text-slate-500">
+        <div>
+          <div class="uppercase text-[11px] font-semibold text-slate-500">Application ID</div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">{{ header.applicationId }}</div>
+        </div>
+        <div>
+          <div class="uppercase text-[11px] font-semibold text-slate-500">Customer Name</div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">{{ header.customerName }}</div>
+        </div>
+        <div>
+          <div class="uppercase text-[11px] font-semibold text-slate-500">Product</div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">{{ header.product }}</div>
+        </div>
+        <div>
+          <div class="uppercase text-[11px] font-semibold text-slate-500">Branch</div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">{{ header.branch }}</div>
+        </div>
+        <div>
+          <div class="uppercase text-[11px] font-semibold text-slate-500">Loan Amount</div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">{{ header.loanAmount }}</div>
+        </div>
+        <div class="flex items-center justify-between md:justify-start gap-3">
+          <div>
+            <div class="uppercase text-[11px] font-semibold text-slate-500">Overall Status</div>
+            <div class="mt-1">
+              <span class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold bg-blue-100 text-blue-700">
+                {{ header.overallStatus }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-900">
+          <span class="h-6 w-6 rounded-md bg-blue-600/10 text-blue-700 inline-flex items-center justify-center text-[10px]">AD</span>
+          Asset Details ({{ assetCount }} Assets)
+        </div>
+        <div class="text-[11px] text-slate-500">
+          {{ selectedAssetIds.size }} assets selected
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[32px_minmax(0,0.7fr)_minmax(0,1.6fr)_minmax(0,0.8fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,0.6fr)_minmax(0,0.7fr)_minmax(0,0.4fr)] gap-3 px-4 py-2 text-[11px] font-semibold uppercase text-slate-500 border-b border-slate-100">
+        <div>
+          <input
+            type="checkbox"
+            class="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-200"
+            [checked]="allSelected"
+            (change)="toggleSelectAll()"
+          />
+        </div>
+        <div>Asset ID</div>
+        <div>Asset Name / Description</div>
+        <div>Asset Type</div>
+        <div>Document Name</div>
+        <div>Vetting Type</div>
+        <div>Forward To</div>
+        <div>Assignee</div>
+        <div>Action</div>
+        <div>Status</div>
+        <div class="text-right">Save</div>
+      </div>
+
+      <div
+        *ngFor="let asset of assets"
+        class="grid grid-cols-[32px_minmax(0,0.7fr)_minmax(0,1.6fr)_minmax(0,0.8fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,0.6fr)_minmax(0,0.7fr)_minmax(0,0.4fr)] gap-3 px-4 py-3 text-xs border-b border-slate-100 items-center hover:bg-blue-50/40"
+      >
+        <div>
+          <input
+            type="checkbox"
+            class="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-200"
+            [checked]="selectedAssetIds.has(asset.id)"
+            (change)="toggleAssetSelection(asset.id)"
+          />
+        </div>
+        <div class="font-semibold text-slate-900">{{ asset.id }}</div>
+        <div class="text-slate-800">{{ asset.name }}</div>
+        <div class="text-slate-700">{{ asset.type }}</div>
+        <div>
+          <span *ngIf="!asset.documentMissing" class="text-blue-700 font-semibold">
+            {{ asset.documentName }}
+          </span>
+          <span *ngIf="asset.documentMissing" class="italic text-slate-400">
+            Not yet uploaded
+          </span>
+        </div>
+        <div>
+          <select
+            class="w-full rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="asset.vettingType"
+          >
+            <option value="" disabled>Select Type</option>
+            <option *ngFor="let option of vettingTypes" [ngValue]="option">{{ option }}</option>
+          </select>
+        </div>
+        <div>
+          <select
+            class="w-full rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="asset.forwardTo"
+          >
+            <option value="" disabled>Select Officer</option>
+            <option *ngFor="let option of forwardOptions" [ngValue]="option">{{ option }}</option>
+          </select>
+        </div>
+        <div>
+          <select
+            class="w-full rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="asset.assignee"
+          >
+            <option *ngFor="let option of assignees" [ngValue]="option">{{ option }}</option>
+          </select>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1 text-blue-700 font-semibold hover:text-blue-800"
+            (click)="uploadDocument(asset)"
+          >
+            Upload
+          </button>
+        </div>
+        <div>
+          <span
+            class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold"
+            [ngClass]="statusClass(asset.statusKey)"
+          >
+            {{ asset.status }}
+          </span>
+        </div>
+        <div class="text-right">
+          <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            (click)="saveAsset(asset)"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-900">
+          <span class="h-6 w-6 rounded-md bg-blue-600/10 text-blue-700 inline-flex items-center justify-center text-[10px]">UD</span>
+          Uploaded Documents Status ({{ documentCount }} Documents)
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[minmax(0,1.4fr)_minmax(0,1.4fr)_minmax(0,0.9fr)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,0.9fr)_minmax(0,0.9fr)_minmax(0,0.6fr)] gap-3 px-4 py-2 text-[11px] font-semibold uppercase text-slate-500 border-b border-slate-100">
+        <div>Asset Name</div>
+        <div>Document Name</div>
+        <div>Document Type</div>
+        <div>Uploaded By</div>
+        <div>Upload Date &amp; Time</div>
+        <div>Upload Status</div>
+        <div>Verification Status</div>
+        <div class="text-right">Action</div>
+      </div>
+
+      <div
+        *ngFor="let doc of documents"
+        class="grid grid-cols-[minmax(0,1.4fr)_minmax(0,1.4fr)_minmax(0,0.9fr)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,0.9fr)_minmax(0,0.9fr)_minmax(0,0.6fr)] gap-3 px-4 py-3 text-xs border-b border-slate-100 items-center"
+      >
+        <div class="text-slate-800">{{ doc.assetName }}</div>
+        <div class="text-slate-800">{{ doc.documentName }}</div>
+        <div class="text-slate-700">{{ doc.documentType }}</div>
+        <div class="text-slate-700">{{ doc.uploadedBy }}</div>
+        <div class="text-slate-700">{{ doc.uploadedAt }}</div>
+        <div>
+          <span
+            class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold"
+            [ngClass]="uploadStatusClass(doc.uploadStatusKey)"
+          >
+            {{ doc.uploadStatus }}
+          </span>
+        </div>
+        <div>
+          <span
+            class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold"
+            [ngClass]="verificationStatusClass(doc.verificationStatusKey)"
+          >
+            {{ doc.verificationStatus }}
+          </span>
+        </div>
+        <div class="text-right flex items-center justify-end gap-2 text-blue-700 font-semibold">
+          <button type="button" (click)="viewDocument(doc)">View</button>
+          <button type="button" (click)="reuploadDocument(doc)">Reupload</button>
+          <button type="button" class="text-rose-600" (click)="deleteDocument(doc)">Delete</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex items-center gap-2 text-xs text-slate-500">
+        <span class="h-6 w-6 rounded-full bg-slate-100 text-slate-600 inline-flex items-center justify-center text-[10px]">i</span>
+        Ensure all required documents are uploaded before forwarding.
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Reassign
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Save Draft
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+          (click)="forwardForVetting()"
+        >
+          Forward for Vetting / Valuation
+        </button>
+      </div>
+    </section>
+  </div>
+</app-loms-layout>

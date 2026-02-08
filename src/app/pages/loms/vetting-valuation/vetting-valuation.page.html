@@ -1,0 +1,295 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Vetting & Valuation"
+  basePath="/loms"
+>
+  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-xl mx-auto">
+    <section class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold text-slate-900">
+          Vetting &amp; Valuation - Work Queue
+        </h1>
+        <p class="text-xs text-slate-500">
+          Review, assign, and process property vetting and valuation cases.
+        </p>
+      </div>
+      <div class="flex items-center gap-2 text-[11px] text-slate-500">
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          User: Rafiq Ahmed
+        </span>
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          Role: Valuation Officer
+        </span>
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          Branch: Gulshan
+        </span>
+        <span class="rounded-full border border-blue-100 bg-blue-50 px-3 py-1 font-medium text-blue-700">
+          Session: 10:25
+        </span>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+      <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-slate-500">
+          <span>Total Pending Cases</span>
+          <span class="h-6 w-6 rounded-full bg-blue-50 text-blue-700 inline-flex items-center justify-center text-[10px]">TP</span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-slate-900">
+          {{ totalPending }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-slate-500">
+          <span>Vetting Pending</span>
+          <span class="h-6 w-6 rounded-full bg-blue-50 text-blue-700 inline-flex items-center justify-center text-[10px]">VP</span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-slate-900">
+          {{ vettingPending }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-slate-500">
+          <span>Valuation Pending</span>
+          <span class="h-6 w-6 rounded-full bg-blue-50 text-blue-700 inline-flex items-center justify-center text-[10px]">VA</span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-slate-900">
+          {{ valuationPending }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-slate-500">
+          <span>Assigned to Me</span>
+          <span class="h-6 w-6 rounded-full bg-blue-50 text-blue-700 inline-flex items-center justify-center text-[10px]">ME</span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-slate-900">
+          {{ assignedToMe }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-rose-200 bg-rose-50/40 px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-rose-600">
+          <span>Overdue Cases</span>
+          <span class="h-6 w-6 rounded-full bg-rose-100 text-rose-600 inline-flex items-center justify-center text-[10px]">OD</span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-rose-700">
+          {{ overdueCount }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-emerald-200 bg-emerald-50/40 px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-emerald-600">
+          <span>Completed Today</span>
+          <span class="h-6 w-6 rounded-full bg-emerald-100 text-emerald-600 inline-flex items-center justify-center text-[10px]">CT</span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-emerald-700">
+          {{ completedToday }}
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="flex items-center gap-2 text-xs text-slate-700">
+          <span class="inline-flex items-center gap-2 font-semibold text-slate-800">
+            <span class="h-6 w-6 rounded-full bg-blue-100 text-blue-700 inline-flex items-center justify-center text-[10px]">SF</span>
+            Search &amp; Filter
+          </span>
+          <select
+            class="rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="selectedFilter"
+          >
+            <option *ngFor="let option of filterOptions" [ngValue]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+          <input
+            type="text"
+            class="w-full md:w-64 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="searchTerm"
+            [placeholder]="selectedFilter === 'all' ? 'Search by any field' : 'Type to search'"
+          />
+          <button
+            type="button"
+            class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+            (click)="searchCases()"
+          >
+            Search
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+            (click)="clearSearch()"
+          >
+            Reset
+          </button>
+        </div>
+        <div class="text-xs text-slate-500">
+          {{ filteredCases.length }} cases
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-900">
+          <span class="h-6 w-6 rounded-md bg-blue-600/10 text-blue-700 inline-flex items-center justify-center text-[10px]">VV</span>
+          Vetting &amp; Valuation Cases ({{ filteredCases.length }} Records)
+        </div>
+        <div class="text-[11px] text-slate-500">
+          Showing {{ rangeStart }}-{{ rangeEnd }} of {{ filteredCases.length }} cases
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,0.7fr)] gap-3 px-4 py-2 text-[11px] font-semibold uppercase text-slate-500 border-b border-slate-100">
+        <div>Application ID</div>
+        <div>Customer Name</div>
+        <div>Product</div>
+        <div>Branch</div>
+        <div>Status</div>
+        <div class="text-right">Action</div>
+      </div>
+
+      <ng-container *ngIf="pagedCases.length; else emptyState">
+        <div
+          *ngFor="let c of pagedCases"
+          class="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,0.7fr)] gap-3 px-4 py-3 text-xs border-b border-slate-100 items-center hover:bg-blue-50/40 cursor-pointer"
+          [ngClass]="{ 'bg-blue-50/60': activeCase?.id === c.id }"
+          (click)="openCase(c)"
+        >
+          <div class="font-medium text-blue-700">
+            {{ c.id }}
+          </div>
+          <div class="text-slate-800">
+            {{ c.customer }}
+          </div>
+          <div class="text-slate-800">
+            {{ c.product }}
+          </div>
+          <div class="text-slate-700">
+            {{ c.branch }}
+          </div>
+          <div>
+            <span
+              class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold"
+              [ngClass]="statusClass(c.statusKey)"
+            >
+              {{ c.status }}
+            </span>
+          </div>
+          <div class="text-right">
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-blue-700 font-semibold hover:text-blue-800"
+            >
+              Open
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #emptyState>
+        <div class="px-4 py-6 text-center text-xs text-slate-500">
+          No cases match your filters.
+        </div>
+      </ng-template>
+
+      <div class="flex items-center justify-between px-4 py-3 text-xs text-slate-500">
+        <div>
+          Page {{ currentPage }} of {{ totalPages }}
+        </div>
+        <div class="flex items-center gap-1">
+          <button
+            type="button"
+            class="rounded-md border border-slate-200 px-2 py-1 text-slate-600 hover:bg-slate-50"
+            (click)="previousPage()"
+          >
+            Prev
+          </button>
+          <button
+            *ngFor="let page of pages"
+            type="button"
+            class="h-7 w-7 rounded-md border text-xs"
+            [ngClass]="currentPage === page ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-200 text-slate-600 hover:bg-slate-50'"
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+          <button
+            type="button"
+            class="rounded-md border border-slate-200 px-2 py-1 text-slate-600 hover:bg-slate-50"
+            (click)="nextPage()"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section *ngIf="activeCase" class="rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="text-sm font-semibold text-slate-900">
+            {{ activeCase.id }} – {{ activeCase.customer }}
+          </div>
+          <div class="text-xs text-slate-500">
+            {{ activeCase.product }} • {{ activeCase.branch }} • Assigned to {{ activeCase.assignedTo }}
+          </div>
+        </div>
+        <button
+          type="button"
+          class="text-slate-400 hover:text-slate-600 text-lg leading-none"
+          (click)="clearPreview()"
+        >
+          x
+        </button>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+        <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+          <div class="text-[11px] text-slate-500">Status</div>
+          <div class="mt-1 font-semibold text-slate-800">{{ activeCase.status }}</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+          <div class="text-[11px] text-slate-500">Stage</div>
+          <div class="mt-1 font-semibold text-slate-800">{{ activeCase.valuationStage }}</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+          <div class="text-[11px] text-slate-500">Received</div>
+          <div class="mt-1 font-semibold text-slate-800">{{ activeCase.receivedDate }}</div>
+        </div>
+        <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+          <div class="text-[11px] text-slate-500">Due Date</div>
+          <div class="mt-1 font-semibold text-slate-800">{{ activeCase.dueDate }}</div>
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+          routerLink="/loms/vetting-valuation/asset-details"
+        >
+          Open Case
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Assign Reviewer
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
+        >
+          Add Note
+        </button>
+      </div>
+    </section>
+
+    <div class="flex items-center justify-center gap-2 text-[11px] text-slate-500">
+      <span class="h-6 w-6 rounded-full bg-slate-100 text-slate-600 inline-flex items-center justify-center text-[10px]">SEC</span>
+      Vetting &amp; Valuation data is confidential and used for credit assessment purposes.
+      All information is protected under bank security policies.
+    </div>
+  </div>
+</app-loms-layout>
