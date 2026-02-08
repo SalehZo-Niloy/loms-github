@@ -4,7 +4,12 @@ export type KycProductType = 'Retail' | 'CreditCard';
 
 export type KycSetupStatus = 'Active' | 'Inactive';
 
-export type KycStatus = 'Pending' | 'In Progress' | 'Submitted' | 'Approved';
+export type KycStatus =
+  | 'Pending'
+  | 'In Progress'
+  | 'Submitted'
+  | 'Approved'
+  | 'Rejected';
 
 export interface KycSetup {
   id: string;
@@ -49,37 +54,37 @@ let branchWorklist: KycWorklistItem[] = [
   {
     appId: 'APP_2026_000501',
     product: 'Retail',
-    applicant: 'John Doe',
+    applicant: 'Md. Rahim Uddin',
     kycStatus: 'Pending',
   },
   {
     appId: 'APP_2026_000502',
     product: 'Retail',
-    applicant: 'Jane Smith',
+    applicant: 'Sharmin Akter',
     kycStatus: 'Pending',
   },
   {
     appId: 'APP_2026_000503',
     product: 'Retail',
-    applicant: 'Bob Builder',
+    applicant: 'Nazmul Hasan',
     kycStatus: 'Pending',
   },
   {
     appId: 'APP_2026_000504',
     product: 'CreditCard',
-    applicant: 'Alice Wonderland',
+    applicant: 'Farzana Rahman',
     kycStatus: 'Pending',
   },
   {
     appId: 'APP_2026_000505',
     product: 'CreditCard',
-    applicant: 'Charlie Brown',
+    applicant: 'Shahriar Hossain',
     kycStatus: 'Pending',
   },
   {
     appId: 'APP_2026_000506',
     product: 'CreditCard',
-    applicant: 'David Miller',
+    applicant: 'Tanvir Ahmed',
     kycStatus: 'Pending',
   },
 ];

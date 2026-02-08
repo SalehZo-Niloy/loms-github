@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -16,7 +16,7 @@ type RepaymentType = 'EMI' | 'Equal Principal' | 'Revolving';
 @Component({
   selector: 'app-loms-product-wizard-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, LomsLayoutComponent, RouterLink],
+  imports: [CommonModule, NgIf, NgFor, FormsModule, LomsLayoutComponent, RouterLink],
   templateUrl: './product-wizard.page.html'
 })
 export class LomsProductWizardPageComponent {

@@ -4,7 +4,7 @@
   breadcrumb="Create KYC Setup"
   basePath="/loms"
 >
-  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-lg mx-auto">
+  <div class="px-2 py-4 bg-white-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-lg mx-auto">
     <section class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold text-slate-900">
         Create KYC Setup
@@ -19,73 +19,57 @@
     </section>
 
     <section class="space-y-6">
-      <div class="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
-        <div class="flex items-center gap-6 text-sm font-medium text-slate-700">
-          <button
-            type="button"
-            class="flex items-center gap-2"
-            (click)="goToStep(1)"
-          >
-            <span
-              class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
-              [ngClass]="currentStep === 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'"
+      <div class="rounded-3xl border border-slate-100 bg-white px-8 py-7 shadow-sm">
+        <div class="flex items-center justify-between">
+          <ng-container *ngFor="let step of steps; let i = index; let last = last">
+            <div class="flex flex-col items-center relative z-10" [class.flex-1]="!last">
+              <button
+                type="button"
+                (click)="goToStep(step.number)"
+                [disabled]="step.number > currentStep"
+                class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold transition-colors duration-200 border"
+                [ngClass]="{
+                  'bg-blue-600 text-white border-blue-600 shadow-sm': step.number === currentStep,
+                  'bg-blue-50 text-blue-600 border-blue-300': step.number < currentStep,
+                  'bg-slate-100 text-slate-500 border-slate-200': step.number > currentStep
+                }"
+              >
+                <span *ngIf="step.number >= currentStep">{{ step.number }}</span>
+                <svg
+                  *ngIf="step.number < currentStep"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="w-5 h-5"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              <span
+                class="absolute top-10 text-[11px] font-medium whitespace-nowrap"
+                [ngClass]="{
+                  'text-blue-600': step.number === currentStep,
+                  'text-slate-600': step.number < currentStep,
+                  'text-gray-500': step.number > currentStep
+                }"
+              >
+                {{ step.name }}
+              </span>
+            </div>
+            <div
+              *ngIf="!last"
+              class="flex-1 h-0.5 bg-gray-200 relative -top-3 -mx-4"
             >
-              1
-            </span>
-            <span>Basics</span>
-          </button>
-          <button
-            type="button"
-            class="flex items-center gap-2"
-            (click)="goToStep(2)"
-          >
-            <span
-              class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
-              [ngClass]="currentStep === 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'"
-            >
-              2
-            </span>
-            <span>Fields</span>
-          </button>
-          <button
-            type="button"
-            class="flex items-center gap-2"
-            (click)="goToStep(3)"
-          >
-            <span
-              class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
-              [ngClass]="currentStep === 3 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'"
-            >
-              3
-            </span>
-            <span>Docs</span>
-          </button>
-          <button
-            type="button"
-            class="flex items-center gap-2"
-            (click)="goToStep(4)"
-          >
-            <span
-              class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
-              [ngClass]="currentStep === 4 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'"
-            >
-              4
-            </span>
-            <span>Risk</span>
-          </button>
-          <button
-            type="button"
-            class="flex items-center gap-2"
-            (click)="goToStep(5)"
-          >
-            <span
-              class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
-              [ngClass]="currentStep === 5 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'"
-            >
-              5
-            </span>
-            <span>Review</span>
-          </button>
+              <div
+                class="h-full bg-blue-600 transition-all duration-300"
+                [style.width.%]="currentStep > step.number ? 100 : 0"
+              ></div>
+            </div>
+          </ng-container>
         </div>
       </div>
 
@@ -142,201 +126,34 @@
                 Sections &amp; Fields
               </h2>
               <span class="text-[11px] font-medium text-slate-500">
-                FIELDSET ONLY (layout prototype)
+                Driven by configuration
               </span>
             </div>
 
             <div class="space-y-4">
-              <div class="rounded-xl border border-slate-200">
-                <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-2.5">
+              <div
+                class="rounded-xl border border-slate-200"
+                *ngFor="let section of sections"
+              >
+                <div
+                  class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-2.5"
+                >
                   <div class="text-[11px] font-semibold text-slate-700">
-                    1. Eligibility &amp; Screening
+                    {{ section.id }}. {{ section.title }}
                   </div>
-                  <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                    ELIGIBILITY
+                  <div
+                    class="text-[10px] font-semibold uppercase tracking-wide text-slate-500"
+                  >
+                    {{ section.code }}
                   </div>
                 </div>
                 <div class="px-4 py-3 space-y-1">
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Target Segment</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Is Applicant 18–65 years old</span>
-                    <span class="text-slate-400">(toggle)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Is Existing Customer?</span>
-                    <span class="text-slate-400">(toggle)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Credit Bureau Status</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="rounded-xl border border-slate-200">
-                <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-2.5">
-                  <div class="text-[11px] font-semibold text-slate-700">
-                    2. Demographic Information
-                  </div>
-                  <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                    DEMOGRAPHIC
-                  </div>
-                </div>
-                <div class="px-4 py-3 space-y-1">
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Full Legal Name</span>
-                    <span class="text-slate-400">(text)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Date of Birth</span>
-                    <span class="text-slate-400">(date)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Gender</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Nationality</span>
-                    <span class="text-slate-400">(text)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Education Level</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Occupation / Profession</span>
-                    <span class="text-slate-400">(text)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="rounded-xl border border-slate-200">
-                <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-2.5">
-                  <div class="text-[11px] font-semibold text-slate-700">
-                    3. Address &amp; Residency
-                  </div>
-                  <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                    RESIDENCY
-                  </div>
-                </div>
-                <div class="px-4 py-3 space-y-1">
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Residence Type</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Years at Current Address</span>
-                    <span class="text-slate-400">(number)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Present Address</span>
-                    <span class="text-slate-400">(textarea)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Permanent Address</span>
-                    <span class="text-slate-400">(textarea)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Preferred Mailing Address</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="rounded-xl border border-slate-200">
-                <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-2.5">
-                  <div class="text-[11px] font-semibold text-slate-700">
-                    4. Financial Profile
-                  </div>
-                  <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                    FINANCIAL
-                  </div>
-                </div>
-                <div class="px-4 py-3 space-y-1">
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Primary Source of Funds</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Gross Monthly Income</span>
-                    <span class="text-slate-400">(number)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Total Monthly Expenses</span>
-                    <span class="text-slate-400">(number)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Tax Identification No (TIN)</span>
-                    <span class="text-slate-400">(text)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Main Bank Name</span>
-                    <span class="text-slate-400">(text)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="rounded-xl border border-slate-200">
-                <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-2.5">
-                  <div class="text-[11px] font-semibold text-slate-700">
-                    5. Family &amp; Relationships
-                  </div>
-                  <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                    FAMILY
-                  </div>
-                </div>
-                <div class="px-4 py-3 space-y-1">
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Marital Status</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Spouse Name</span>
-                    <span class="text-slate-400">(text)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">No. of Dependents</span>
-                    <span class="text-slate-400">(number)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Next of Kin Name</span>
-                    <span class="text-slate-400">(text)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Relation with Next of Kin</span>
-                    <span class="text-slate-400">(text)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="rounded-xl border border-slate-200">
-                <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-2.5">
-                  <div class="text-[11px] font-semibold text-slate-700">
-                    6. Political &amp; Regulatory Screening
-                  </div>
-                  <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                    POLITICAL
-                  </div>
-                </div>
-                <div class="px-4 py-3 space-y-1">
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">PEP Status</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Sanctions Screening Result</span>
-                    <span class="text-slate-400">(select)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">FATCA / US Person</span>
-                    <span class="text-slate-400">(toggle)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-700">Country of Tax Residency</span>
-                    <span class="text-slate-400">(text)</span>
+                  <div
+                    class="flex justify-between"
+                    *ngFor="let field of section.fields"
+                  >
+                    <span class="text-slate-700">{{ field.label }}</span>
+                    <span class="text-slate-400">({{ field.type }})</span>
                   </div>
                 </div>
               </div>
@@ -459,196 +276,29 @@
               </div>
 
               <div class="space-y-4">
-                <div class="rounded-lg border border-slate-100">
-                  <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-3 py-2">
+                <div
+                  class="rounded-lg border border-slate-100"
+                  *ngFor="let section of sections"
+                >
+                  <div
+                    class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-3 py-2"
+                  >
                     <div class="text-[11px] font-semibold text-slate-700">
-                      1. Eligibility &amp; Screening
+                      {{ section.id }}. {{ section.title }}
                     </div>
-                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                      ELIGIBILITY
+                    <div
+                      class="text-[10px] font-semibold uppercase tracking-wide text-slate-500"
+                    >
+                      {{ section.code }}
                     </div>
                   </div>
                   <div class="px-3 py-2 space-y-1">
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Target Segment</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Is Applicant 18–65 years old</span>
-                      <span class="text-slate-400">(toggle)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Is Existing Customer?</span>
-                      <span class="text-slate-400">(toggle)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Credit Bureau Status</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="rounded-lg border border-slate-100">
-                  <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-3 py-2">
-                    <div class="text-[11px] font-semibold text-slate-700">
-                      2. Demographic Information
-                    </div>
-                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                      DEMOGRAPHIC
-                    </div>
-                  </div>
-                  <div class="px-3 py-2 space-y-1">
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Full Legal Name</span>
-                      <span class="text-slate-400">(text)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Date of Birth</span>
-                      <span class="text-slate-400">(date)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Gender</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Nationality</span>
-                      <span class="text-slate-400">(text)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Education Level</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Occupation / Profession</span>
-                      <span class="text-slate-400">(text)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="rounded-lg border border-slate-100">
-                  <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-3 py-2">
-                    <div class="text-[11px] font-semibold text-slate-700">
-                      3. Address &amp; Residency
-                    </div>
-                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                      RESIDENCY
-                    </div>
-                  </div>
-                  <div class="px-3 py-2 space-y-1">
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Residence Type</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Years at Current Address</span>
-                      <span class="text-slate-400">(number)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Present Address</span>
-                      <span class="text-slate-400">(textarea)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Permanent Address</span>
-                      <span class="text-slate-400">(textarea)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Preferred Mailing Address</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="rounded-lg border border-slate-100">
-                  <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-3 py-2">
-                    <div class="text-[11px] font-semibold text-slate-700">
-                      4. Financial Profile
-                    </div>
-                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                      FINANCIAL
-                    </div>
-                  </div>
-                  <div class="px-3 py-2 space-y-1">
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Primary Source of Funds</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Gross Monthly Income</span>
-                      <span class="text-slate-400">(number)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Total Monthly Expenses</span>
-                      <span class="text-slate-400">(number)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Tax Identification No (TIN)</span>
-                      <span class="text-slate-400">(text)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Main Bank Name</span>
-                      <span class="text-slate-400">(text)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="rounded-lg border border-slate-100">
-                  <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-3 py-2">
-                    <div class="text-[11px] font-semibold text-slate-700">
-                      5. Family &amp; Relationships
-                    </div>
-                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                      FAMILY
-                    </div>
-                  </div>
-                  <div class="px-3 py-2 space-y-1">
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Marital Status</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Spouse Name</span>
-                      <span class="text-slate-400">(text)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">No. of Dependents</span>
-                      <span class="text-slate-400">(number)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Next of Kin Name</span>
-                      <span class="text-slate-400">(text)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Relation with Next of Kin</span>
-                      <span class="text-slate-400">(text)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="rounded-lg border border-slate-100">
-                  <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-3 py-2">
-                    <div class="text-[11px] font-semibold text-slate-700">
-                      6. Political &amp; Regulatory Screening
-                    </div>
-                    <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                      POLITICAL
-                    </div>
-                  </div>
-                  <div class="px-3 py-2 space-y-1">
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">PEP Status</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Sanctions Screening Result</span>
-                      <span class="text-slate-400">(select)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">FATCA / US Person</span>
-                      <span class="text-slate-400">(toggle)</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-700">Country of Tax Residency</span>
-                      <span class="text-slate-400">(text)</span>
+                    <div
+                      class="flex justify-between"
+                      *ngFor="let field of section.fields"
+                    >
+                      <span class="text-slate-700">{{ field.label }}</span>
+                      <span class="text-slate-400">({{ field.type }})</span>
                     </div>
                   </div>
                 </div>

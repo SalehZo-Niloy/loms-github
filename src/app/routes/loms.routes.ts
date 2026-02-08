@@ -19,7 +19,21 @@ import { LomsQueryCreatePageComponent } from '../pages/loms/query/query-create.p
 import { LomsKycDashboardPageComponent } from '../pages/loms/kyc/kyc-dashboard.page';
 import { LomsKycSetupWizardPageComponent } from '../pages/loms/kyc/kyc-setup-wizard.page';
 import { LomsKycProfilingPageComponent } from '../pages/loms/kyc/kyc-profiling.page';
+// import { LomsSubmissionPageComponent } from '../pages/loms/submission/submission.page';
+// import { LomsProductDashboardPageComponent } from '../pages/loms/product/product-dashboard.page';
+// import { LomsProductWizardPageComponent } from '../pages/loms/product/product-wizard.page';
+// import { LomsProductViewPageComponent } from '../pages/loms/product/product-view.page';
+// import { LomsQueryDashboardPageComponent } from '../pages/loms/query/query-dashboard.page';
+// import { LomsQueryCreatePageComponent } from '../pages/loms/query/query-create.page';
+// import { LomsKycDashboardPageComponent } from '../pages/loms/kyc/kyc-dashboard.page';
+// import { LomsKycSetupWizardPageComponent } from '../pages/loms/kyc/kyc-setup-wizard.page';
+// import { LomsKycProfilingPageComponent } from '../pages/loms/kyc/kyc-profiling.page';
 import { LomsSubmissionPageComponent } from '../pages/loms/submission/submission.page';
+import { CreditRiskDashboardPage } from '../pages/loms/credit-risk/credit-risk-dashboard.page';
+import { CreditRiskWizardPage } from '../pages/loms/credit-risk/credit-risk-wizard.page';
+import { CreditRiskScoringDashboardPage } from '../pages/loms/credit-risk/credit-risk-scoring-dashboard.page';
+import { CreditRiskScoringAssessmentPage } from '../pages/loms/credit-risk/credit-risk-scoring-assessment.page';
+import { LomsFormBuilderPageComponent } from '../pages/loms/form-builder/form-builder.page';
 
 export const lomsRoutes: Routes = [
   {
@@ -109,6 +123,66 @@ export const lomsRoutes: Routes = [
   {
     path: 'submission',
     component: LomsSubmissionPageComponent
+  },
+  {
+    path: 'product',
+    component: LomsProductDashboardPageComponent
+  },
+  {
+    path: 'product/create',
+    component: LomsProductWizardPageComponent
+  },
+  {
+    path: 'product/view/:code',
+    component: LomsProductViewPageComponent
+  },
+  {
+    path: 'query',
+    component: LomsQueryDashboardPageComponent
+  },
+  {
+    path: 'query/create',
+    component: LomsQueryCreatePageComponent
+  },
+  {
+    path: 'query/:id',
+    component: LomsQueryDashboardPageComponent
+  },
+  {
+    path: 'kyc',
+    component: LomsKycDashboardPageComponent
+  },
+  {
+    path: 'kyc/setup/create',
+    component: LomsKycSetupWizardPageComponent
+  },
+  {
+    path: 'kyc/profiling/:appId',
+    component: LomsKycProfilingPageComponent
+  },
+  {
+    path: 'submission',
+    component: LomsSubmissionPageComponent
+  },
+  {
+    path: 'credit-risk',
+    component: CreditRiskDashboardPage
+  },
+  {
+    path: 'credit-risk/create',
+    component: CreditRiskWizardPage
+  },
+  {
+    path: 'credit-risk/scoring',
+    component: CreditRiskScoringDashboardPage
+  },
+  {
+    path: 'credit-risk/scoring/:appId',
+    component: CreditRiskScoringAssessmentPage
+  },
+  {
+    path: 'form-builder',
+    component: LomsFormBuilderPageComponent
   },
   {
     path: '',

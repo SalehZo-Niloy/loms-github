@@ -469,7 +469,7 @@ export class LomsLayoutComponent implements OnInit {
       route: ['/loms', 'product'],
       children: [
         {
-          label: 'Create Product',
+          label: 'Design Product',
           route: ['/loms', 'product'],
         },
       ],
@@ -497,6 +497,24 @@ export class LomsLayoutComponent implements OnInit {
           route: ['/loms', 'kyc'],
         },
       ],
+    },
+    {
+      label: 'Credit Risk Scoring',
+      route: ['/loms', 'credit-risk'],
+      children: [
+        {
+          label: 'Configurations',
+          route: ['/loms', 'credit-risk'],
+        },
+        {
+          label: 'Scoring Worklist',
+          route: ['/loms', 'credit-risk', 'scoring'],
+        },
+      ],
+    },
+    {
+      label: 'Self Defined Form Builder',
+      route: ['/loms', 'form-builder'],
     },
     {
       label: 'Submission',

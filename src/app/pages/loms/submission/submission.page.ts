@@ -33,14 +33,14 @@ interface SubmissionActivityLogItem {
 })
 export class LomsSubmissionPageComponent {
   appNo = 'LN-2023-001';
-  customerName = 'John Doe';
+  customerName = 'Md. Rahim Uddin';
   productName = 'Home Loan';
   dueAt = new Date('2026-01-31T13:05:41');
 
   recipients: SubmissionRecipient[] = [
-    { id: 'bob-branch', label: 'Bob Branch (Req)' },
-    { id: 'alice-cro', label: 'Alice CRO' },
-    { id: 'ops-team', label: 'Ops Team' },
+    { id: 'bob-branch', label: 'Rahim Branch Manager (Req)' },
+    { id: 'alice-cro', label: 'Farhana CRO' },
+    { id: 'ops-team', label: 'Dhaka Ops Team' },
   ];
 
   selectedRecipientId = 'bob-branch';
@@ -48,14 +48,14 @@ export class LomsSubmissionPageComponent {
   messages: SubmissionMessage[] = [
     {
       id: 'm1',
-      senderLabel: 'Alice CRO (QUESTION)',
+      senderLabel: 'Farhana CRO (QUESTION)',
       role: 'QUESTION',
       text: 'Customer ID proof is blurry.',
       createdAt: new Date('2026-01-29T13:05:41'),
     },
     {
       id: 'm2',
-      senderLabel: 'Bob Branch (RESPONSE)',
+      senderLabel: 'Rahim Branch Manager (RESPONSE)',
       role: 'RESPONSE',
       text: 'Attached clear copy.',
       createdAt: new Date('2026-01-30T13:05:41'),
@@ -67,21 +67,21 @@ export class LomsSubmissionPageComponent {
     {
       id: 'a1',
       timestamp: new Date('2026-01-29T13:05:41'),
-      actor: 'Alice CRO',
+      actor: 'Farhana CRO',
       action: 'CREATED',
       note: 'Query created',
     },
     {
       id: 'a2',
       timestamp: new Date('2026-01-30T13:05:41'),
-      actor: 'Bob Branch',
+      actor: 'Rahim Branch Manager',
       action: 'STATUS_CHANGED',
       note: 'Status changed to RESPONDED',
     },
     {
       id: 'a3',
       timestamp: new Date('2026-01-30T13:05:41'),
-      actor: 'Bob Branch',
+      actor: 'Rahim Branch Manager',
       action: 'RESPONDED',
       note: 'Response added',
     },
@@ -102,7 +102,7 @@ export class LomsSubmissionPageComponent {
     const now = new Date();
     const message: SubmissionMessage = {
       id: `m-${now.getTime()}`,
-      senderLabel: 'Bob Branch (RESPONSE)',
+      senderLabel: 'Rahim Branch Manager (RESPONSE)',
       role: 'RESPONSE',
       text,
       createdAt: now,
@@ -112,7 +112,7 @@ export class LomsSubmissionPageComponent {
     const logItem: SubmissionActivityLogItem = {
       id: `a-${now.getTime()}`,
       timestamp: now,
-      actor: 'Bob Branch',
+      actor: 'Rahim Branch Manager',
       action: 'RESPONDED',
       note: 'Response added',
     };

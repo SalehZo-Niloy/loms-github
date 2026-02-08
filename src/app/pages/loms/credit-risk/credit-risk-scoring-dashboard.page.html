@@ -1,0 +1,134 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Credit Risk Scoring"
+  basePath="/loms"
+>
+  <section
+    class="mx-auto flex w-full max-w-6xl flex-col gap-4 rounded-2xl bg-white-50 px-4 py-4"
+  >
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-semibold text-slate-900">
+        Credit Risk Scoring
+      </h1>
+      <div class="flex items-center gap-2 text-sm">
+        <span class="text-slate-600">Role:</span>
+        <select
+          class="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-100 focus:border-blue-300"
+          [(ngModel)]="role"
+        >
+          <option value="Maker">Maker (Risk Officer)</option>
+          <option value="Checker">Checker (Approver)</option>
+        </select>
+      </div>
+    </div>
+
+    <section class="space-y-4">
+      <div
+        class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+      >
+        <div class="flex flex-1 flex-wrap gap-2">
+          <select
+            class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="productFilter"
+          >
+            <option [ngValue]="'All Products'">All Products</option>
+            <option [ngValue]="'Retail'">Retail</option>
+            <option [ngValue]="'Credit Card'">Credit Card</option>
+          </select>
+
+          <select
+            class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="statusFilter"
+          >
+            <option [ngValue]="'All Statuses'">All Statuses</option>
+            <option [ngValue]="'Draft'">Draft</option>
+            <option [ngValue]="'Pending Approval'">Pending Approval</option>
+            <option [ngValue]="'Approved'">Approved</option>
+            <option [ngValue]="'Rejected'">Rejected</option>
+          </select>
+
+          <div
+            class="flex flex-1 items-center rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus-within:ring-1 focus-within:ring-blue-100 focus-within:border-blue-300"
+          >
+            <input
+              type="text"
+              class="w-full border-0 bg-transparent text-sm outline-none"
+              placeholder="Search App ID or Name..."
+              [(ngModel)]="searchTerm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="rounded-2xl border border-slate-200 bg-white px-0 py-0 shadow-sm overflow-hidden"
+      >
+        <table class="min-w-full border-collapse text-sm">
+          <thead class="bg-slate-50 text-[11px] font-semibold text-slate-600">
+            <tr>
+              <th class="px-5 py-3 text-left">App ID</th>
+              <th class="px-5 py-3 text-left">Product</th>
+              <th class="px-5 py-3 text-left">Applicant</th>
+              <th class="px-5 py-3 text-left">Amount/Limit</th>
+              <th class="px-5 py-3 text-left">CIB Score</th>
+              <th class="px-5 py-3 text-left">Status</th>
+              <th class="px-5 py-3 text-left">Updated On</th>
+              <th class="px-5 py-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let app of filteredApplications"
+              class="border-t border-slate-100 text-slate-800"
+            >
+              <td class="px-5 py-3 font-medium">
+                {{ app.appId }}
+              </td>
+              <td class="px-5 py-3">
+                {{ app.product }}
+              </td>
+              <td class="px-5 py-3">
+                {{ app.applicant }}
+              </td>
+              <td class="px-5 py-3">
+                {{ app.amount | number: '1.0-0' }}
+              </td>
+              <td class="px-5 py-3">
+                {{ app.cibScore }}
+              </td>
+              <td class="px-5 py-3">
+                <span
+                  class="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200"
+                >
+                  {{ app.status }}
+                </span>
+              </td>
+              <td class="px-5 py-3">
+                {{ app.updatedOn }}
+              </td>
+              <td class="px-5 py-3">
+                <button
+                  type="button"
+                  class="rounded-md bg-blue-700 px-4 py-1.5 text-[11px] font-semibold text-white hover:bg-blue-800"
+                  (click)="onOpen(app)"
+                >
+                  {{ isMaker() ? 'Open / Edit' : 'View' }}
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!filteredApplications.length">
+              <td
+                class="px-5 py-5 text-center text-[11px] text-slate-500"
+                colspan="8"
+              >
+                No applications found. Adjust filters.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+</app-loms-layout>
+

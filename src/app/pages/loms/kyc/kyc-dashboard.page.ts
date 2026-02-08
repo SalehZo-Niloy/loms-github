@@ -63,6 +63,14 @@ export class LomsKycDashboardPageComponent {
   }
 
   startKyc(appId: string): void {
-    this.router.navigate(['/loms', 'kyc', 'profiling', appId]);
+    this.router.navigate(['/loms', 'kyc', 'profiling', appId], {
+      queryParams: { role: 'Branch' },
+    });
+  }
+
+  reviewKyc(appId: string): void {
+    this.router.navigate(['/loms', 'kyc', 'profiling', appId], {
+      queryParams: { role: 'Checker' },
+    });
   }
 }

@@ -4,7 +4,7 @@
   breadcrumb="KYC Management"
   basePath="/loms"
 >
-  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-xl mx-auto">
+  <div class="px-2 py-4 bg-white-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-xl mx-auto">
     <section class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold text-slate-900">
         KYC Setup Dashboard
@@ -26,18 +26,18 @@
     <ng-container *ngIf="currentRole === 'Admin'; else nonAdminViews">
       <section class="space-y-4">
         <div class="flex flex-wrap gap-3">
-          <div
+          <!-- <div
             *ngIf="activeRetailId"
             class="inline-flex items-center rounded-full bg-violet-50 px-4 py-2 text-xs font-semibold text-violet-700"
           >
             ACTIVE RETAIL: {{ activeRetailId }}
-          </div>
-          <div
+          </div> -->
+          <!-- <div
             *ngIf="activeCardId"
             class="inline-flex items-center rounded-full bg-violet-50 px-4 py-2 text-xs font-semibold text-violet-700"
           >
             ACTIVE CREDIT CARD: {{ activeCardId }}
-          </div>
+          </div> -->
         </div>
 
         <div class="flex justify-end">
@@ -87,7 +87,7 @@
                   {{ s.effectiveDate }}
                 </td>
                 <td class="px-6 py-3">
-                  <div class="flex flex-wrap gap-2">
+                  <div class="flex gap-2 whitespace-nowrap">
                     <button
                       type="button"
                       class="rounded-md border border-slate-300 px-3 py-1 text-xs font-medium text-slate-700"
@@ -199,8 +199,15 @@
                   <td class="px-6 py-3">
                     {{ item.kycStatus | uppercase }}
                   </td>
-                  <td class="px-6 py-3 text-xs text-slate-500">
-                    No Action
+                  <td class="px-6 py-3">
+                    <button
+                      type="button"
+                      class="rounded-md bg-blue-600 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                      (click)="reviewKyc(item.appId)"
+                      [disabled]="item.kycStatus !== 'Submitted'"
+                    >
+                      Review KYC
+                    </button>
                   </td>
                 </tr>
               </tbody>
