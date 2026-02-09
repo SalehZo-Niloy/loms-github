@@ -42,6 +42,9 @@ import { LomsCibOfficerPersonaDetailsPageComponent } from '../pages/loms/cib-ini
 import { LomsCibFinalizationPageComponent } from '../pages/loms/cib-initiation/cib-finalization.page';
 import { LomsVettingValuationPageComponent } from '../pages/loms/vetting-valuation/vetting-valuation.page';
 import { LomsVettingValuationAssetDetailsPageComponent } from '../pages/loms/vetting-valuation-asset-details/vetting-valuation-asset-details.page';
+import { LomsCardOperationPageComponent } from '../pages/loms/card-operation/card-operation.page';
+import { LomsCardOperationDetailsPageComponent } from '../pages/loms/card-operation/card-operation-details.page';
+import { LomsCardIssuanceProcessingPageComponent } from '../pages/loms/card-operation/card-operation-issuance-processing.page';
 
 export const lomsRoutes: Routes = [
   {
@@ -219,6 +222,18 @@ export const lomsRoutes: Routes = [
   {
     path: 'vetting-valuation/application',
     component: LomsVettingValuationPageComponent,
+  },
+  {
+    path: 'card-operation/issuance-processing',
+    component: LomsCardIssuanceProcessingPageComponent,
+  },
+  {
+    path: 'card-operation/application/:id',
+    component: LomsCardOperationDetailsPageComponent,
+  },
+  {
+    path: 'card-operation/application',
+    component: LomsCardOperationPageComponent,
   },
   {
     path: 'vetting-valuation/asset-details',

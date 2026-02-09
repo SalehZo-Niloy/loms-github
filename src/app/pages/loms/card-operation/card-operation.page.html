@@ -1,0 +1,472 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Card Operation"
+  basePath="/loms"
+>
+  <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-6 w-full flex-1 max-w-screen-2xl mx-auto">
+    <section class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold text-slate-900">
+          Card Issuance Review Dashboard
+        </h1>
+        <p class="text-xs text-slate-500">
+          Monitor, review, and escalate card issuance applications to makers.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          User: Sarah Ahmed
+        </span>
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          Role: Issuance Reviewer
+        </span>
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          Branch: Head Office
+        </span>
+        <span class="rounded-full border border-blue-100 bg-blue-50 px-3 py-1 font-medium text-blue-700">
+          Session: 11:42
+        </span>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-5">
+      <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-slate-500">
+          <span>Pending Review</span>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-orange-50 text-[11px] font-semibold text-orange-700">
+            PR
+          </span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-slate-900">
+          {{ pendingReviewCount }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-emerald-600">
+          <span>Reviewed Today</span>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold">
+            RT
+          </span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-emerald-700">
+          {{ reviewedTodayCount }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-blue-200 bg-blue-50/60 px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-blue-700">
+          <span>Escalated Forward</span>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-[11px] font-semibold">
+            EM
+          </span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-blue-800">
+          {{ escalatedToMakerCount }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-rose-200 bg-rose-50/60 px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-rose-600">
+          <span>Urgent / Priority</span>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-100 text-[11px] font-semibold">
+            UP
+          </span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-rose-700">
+          {{ urgentPriorityCount }}
+        </div>
+      </div>
+      <div class="rounded-xl border border-violet-200 bg-violet-50/60 px-4 py-3 shadow-sm">
+        <div class="flex items-center justify-between text-xs text-violet-700">
+          <span>Avg. TAT (hours)</span>
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-[11px] font-semibold">
+            TAT
+          </span>
+        </div>
+        <div class="mt-2 text-2xl font-semibold text-violet-800">
+          {{ averageTatHours }}
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-800">
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-[11px] text-blue-700">
+            SF
+          </span>
+          <span>Search &amp; Filter Applications</span>
+        </div>
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700"
+        >
+          <span class="rotate-0">⌃</span>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="grid gap-3 md:grid-cols-6 text-xs">
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Application Date From</div>
+            <input
+              type="date"
+              class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="dateFrom"
+            />
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Application Date To</div>
+            <input
+              type="date"
+              class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="dateTo"
+            />
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Card Type</div>
+            <select
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="cardTypeFilter"
+            >
+              <option value="All">All</option>
+              <option value="Debit Card">Debit Card</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Prepaid Card">Prepaid Card</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Card Product</div>
+            <select
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="cardProductFilter"
+            >
+              <option value="All">All Products</option>
+              <option value="Classic Debit">Classic Debit</option>
+              <option value="Gold Credit">Gold Credit</option>
+              <option value="Platinum Credit">Platinum Credit</option>
+              <option value="Student Prepaid">Student Prepaid</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Branch</div>
+            <select
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="branchFilter"
+            >
+              <option value="All">All Branches</option>
+              <option value="Head Office">Head Office</option>
+              <option value="Gulshan">Gulshan</option>
+              <option value="Banani">Banani</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Priority</div>
+            <select
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="priorityFilter"
+            >
+              <option value="All">All</option>
+              <option value="Normal">Normal</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid gap-3 md:grid-cols-6 text-xs">
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Review Status</div>
+            <select
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="reviewStatusFilter"
+            >
+              <option value="All">All</option>
+              <option value="Pending">Pending</option>
+              <option value="Reviewed">Reviewed</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Escalation Status</div>
+            <select
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="escalationStatusFilter"
+            >
+              <option value="All">All</option>
+              <option value="Not Sent">Not Sent</option>
+              <option value="Sent to Maker">Sent to Maker</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Application ID</div>
+            <input
+              type="text"
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="applicationIdSearch"
+              placeholder="Search by Application ID"
+            />
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">Customer Name</div>
+            <input
+              type="text"
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="customerNameSearch"
+              placeholder="Search by Name"
+            />
+          </div>
+          <div class="space-y-1">
+            <div class="font-medium text-slate-700">CIF / Customer ID</div>
+            <input
+              type="text"
+              class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+              [(ngModel)]="cifSearch"
+              placeholder="Search by CIF"
+            />
+          </div>
+          <div class="flex items-end justify-end gap-2">
+            <button
+              type="button"
+              class="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+              (click)="resetFilters()"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+              (click)="applyFilters()"
+            >
+              Apply Filters
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between text-xs">
+        <div class="text-slate-600">
+          <span class="font-semibold">{{ selectedCount }}</span> application(s) selected
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <select
+            class="w-40 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="bulkAction"
+          >
+            <option value="">Select Action</option>
+            <option value="escalateForward">Escalate Forward</option>
+            <option value="hold">Hold Application</option>
+          </select>
+          <select
+            class="w-40 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="selectedMaker"
+          >
+            <option value="">Select Maker</option>
+            <option *ngFor="let maker of makers" [ngValue]="maker">
+              {{ maker }}
+            </option>
+          </select>
+          <div class="relative">
+            <button
+              type="button"
+              class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed"
+              [disabled]="!canExecuteAction()"
+              (click)="executeAction()"
+            >
+              Execute Action
+            </button>
+            <div
+              *ngIf="showActionTooltip"
+              class="absolute right-0 mt-2 z-10"
+            >
+              <div
+                class="rounded-md border px-3 py-2 text-[11px] shadow-lg flex items-center gap-2"
+                [ngClass]="{
+                  'border-emerald-200 bg-emerald-50 text-emerald-800': actionTooltipStyle === 'hold',
+                  'border-blue-200 bg-blue-50 text-blue-800': actionTooltipStyle === 'escalateForward',
+                  'border-slate-200 bg-white text-slate-800': actionTooltipStyle === 'info'
+                }"
+              >
+                <span
+                  class="inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold"
+                  [ngClass]="{
+                    'bg-emerald-600 text-white': actionTooltipStyle === 'hold',
+                    'bg-blue-600 text-white': actionTooltipStyle === 'escalateForward',
+                    'bg-slate-400 text-white': actionTooltipStyle === 'info'
+                  }"
+                >
+                  ✓
+                </span>
+                <span class="font-medium">
+                  {{ actionTooltipMessage }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-900">
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-blue-600/10 text-[11px] text-blue-700">
+            CI
+          </span>
+          <span>Card Issuance Applications ({{ filteredApplications.length }} Records)</span>
+        </div>
+        <div class="text-[11px] text-slate-500">
+          Showing {{ rangeStart }} to {{ rangeEnd }} of {{ filteredApplications.length }} entries
+        </div>
+      </div>
+
+      <div class="min-w-full overflow-x-auto">
+        <table class="min-w-full border-collapse text-xs">
+          <thead class="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
+            <tr>
+              <th class="px-3 py-2 text-left">
+                <input
+                  type="checkbox"
+                  class="h-3.5 w-3.5 rounded border-slate-300 text-blue-600"
+                  [checked]="isAllSelectedOnPage"
+                  (change)="toggleSelectAllOnPage($any($event.target).checked)"
+                />
+              </th>
+              <th class="px-3 py-2 text-left">Application ID</th>
+              <th class="px-3 py-2 text-left">Application Date</th>
+              <th class="px-3 py-2 text-left">Customer Name</th>
+              <th class="px-3 py-2 text-left">CIF / Customer ID</th>
+              <th class="px-3 py-2 text-left">Account Number</th>
+              <th class="px-3 py-2 text-left">Card Type</th>
+              <th class="px-3 py-2 text-left">Card Product</th>
+              <th class="px-3 py-2 text-left">Currency</th>
+              <th class="px-3 py-2 text-left">Priority</th>
+              <th class="px-3 py-2 text-left">Review Status</th>
+              <th class="px-3 py-2 text-left">Escalation</th>
+              <th class="px-3 py-2 text-left">Assigned Maker</th>
+              <th class="px-3 py-2 text-right">SLA Aging</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let app of pagedApplications"
+              class="border-t border-slate-100 text-slate-800 hover:bg-blue-50/40 cursor-pointer"
+              (click)="openDetails(app)"
+            >
+              <td class="px-3 py-2">
+                <input
+                  type="checkbox"
+                  class="h-3.5 w-3.5 rounded border-slate-300 text-blue-600"
+                  [checked]="selectedIds.has(app.id)"
+                  (click)="$event.stopPropagation()"
+                  (change)="toggleSelectOne(app.id, $any($event.target).checked)"
+                />
+              </td>
+              <td class="px-3 py-2 text-blue-700 font-semibold">
+                {{ app.id }}
+              </td>
+              <td class="px-3 py-2 text-slate-700">
+                {{ app.applicationDate | date: 'dd-MMM-yyyy' }}
+              </td>
+              <td class="px-3 py-2 text-slate-800">
+                {{ app.customerName }}
+              </td>
+              <td class="px-3 py-2 text-slate-700">
+                {{ app.cif }}
+              </td>
+              <td class="px-3 py-2 text-slate-700">
+                {{ app.accountNumber }}
+              </td>
+              <td class="px-3 py-2 text-slate-700">
+                {{ app.cardType }}
+              </td>
+              <td class="px-3 py-2 text-slate-700">
+                {{ app.cardProduct }}
+              </td>
+              <td class="px-3 py-2 text-slate-700">
+                {{ app.currency }}
+              </td>
+              <td class="px-3 py-2">
+                <span
+                  class="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold"
+                  [ngClass]="getPriorityBadgeClasses(app.priority)"
+                >
+                  {{ app.priority }}
+                </span>
+              </td>
+              <td class="px-3 py-2">
+                <span
+                  class="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold"
+                  [ngClass]="
+                    app.reviewStatus === 'Pending'
+                      ? 'bg-amber-50 text-amber-700'
+                      : 'bg-emerald-50 text-emerald-700'
+                  "
+                >
+                  {{ app.reviewStatus }}
+                </span>
+              </td>
+              <td class="px-3 py-2">
+                <span
+                  class="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold"
+                  [ngClass]="
+                    app.escalationStatus === 'Sent to Maker'
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'bg-slate-50 text-slate-600'
+                  "
+                >
+                  {{ app.escalationStatus }}
+                </span>
+              </td>
+              <td class="px-3 py-2 text-slate-700">
+                {{ app.assignedMaker }}
+              </td>
+              <td class="px-3 py-2 text-right text-slate-700">
+                {{ app.slaAgingHours }} hrs
+              </td>
+            </tr>
+            <tr *ngIf="pagedApplications.length === 0">
+              <td colspan="14" class="px-4 py-6 text-center text-xs text-slate-500">
+                No applications match your filters.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between px-4 py-3 text-[11px] text-slate-500 border-t border-slate-100">
+        <div>
+          Showing {{ rangeStart }} to {{ rangeEnd }} of {{ filteredApplications.length }} entries
+        </div>
+        <div class="flex items-center gap-1">
+          <button
+            type="button"
+            class="rounded-md border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 hover:bg-slate-50"
+            (click)="previousPage()"
+          >
+            Previous
+          </button>
+          <button
+            *ngFor="let page of pages"
+            type="button"
+            class="h-7 w-7 rounded-md border text-xs"
+            [ngClass]="
+              currentPage === page
+                ? 'border-blue-600 bg-blue-600 text-white'
+                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+            "
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+          <button
+            type="button"
+            class="rounded-md border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 hover:bg-slate-50"
+            (click)="nextPage()"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</app-loms-layout>

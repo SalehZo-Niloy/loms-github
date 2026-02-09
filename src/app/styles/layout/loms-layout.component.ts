@@ -277,6 +277,37 @@ interface LomsMenuItem {
                           </span>
                           <span
                             class="flex h-4 w-4 items-center justify-center text-slate-400"
+                            *ngIf="item.label === 'Card Operation'"
+                          >
+                            <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                              <rect
+                                x="3.5"
+                                y="5"
+                                width="13"
+                                height="10"
+                                rx="2"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              />
+                              <rect
+                                x="5"
+                                y="6.5"
+                                width="4.5"
+                                height="3"
+                                rx="0.8"
+                                stroke="currentColor"
+                                stroke-width="1.2"
+                              />
+                              <path
+                                d="M5 12.5h10"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="flex h-4 w-4 items-center justify-center text-slate-400"
                             *ngIf="item.label === 'Product Configuration'"
                           >
                             <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
@@ -634,6 +665,19 @@ export class LomsLayoutComponent implements OnInit {
         {
           label: 'Vetting & Valuation',
           route: ['/loms', 'vetting-valuation', 'application'],
+        },
+      ],
+    },
+    {
+      label: 'Card Operation',
+      children: [
+        {
+          label: 'Issuance Review',
+          route: ['/loms', 'card-operation', 'application'],
+        },
+        {
+          label: 'Issuance Processing',
+          route: ['/loms', 'card-operation', 'issuance-processing'],
         },
       ],
     },

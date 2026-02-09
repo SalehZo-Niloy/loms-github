@@ -171,7 +171,7 @@
             </div>
 
             <div class="space-y-4 bg-white border border-blue-100 p-4 rounded-lg">
-              <div class="grid gap-4 md:grid-cols-3">
+              <div class="grid gap-4 md:grid-cols-4">
                 <app-ui-input
                   label="Full Name (as per NID)"
                   placeholder="Enter full name"
@@ -189,6 +189,11 @@
                   placeholder="Enter mother’s name"
                   [required]="true"
                   [(value)]="persona.motherName"
+                ></app-ui-input>
+                <app-ui-input
+                  label="Spouse Name"
+                  placeholder="Enter spouse name"
+                  [(value)]="persona.spouseName"
                 ></app-ui-input>
               </div>
 
@@ -288,19 +293,16 @@
               <div class="grid gap-4 md:grid-cols-3">
                 <app-ui-dropdown
                   label="Division"
-                  [required]="true"
                   [options]="divisionOptions"
                   [(value)]="persona.presentAddress.division"
                 ></app-ui-dropdown>
                 <app-ui-dropdown
                   label="District"
-                  [required]="true"
                   [options]="districtOptions"
                   [(value)]="persona.presentAddress.district"
                 ></app-ui-dropdown>
                 <app-ui-dropdown
                   label="Thana"
-                  [required]="true"
                   [options]="thanaOptions"
                   [(value)]="persona.presentAddress.thana"
                 ></app-ui-dropdown>
@@ -310,7 +312,6 @@
                 <app-ui-input
                   label="Detailed Address"
                   placeholder="Enter detailed present address"
-                  [required]="true"
                   [(value)]="persona.presentAddress.addressLine"
                 ></app-ui-input>
               </div>
@@ -366,19 +367,16 @@
               <div class="grid gap-4 md:grid-cols-3">
                 <app-ui-dropdown
                   label="Division"
-                  [required]="true"
                   [options]="divisionOptions"
                   [(value)]="persona.permanentAddress.division"
                 ></app-ui-dropdown>
                 <app-ui-dropdown
                   label="District"
-                  [required]="true"
                   [options]="districtOptions"
                   [(value)]="persona.permanentAddress.district"
                 ></app-ui-dropdown>
                 <app-ui-dropdown
                   label="Thana"
-                  [required]="true"
                   [options]="thanaOptions"
                   [(value)]="persona.permanentAddress.thana"
                 ></app-ui-dropdown>
@@ -388,7 +386,6 @@
                 <app-ui-input
                   label="Detailed Address"
                   placeholder="Enter detailed permanent address"
-                  [required]="true"
                   [(value)]="persona.permanentAddress.addressLine"
                 ></app-ui-input>
               </div>

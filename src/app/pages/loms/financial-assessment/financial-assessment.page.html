@@ -594,7 +594,7 @@
               Section 4: Net Disposable Income Calculation
             </p>
           </div>
-          <div class="p-4 grid gap-3 md:grid-cols-3 text-xs text-slate-800">
+          <div class="p-4 grid gap-3 md:grid-cols-4 text-xs text-slate-800">
             <div class="space-y-1">
               <p class="text-[11px] font-medium text-slate-600">
                 Total Monthly Income
@@ -619,6 +619,18 @@
                 {{ form.netDisposableIncome || '0.00' }}
               </div>
             </div>
+            <label class="space-y-1">
+              <span class="text-[11px] font-medium text-slate-600">
+                Interest Rate
+              </span>
+              <input
+                type="text"
+                [(ngModel)]="form.interestRateSection4"
+                (ngModelChange)="onSimpleFieldChange()"
+                class="mt-1 w-full rounded-md border border-blue-100 bg-white px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                placeholder="Interest rate"
+              />
+            </label>
           </div>
         </section>
 
@@ -665,6 +677,18 @@
                   (ngModelChange)="onAmountFieldChange()"
                   class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
                   placeholder="Proposed EMI"
+                />
+              </label>
+              <label class="space-y-1">
+                <span class="text-[11px] font-medium text-slate-700">
+                  Interest Rate
+                </span>
+                <input
+                  type="text"
+                  [(ngModel)]="form.interestRateSection5"
+                  (ngModelChange)="onSimpleFieldChange()"
+                  class="mt-1 w-full rounded-md border border-blue-100 bg-blue-50/40 px-2 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  placeholder="Interest rate"
                 />
               </label>
             </div>
@@ -881,7 +905,7 @@
         <button
           type="button"
           class="inline-flex items-center gap-1 rounded-md border border-blue-600 bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
-          (click)="onAmountFieldChange()"
+          (click)="onFinalizeAssessment()"
         >
           Finalize Assessment
         </button>

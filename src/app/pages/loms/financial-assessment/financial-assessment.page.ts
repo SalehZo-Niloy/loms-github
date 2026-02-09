@@ -61,10 +61,12 @@ interface FinancialAssessmentForm {
   totalMonthlyIncome: string;
   totalMonthlyExpenses: string;
   netDisposableIncome: string;
+  interestRateSection4: string;
 
   proposedLoanAmount: string;
   proposedTenorMonths: string;
   proposedEmi: string;
+  interestRateSection5: string;
   dbrBefore: string;
   dbrAfter: string;
 
@@ -144,9 +146,11 @@ export class LomsFinancialAssessmentPageComponent {
       totalMonthlyIncome: '',
       totalMonthlyExpenses: '',
       netDisposableIncome: '',
+      interestRateSection4: '',
       proposedLoanAmount: '',
       proposedTenorMonths: '',
       proposedEmi: '',
+      interestRateSection5: '',
       dbrBefore: '',
       dbrAfter: '',
       systemOpinion: '',
@@ -194,6 +198,11 @@ export class LomsFinancialAssessmentPageComponent {
 
   onAmountFieldChange(): void {
     this.recalculateFromForm();
+  }
+
+  onFinalizeAssessment(): void {
+    this.recalculateFromForm();
+    this.saveFormToStorage();
     this.showFinalizeSuccessAlert();
   }
 

@@ -21,6 +21,7 @@ interface DemographicPersona {
   fullName: string;
   fatherName: string;
   motherName: string;
+  spouseName: string;
   dateOfBirth: string;
   gender: 'male' | 'female' | '';
   maritalStatus: string;
@@ -77,6 +78,7 @@ export class LomsDemographicApplicationPageComponent {
   personaTypeOptions = [
     { label: 'Primary Applicant', value: 'primary' },
     { label: 'Co-applicant', value: 'co_applicant' },
+    { label: 'Supplementary', value: 'supplementary' },
     { label: 'Guarantor', value: 'guarantor' },
     { label: 'Reference Person', value: 'reference_person' },
     { label: 'Nominee', value: 'nominee' }
@@ -147,6 +149,7 @@ export class LomsDemographicApplicationPageComponent {
         fullName: '',
         fatherName: '',
         motherName: '',
+        spouseName: '',
         dateOfBirth: '',
         gender: '',
         maritalStatus: '',
@@ -193,6 +196,7 @@ export class LomsDemographicApplicationPageComponent {
       fullName: '',
       fatherName: '',
       motherName: '',
+      spouseName: '',
       dateOfBirth: '',
       gender: '',
       maritalStatus: '',
@@ -512,43 +516,8 @@ export class LomsDemographicApplicationPageComponent {
   }
 
   private validatePersonaAddresses(persona: DemographicPersona): boolean {
-    const presentErrors: string[] = [];
-    if (!persona.presentAddress.division) {
-      presentErrors.push('Present division is required.');
-    }
-    if (!persona.presentAddress.district) {
-      presentErrors.push('Present district is required.');
-    }
-    if (!persona.presentAddress.thana) {
-      presentErrors.push('Present thana is required.');
-    }
-    if (!persona.presentAddress.addressLine) {
-      presentErrors.push('Present address is required.');
-    }
-
-    const permanentErrors: string[] = [];
-    if (!persona.permanentAddress.division) {
-      permanentErrors.push('Permanent division is required.');
-    }
-    if (!persona.permanentAddress.district) {
-      permanentErrors.push('Permanent district is required.');
-    }
-    if (!persona.permanentAddress.thana) {
-      permanentErrors.push('Permanent thana is required.');
-    }
-    if (!persona.permanentAddress.addressLine) {
-      permanentErrors.push('Permanent address is required.');
-    }
-
-    const errors: { presentAddress?: string[]; permanentAddress?: string[] } = {};
-    if (presentErrors.length) {
-      errors.presentAddress = presentErrors;
-    }
-    if (permanentErrors.length) {
-      errors.permanentAddress = permanentErrors;
-    }
-    this.setPersonaAddressErrors(persona.id, errors);
-    return !presentErrors.length && !permanentErrors.length;
+    this.clearPersonaAddressErrors(persona.id);
+    return true;
   }
 
   private validateAllPersonas(): boolean {
