@@ -46,11 +46,12 @@ export class LomsSecurityApplicationPageComponent implements OnInit {
 
   stepTitles: string[] = [
     'Application Information',
+    'Document Information',
     'Demographic Information',
     'Product Information',
-    'Financial Information',
     'Security Information',
-    'Document Information',
+    'Financial Information',
+    'Financial Assessment',
     'Preview'
   ];
 
@@ -138,6 +139,9 @@ export class LomsSecurityApplicationPageComponent implements OnInit {
   }
 
   getStepCircleClasses(index: number): string[] {
+    if (index === 1) {
+      return ['hidden'];
+    }
     const isCompleted = this.completedSteps.includes(index);
     const isDraft = this.draftSteps.includes(index);
     const isCurrent = index === this.currentStep;
@@ -235,18 +239,13 @@ export class LomsSecurityApplicationPageComponent implements OnInit {
       return;
     }
 
-    if (index === 1) {
+    if (index === 1 || index === 2) {
       this.router.navigate(['/loms', 'demographic-application', 'application']);
       return;
     }
 
-    if (index === 2) {
-      this.router.navigate(['/loms', 'product-application', 'application']);
-      return;
-    }
-
     if (index === 3) {
-      this.router.navigate(['/loms', 'financial-application', 'application']);
+      this.router.navigate(['/loms', 'product-application', 'application']);
       return;
     }
 
@@ -256,11 +255,16 @@ export class LomsSecurityApplicationPageComponent implements OnInit {
     }
 
     if (index === 5) {
-      this.router.navigate(['/loms', 'document-application', 'application']);
+      this.router.navigate(['/loms', 'financial-application', 'application']);
       return;
     }
 
     if (index === 6) {
+      this.router.navigate(['/loms', 'financial-assessment', 'application']);
+      return;
+    }
+
+    if (index === 7) {
       this.saveFormToStorage();
       this.router.navigate(['/loms', 'application-preview']);
     }
@@ -351,12 +355,12 @@ export class LomsSecurityApplicationPageComponent implements OnInit {
       securities: this.form.securities.map(entry => ({ ...entry }))
     };
     this.saveFormToStorage();
-    this.router.navigate(['/loms', 'document-application', 'application']);
+    this.router.navigate(['/loms', 'financial-application', 'application']);
   }
 
   goBackToFinancial(): void {
     this.saveAsDraft();
-    this.router.navigate(['/loms', 'financial-application', 'application']);
+    this.router.navigate(['/loms', 'product-application', 'application']);
   }
 
   exportApplicationData(): SecurityApplicationForm {

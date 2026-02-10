@@ -8,6 +8,8 @@ import { LomsFinancialApplicationPageComponent } from '../pages/loms/financial-a
 import { LomsSecurityApplicationPageComponent } from '../pages/loms/security-application/security-application.page';
 import { LomsDocumentApplicationPageComponent } from '../pages/loms/document-application/document-application.page';
 import { LomsApplicationPreviewPageComponent } from '../pages/loms/application-preview/application-preview.page';
+import { LomsApplicationSubmissionPageComponent } from '../pages/loms/application-submission/application-submission.page';
+import { LomsApplicationCommunicationPageComponent } from '../pages/loms/application-communication/application-communication.page';
 import { LomsFinancialAssessmentPageComponent } from '../pages/loms/financial-assessment/financial-assessment.page';
 import { CpvDashboardPageComponent } from '../pages/loms/cpv/dashboard/cpv-dashboard.page';
 import { CpvInitiationAssignPageComponent } from '../pages/loms/cpv/initiation-assign/cpv-initiation-assign.page';
@@ -58,6 +60,8 @@ import { LomsCardOperationPageComponent } from '../pages/loms/card-operation/car
 import { LomsCardOperationDetailsPageComponent } from '../pages/loms/card-operation/card-operation-details.page';
 import { LomsCardIssuanceProcessingPageComponent } from '../pages/loms/card-operation/card-operation-issuance-processing.page';
 import { LomsDashboardConfigurationPageComponent } from '../pages/loms/dashboard-configuration/dashboard-configuration.page';
+import { LomsDatFileGenerationPageComponent } from '../pages/loms/card-operation/dat-file-generation/dat-file-generation.page';
+import { LomsCardDisbursementPageComponent } from '../pages/loms/card-operation/card-disbursement/card-disbursement.page';
 
 export const lomsRoutes: Routes = [
   {
@@ -99,6 +103,14 @@ export const lomsRoutes: Routes = [
   {
     path: 'application-preview',
     component: LomsApplicationPreviewPageComponent,
+  },
+  {
+    path: 'application-submission',
+    component: LomsApplicationSubmissionPageComponent,
+  },
+  {
+    path: 'application-communication',
+    component: LomsApplicationCommunicationPageComponent,
   },
   {
     path: 'financial-assessment/application',
@@ -243,6 +255,14 @@ export const lomsRoutes: Routes = [
   {
     path: 'card-operation/issuance-processing',
     component: LomsCardIssuanceProcessingPageComponent,
+  },
+  {
+    path: 'card-operation/card-disbursement',
+    component: LomsCardDisbursementPageComponent,
+  },
+  {
+    path: 'card-operation/dat-file-generation',
+    component: LomsDatFileGenerationPageComponent,
   },
   {
     path: 'card-operation/application/:id',

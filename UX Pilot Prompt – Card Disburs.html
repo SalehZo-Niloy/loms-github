@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Disbursement Record</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;}</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'bank-blue': '#1e3a8a',
+                        'bank-blue-light': '#3b82f6',
+                        'bank-gray': '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+<header id="header" class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
+    <div class="flex items-center justify-between px-8 py-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-bank-blue rounded-lg flex items-center justify-center">
+                <i class="fa-solid fa-credit-card text-white text-lg"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-semibold text-gray-900">Loan Origination and Monitoring System</h1>
+                <p class="text-sm text-gray-500">Card Disbursement Record</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-6">
+            <div class="text-right">
+                <p class="text-sm font-medium text-gray-900">Sarah Mitchell</p>
+                <p class="text-xs text-gray-500">Card Operations</p>
+            </div>
+            <div class="flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-lg">
+                <i class="fa-regular fa-clock text-gray-600"></i>
+                <span class="text-sm font-medium text-gray-700" id="sessionTime">00:24:15</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="pt-24 px-8 pb-8">
+    <section id="context-section" class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+        <div class="grid grid-cols-3 gap-6">
+            <div>
+                <p class="text-xs text-gray-500 mb-1">Business Date</p>
+                <p class="text-sm font-semibold text-gray-900">January 15, 2025</p>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 mb-1">Card Network</p>
+                <p class="text-sm font-semibold text-gray-900">Visa</p>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500 mb-1">Issuing BIN</p>
+                <p class="text-sm font-semibold text-gray-900">456789</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="filter-section" class="bg-white rounded-lg border border-gray-200 mb-6">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 cursor-pointer" onclick="toggleFilter()">
+            <h2 class="text-base font-semibold text-gray-900">Search & Filter</h2>
+            <i class="fa-solid fa-chevron-down text-gray-500 transition-transform" id="filterIcon"></i>
+        </div>
+        <div id="filterContent" class="px-6 py-5">
+            <div class="grid grid-cols-4 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date Type</label>
+                    <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm">
+                        <option>Approval Date</option>
+                        <option selected>Issuance Date</option>
+                        <option>Dispatch Date</option>
+                        <option>Delivery Date</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">From Date</label>
+                    <input type="date" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm" value="2025-01-01">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">To Date</label>
+                    <input type="date" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm" value="2025-01-15">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Disbursement Status</label>
+                    <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm">
+                        <option>All</option>
+                        <option>Not Dispatched</option>
+                        <option>Dispatched</option>
+                        <option>Delivered</option>
+                        <option>Not Delivered</option>
+                        <option>Returned</option>
+                        <option>Re-Dispatched</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-cols-4 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Mode</label>
+                    <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm">
+                        <option>All</option>
+                        <option>Branch Pickup</option>
+                        <option>Courier</option>
+                        <option>Postal Service</option>
+                        <option>Hand Delivery</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Product Type</label>
+                    <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm">
+                        <option>All</option>
+                        <option>Classic</option>
+                        <option>Gold</option>
+                        <option>Platinum</option>
+                        <option>Corporate</option>
+                        <option>Prepaid</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Issuance Channel</label>
+                    <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm">
+                        <option>All</option>
+                        <option>Branch</option>
+                        <option>Online</option>
+                        <option>Call Center</option>
+                        <option>Campaign</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Branch / Region</label>
+                    <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm">
+                        <option>All Branches</option>
+                        <option>Head Office</option>
+                        <option>Dhaka North</option>
+                        <option>Dhaka South</option>
+                        <option>Chattogram</option>
+                        <option>Sylhet</option>
+                        <option>Khulna</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex space-x-3">
+                <button class="px-6 py-2.5 bg-bank-blue text-white rounded-lg font-medium hover:bg-blue-900 transition-colors text-sm">
+                    <i class="fa-solid fa-search mr-2"></i>Search
+                </button>
+                <button class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm">
+                    <i class="fa-solid fa-rotate-right mr-2"></i>Reset
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="bulk-upload-section" class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-base font-semibold text-gray-900 mb-1">Bulk Card Data Upload</h2>
+                <p class="text-sm text-gray-500">Upload Excel file to map Client ID and Card Number to Application IDs</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="#" class="text-sm text-bank-blue hover:underline flex items-center">
+                    <i class="fa-solid fa-download mr-2"></i>Download Sample Template
+                </a>
+                <label for="excelUpload" class="px-6 py-2.5 bg-bank-blue text-white rounded-lg font-medium hover:bg-blue-900 transition-colors text-sm cursor-pointer">
+                    <i class="fa-solid fa-upload mr-2"></i>Upload Excel File
+                </label>
+                <input type="file" id="excelUpload" accept=".xlsx,.xls" class="hidden" onchange="handleFileUpload(event)">
+            </div>
+        </div>
+        <div id="uploadStatus" class="hidden mt-4 p-4 rounded-lg">
+            <div class="flex items-center">
+                <i class="fa-solid fa-circle-check text-green-600 mr-2"></i>
+                <span class="text-sm font-medium text-green-800">Successfully uploaded and mapped <span id="uploadCount">0</span> records</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="disbursement-list-section" class="bg-white rounded-lg border border-gray-200 mb-24">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-base font-semibold text-gray-900">Card Disbursement List</h2>
+                    <p class="text-sm text-gray-500 mt-1">142 card records found | <span id="selectedCount">0</span> selected</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 bg-gray-50 p-4 rounded-lg">
+                <div class="flex-1">
+                    <label class="block text-xs font-medium text-gray-700 mb-2">Disbursement Status</label>
+                    <select id="bulkStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm">
+                        <option value="">Select Status</option>
+                        <option>Not Dispatched</option>
+                        <option>Dispatched</option>
+                        <option>Delivered</option>
+                        <option>Not Delivered</option>
+                        <option>Returned</option>
+                        <option>Re-Dispatched</option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-xs font-medium text-gray-700 mb-2">Delivery Mode</label>
+                    <select id="bulkMode" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light text-sm">
+                        <option value="">Select Mode</option>
+                        <option>Branch Pickup</option>
+                        <option>Courier</option>
+                        <option>Postal Service</option>
+                        <option>Hand Delivery</option>
+                    </select>
+                </div>
+                <div class="pt-6">
+                    <button id="applyBulkBtn" onclick="showConfirmModal()" disabled class="px-6 py-2 bg-gray-300 text-gray-500 rounded-lg font-medium cursor-not-allowed text-sm">
+                        <i class="fa-solid fa-check mr-2"></i>Apply Status
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full" id="disbursementTable">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-4 py-3 text-left">
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" class="w-4 h-4 text-bank-blue border-gray-300 rounded focus:ring-bank-blue-light">
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Application ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase hidden" id="clientIdHeader">Client ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Customer Name</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Card Number</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Network</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Product</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Approval</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Issuance</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Delivery</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Disbursement</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Card Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="showDetails('APP-2025-001234')">
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                            <input type="checkbox" class="w-4 h-4 text-bank-blue border-gray-300 rounded focus:ring-bank-blue-light" onclick="toggleRowSelection('row1')">
+                        </td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">APP-2025-001234</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Michael Thompson</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 font-mono">**** 4521</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Visa</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Gold</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">Jan 10</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">Jan 12</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Courier</td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Delivered</span></td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Issued</span></td>
+                        <td class="px-4 py-3">
+                            <div class="relative">
+                                <button class="p-2 text-gray-600 hover:text-gray-900" onclick="toggleActionMenu(event, 'menu1')">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                                <div id="menu1" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                                    <button onclick="showDetails('APP-2025-001234')" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">View Details</button>
+                                    <button onclick="showUpdateModal('APP-2025-001234')" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Update Status</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="showDetails('APP-2025-001235')">
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                            <input type="checkbox" class="w-4 h-4 text-bank-blue border-gray-300 rounded focus:ring-bank-blue-light" onclick="toggleRowSelection('row2')">
+                        </td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">APP-2025-001235</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Jennifer Martinez</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 font-mono">**** 8932</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Visa</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Platinum</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">Jan 11</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">Jan 13</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Branch Pickup</td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Dispatched</span></td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Issued</span></td>
+                        <td class="px-4 py-3">
+                            <div class="relative">
+                                <button class="p-2 text-gray-600 hover:text-gray-900" onclick="toggleActionMenu(event, 'menu2')">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                                <div id="menu2" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                                    <button onclick="showDetails('APP-2025-001235')" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">View Details</button>
+                                    <button onclick="showUpdateModal('APP-2025-001235')" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Update Status</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="showDetails('APP-2025-001236')">
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                            <input type="checkbox" class="w-4 h-4 text-bank-blue border-gray-300 rounded focus:ring-bank-blue-light" onclick="toggleRowSelection('row3')">
+                        </td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">APP-2025-001236</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">David Chen</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 font-mono">**** 2145</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Visa</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Classic</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">Jan 09</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">Jan 11</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Postal Service</td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Not Dispatched</span></td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Approved</span></td>
+                        <td class="px-4 py-3">
+                            <div class="relative">
+                                <button class="p-2 text-gray-600 hover:text-gray-900" onclick="toggleActionMenu(event, 'menu3')">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                                <div id="menu3" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                                    <button onclick="showDetails('APP-2025-001236')" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">View Details</button>
+                                    <button onclick="showUpdateModal('APP-2025-001236')" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Update Status</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="showDetails('APP-2025-001237')">
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                            <input type="checkbox" class="w-4 h-4 text-bank-blue border-gray-300 rounded focus:ring-bank-blue-light" onclick="toggleRowSelection('row4')">
+                        </td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">APP-2025-001237</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Emily Rodriguez</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 font-mono">**** 7823</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Visa</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Gold</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">Jan 12</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">Jan 14</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">Courier</td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Not Delivered</span></td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Issued</span></td>
+                        <td class="px-4 py-3">
+                            <div class="relative">
+                                <button class="p-2 text-gray-600 hover:text-gray-900" onclick="toggleActionMenu(event, 'menu4')">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                                <div id="menu4" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                                    <button onclick="showDetails('APP-2025-001237')" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">View Details</button>
+                                    <button onclick="showUpdateModal('APP-2025-001237')" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Update Status</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <p class="text-sm text-gray-600">Showing 1 to 4 of 142 records</p>
+            <div class="flex items-center space-x-2">
+                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">Previous</button>
+                <button class="px-3 py-2 bg-bank-blue text-white rounded-lg text-sm">1</button>
+                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">2</button>
+                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">3</button>
+                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">Next</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div id="actionBar" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-8 py-4">
+    <div class="flex items-center justify-between">
+        <button class="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+            <i class="fa-solid fa-arrow-left mr-2"></i>Back to Dashboard
+        </button>
+    </div>
+</div>
+
+<div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg w-[800px] max-h-[700px] overflow-y-auto">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900">Disbursement Details</h3>
+                <p class="text-sm text-gray-500 mt-1" id="detailsAppId">APP-2025-001234</p>
+            </div>
+            <button onclick="closeModal('detailsModal')" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6 space-y-6">
+            <div>
+                <h4 class="text-sm font-semibold text-gray-900 mb-3">Application Information</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Application ID</p>
+                        <p class="text-sm font-medium text-gray-900">APP-2025-001234</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Product Type</p>
+                        <p class="text-sm font-medium text-gray-900">Gold</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Card Network</p>
+                        <p class="text-sm font-medium text-gray-900">Visa</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold text-gray-900 mb-3">Customer Information</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Customer Name</p>
+                        <p class="text-sm font-medium text-gray-900">Michael Thompson</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Mobile Number</p>
+                        <p class="text-sm font-medium text-gray-900">+1 (555) 123-4567</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold text-gray-900 mb-3">Card Information</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Card Number</p>
+                        <p class="text-sm font-medium text-gray-900 font-mono">**** 4521</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Issuance Date</p>
+                        <p class="text-sm font-medium text-gray-900">January 12, 2025</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold text-gray-900 mb-3">Disbursement Information</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Delivery Mode</p>
+                        <p class="text-sm font-medium text-gray-900">Courier</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Tracking Reference</p>
+                        <p class="text-sm font-medium text-gray-900">DHL123456789</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Dispatch Date</p>
+                        <p class="text-sm font-medium text-gray-900">January 13, 2025</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Delivery Date</p>
+                        <p class="text-sm font-medium text-gray-900">January 14, 2025</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Disbursement Status</p>
+                        <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Delivered</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
+            <button onclick="closeModal('detailsModal')" class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="updateModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg w-[600px]">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900">Update Disbursement Status</h3>
+                <p class="text-sm text-gray-500 mt-1" id="updateAppId">APP-2025-001234</p>
+            </div>
+            <button onclick="closeModal('updateModal')" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        <div class="p-6 space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Disbursement Status</label>
+                <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light">
+                    <option>Not Dispatched</option>
+                    <option>Dispatched</option>
+                    <option>Delivered</option>
+                    <option>Not Delivered</option>
+                    <option>Returned</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Mode</label>
+                <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light">
+                    <option>Branch Pickup</option>
+                    <option>Courier</option>
+                    <option>Postal Service</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Courier / Tracking Reference</label>
+                <input type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light" placeholder="Enter tracking reference">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
+                <textarea rows="3" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bank-blue-light" placeholder="Enter remarks (optional)"></textarea>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+            <button onclick="closeModal('updateModal')" class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                Cancel
+            </button>
+            <button class="px-6 py-2.5 bg-bank-blue text-white rounded-lg font-medium hover:bg-blue-900 transition-colors">
+                Save
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg w-[400px] p-6">
+        <div class="text-center">
+            <i class="fa-solid fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Confirm Bulk Update</h3>
+            <p class="text-gray-600 mb-6">Are you sure you want to apply the selected status to all selected records?</p>
+            <div class="flex justify-center space-x-3">
+                <button onclick="closeModal('confirmModal')" class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                    Cancel
+                </button>
+                <button onclick="applyBulkUpdate()" class="px-6 py-2.5 bg-bank-blue text-white rounded-lg font-medium hover:bg-blue-900 transition-colors">
+                    Apply
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleFilter() {
+        const content = document.getElementById('filterContent');
+        const icon = document.getElementById('filterIcon');
+        content.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+    }
+
+    function toggleActionMenu(event, menuId) {
+        event.stopPropagation();
+        const menu = document.getElementById(menuId);
+        document.querySelectorAll('[id^="menu"]').forEach(m => {
+            if (m.id !== menuId) m.classList.add('hidden');
+        });
+        menu.classList.toggle('hidden');
+    }
+
+    function showDetails(appId) {
+        document.getElementById('detailsAppId').textContent = appId;
+        document.getElementById('detailsModal').classList.remove('hidden');
+    }
+
+    function showUpdateModal(appId) {
+        document.getElementById('updateAppId').textContent = appId;
+        document.getElementById('updateModal').classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+
+    document.addEventListener('click', function() {
+        document.querySelectorAll('[id^="menu"]').forEach(m => m.classList.add('hidden'));
+    });
+
+    function toggleSelectAll() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][onclick*="toggleRowSelection"]');
+        const selectAll = document.getElementById('selectAll');
+        const selectedCount = document.getElementById('selectedCount');
+        
+        if (selectAll.checked) {
+            checkboxes.forEach(checkbox => checkbox.checked = true);
+            selectedCount.textContent = checkboxes.length;
+        } else {
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+            selectedCount.textContent = '0';
+        }
+        
+        updateBulkButtonState();
+    }
+
+    function toggleRowSelection(rowId) {
+        const row = document.getElementById(rowId);
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][onclick*="toggleRowSelection"]');
+        const selectAll = document.getElementById('selectAll');
+        const selectedCount = document.getElementById('selectedCount');
+        
+        checkboxes.forEach(checkbox => checkbox.checked = false);
+        
+        const selected = document.querySelectorAll(`input[type="checkbox"][onclick*="toggleRowSelection"]:checked`);
+        selectedCount.textContent = selected.length;
+        
+        updateBulkButtonState();
+    }
+
+    function updateBulkButtonState() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][onclick*="toggleRowSelection"]:checked');
+        const selectAll = document.getElementById('selectAll');
+        const applyBtn = document.getElementById('applyBulkBtn');
+        
+        if (checkboxes.length > 0) {
+            applyBtn.disabled = false;
+            applyBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+            applyBtn.classList.add('bg-bank-blue', 'text-white');
+        } else {
+            applyBtn.disabled = true;
+            applyBtn.classList.remove('bg-bank-blue', 'text-white');
+            applyBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+        }
+    }
+
+    function showConfirmModal() {
+        document.getElementById('confirmModal').classList.remove('hidden');
+    }
+
+    function applyBulkUpdate() {
+        const selected = document.querySelectorAll('input[type="checkbox"][onclick*="toggleRowSelection"]:checked');
+        const bulkStatus = document.getElementById('bulkStatus').value;
+        const bulkMode = document.getElementById('bulkMode').value;
+        
+        if (selected.length === 0) {
+            alert('Please select at least one record to update.');
+            return;
+        }
+        
+        if (!bulkStatus) {
+            alert('Please select a bulk disbursement status.');
+            return;
+        }
+        
+        if (!bulkMode) {
+            alert('Please select a bulk delivery mode.');
+            return;
+        }
+        
+        // Simulate bulk update
+        selected.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+            const statusCell = row.querySelector('td:nth-child(11)');
+            const deliveryCell = row.querySelector('td:nth-child(10)');
+            
+            if (bulkStatus === 'Not Dispatched') {
+                statusCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Not Dispatched</span>';
+            } else if (bulkStatus === 'Dispatched') {
+                statusCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Dispatched</span>';
+            } else if (bulkStatus === 'Delivered') {
+                statusCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Delivered</span>';
+            } else if (bulkStatus === 'Not Delivered') {
+                statusCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Not Delivered</span>';
+            } else if (bulkStatus === 'Returned') {
+                statusCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">Returned</span>';
+            }
+            
+            if (bulkMode === 'Branch Pickup') {
+                deliveryCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Branch Pickup</span>';
+            } else if (bulkMode === 'Courier') {
+                deliveryCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Courier</span>';
+            } else if (bulkMode === 'Postal Service') {
+                deliveryCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Postal Service</span>';
+            } else if (bulkMode === 'Hand Delivery') {
+                deliveryCell.innerHTML = '<span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">Hand Delivery</span>';
+            }
+        });
+        
+        alert(`Successfully updated ${selected.length} records with status "${bulkStatus}" and delivery mode "${bulkMode}".`);
+        
+        // Reset bulk update form
+        document.getElementById('bulkStatus').value = '';
+        document.getElementById('bulkMode').value = '';
+        
+        // Update selected count
+        document.getElementById('selectedCount').textContent = '0';
+        
+        // Update bulk button state
+        updateBulkButtonState();
+        
+        // Close confirm modal
+        document.getElementById('confirmModal').classList.add('hidden');
+    }
+
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = e.target.result;
+            // Simulate file processing
+            document.getElementById('uploadStatus').classList.remove('hidden');
+            document.getElementById('uploadCount').textContent = '100';
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    let sessionSeconds = 1455;
+    setInterval(function() {
+        sessionSeconds++;
+        const hours = Math.floor(sessionSeconds / 3600);
+        const minutes = Math.floor((sessionSeconds % 3600) / 60);
+        const seconds = sessionSeconds % 60;
+        document.getElementById('sessionTime').textContent = 
+            String(hours).padStart(2, '0') + ':' + 
+            String(minutes).padStart(2, '0') + ':' + 
+            String(seconds).padStart(2, '0');
+    }, 1000);
+</script>
+
+</body>
+</html>

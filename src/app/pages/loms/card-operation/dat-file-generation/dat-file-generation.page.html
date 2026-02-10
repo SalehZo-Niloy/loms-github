@@ -1,0 +1,420 @@
+<app-loms-layout organisationName="Loan Origination and Monitoring System" solutionName="LOMS"
+  breadcrumb="DAT File Generation" basePath="/loms">
+  <div class="px-2 py-4 min-h-screen space-y-6 w-full flex-1 max-w-screen-2xl mx-auto">
+    <section class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+      <div>
+        <h1 class="text-xl font-semibold text-slate-900">
+          DAT File Generation
+        </h1>
+        <p class="text-xs text-slate-500">
+          Generate DAT files for eligible card issuance applications.
+        </p>
+      </div>
+      <!-- <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          User: Sarah Mitchell
+        </span>
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          Role: Card Operations
+        </span>
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1">
+          Branch: Head Office
+        </span>
+      </div> -->
+    </section>
+
+    <section class="rounded-md border border-slate-200 bg-white px-4 py-4 text-xs shadow-sm space-y-3">
+      <div class="grid gap-4 md:grid-cols-3">
+        <div>
+          <div class="text-[11px] font-semibold uppercase text-slate-500">
+            Processing Date
+          </div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">
+            {{ processingDate }}
+          </div>
+        </div>
+        <div>
+          <div class="text-[11px] font-semibold uppercase text-slate-500">
+            Card Network
+          </div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">
+            {{ cardNetwork }}
+          </div>
+        </div>
+        <!-- <div>
+          <div class="text-[11px] font-semibold uppercase text-slate-500">
+            Issuing BIN
+          </div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">
+            {{ issuingBin }}
+          </div>
+        </div> -->
+        <div>
+          <div class="text-[11px] font-semibold uppercase text-slate-500">
+            DAT Version
+          </div>
+          <div class="mt-1 text-sm font-semibold text-slate-900">
+            {{ datVersion }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-md border border-slate-200 bg-white text-xs shadow-sm">
+      <button type="button" class="flex w-full items-center justify-between px-4 py-3 text-left">
+        <span class="text-sm font-semibold text-slate-900">
+          Search &amp; Eligibility Filter
+        </span>
+      </button>
+      <div class="border-t border-slate-200 px-4 py-4 space-y-4">
+        <div class="grid gap-4 md:grid-cols-4">
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Date Type
+            </div>
+            <select
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="dateType">
+              <option>Approval Date</option>
+              <option>Issuance Date</option>
+            </select>
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              From Date
+            </div>
+            <input type="date"
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="fromDate" />
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              To Date
+            </div>
+            <input type="date"
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="toDate" />
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Card Status
+            </div>
+            <select
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="cardStatus">
+              <option>All</option>
+              <option>Approved</option>
+              <option>Issued</option>
+              <option>Activated</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-4">
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Card Network
+            </div>
+            <select
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="networkFilter">
+              <option>All</option>
+              <option>Visa</option>
+              <option>MasterCard</option>
+              <option>UnionPay</option>
+            </select>
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Product Type
+            </div>
+            <select
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="productType">
+              <option>All</option>
+              <option>Classic</option>
+              <option>Gold</option>
+              <option>Platinum</option>
+              <option>Corporate</option>
+            </select>
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Customer Type
+            </div>
+            <select
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="customerType">
+              <option>All</option>
+              <option>Individual</option>
+              <option>Corporate</option>
+            </select>
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Issuance Channel
+            </div>
+            <select
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="issuanceChannel">
+              <option>All</option>
+              <option>Branch</option>
+              <option>Online</option>
+              <option>Call Center</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-4">
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Branch / Region
+            </div>
+            <select
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="branchRegion">
+              <option>All Branches</option>
+              <option>Paltan</option>
+              <option>Karwan Bazar</option>
+              <option>Motijhil</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 justify-end">
+          <button type="button"
+            class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-[11px] font-semibold text-white shadow-sm hover:bg-blue-700"
+            (click)="onSearch()">
+            Search
+          </button>
+          <button type="button"
+            class="inline-flex items-center rounded-md border border-slate-200 bg-white px-4 py-2 text-[11px] font-medium text-slate-700 hover:bg-slate-50"
+            (click)="onReset()">
+            Reset
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-md border border-slate-200 bg-white text-xs shadow-sm">
+      <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+        <div>
+          <h2 class="text-sm font-semibold text-slate-900">
+            Eligible Application List
+          </h2>
+          <p class="mt-0.5 text-[11px] text-slate-500">
+            {{ totalRecords }} applications found |
+            <span class="font-semibold text-slate-800">
+              {{ selectedCount }} selected
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-xs">
+          <thead class="bg-slate-50 border-b border-slate-200">
+            <tr class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              <th class="px-4 py-2">
+                <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-200"
+                  [checked]="isAllSelected()" (change)="toggleSelectAll($event.target.checked)" />
+              </th>
+              <th class="px-4 py-2">
+                Application ID
+              </th>
+              <th class="px-4 py-2">
+                Customer Name
+              </th>
+              <th class="px-4 py-2">
+                Card Network
+              </th>
+              <th class="px-4 py-2">
+                Product Type
+              </th>
+              <th class="px-4 py-2">
+                Approval Date
+              </th>
+              <th class="px-4 py-2">
+                Issuance Date
+              </th>
+              <th class="px-4 py-2">
+                Credit Limit
+              </th>
+              <th class="px-4 py-2">
+                Card Status
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 bg-white">
+            <tr *ngFor="let row of applications" class="hover:bg-slate-50">
+              <td class="px-4 py-2 align-top">
+                <input type="checkbox" class="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-200"
+                  [checked]="selectedIds.has(row.id)" (change)="toggleRowSelection(row.id, $event.target.checked)" />
+              </td>
+              <td class="px-4 py-2 text-xs font-semibold text-slate-900">
+                {{ row.id }}
+              </td>
+              <td class="px-4 py-2 text-xs text-slate-900">
+                {{ row.customerName }}
+              </td>
+              <td class="px-4 py-2 text-xs text-slate-900">
+                {{ row.cardNetwork }}
+              </td>
+              <td class="px-4 py-2 text-xs text-slate-900">
+                {{ row.productType }}
+              </td>
+              <td class="px-4 py-2 text-xs text-slate-600">
+                {{ row.approvalDate }}
+              </td>
+              <td class="px-4 py-2 text-xs text-slate-600">
+                {{ row.issuanceDate }}
+              </td>
+              <td class="px-4 py-2 text-xs font-semibold text-slate-900">
+                {{ row.creditLimit }}
+              </td>
+              <td class="px-4 py-2">
+                <span class="inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium" [ngClass]="
+                    row.status === 'Issued'
+                      ? 'bg-emerald-50 text-emerald-700'
+                      : 'bg-blue-50 text-blue-700'
+                  ">
+                  {{ row.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex items-center justify-between border-t border-slate-200 px-4 py-3">
+        <p class="text-[11px] text-slate-500">
+          Showing 1 to {{ totalRecords }} of {{ totalRecords }} records
+        </p>
+      </div>
+    </section>
+
+    <section class="rounded-md border border-slate-200 bg-white text-xs shadow-sm">
+      <div class="border-b border-slate-200 px-4 py-3">
+        <h2 class="text-sm font-semibold text-slate-900">
+          DAT File Configuration
+        </h2>
+      </div>
+      <div class="px-4 py-4 space-y-4">
+        <div class="grid gap-4 md:grid-cols-3">
+          <!-- <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Filing Mode
+            </div>
+            <div class="flex flex-wrap gap-4">
+              <label class="inline-flex items-center gap-2 text-[11px] text-slate-700">
+                <input
+                  type="radio"
+                  class="h-3.5 w-3.5 border-slate-300 text-blue-600 focus:ring-blue-200"
+                  name="filingMode"
+                  [value]="'single'"
+                  [(ngModel)]="filingMode"
+                />
+                <span>Single Application</span>
+              </label>
+              <label class="inline-flex items-center gap-2 text-[11px] text-slate-700">
+                <input
+                  type="radio"
+                  class="h-3.5 w-3.5 border-slate-300 text-blue-600 focus:ring-blue-200"
+                  name="filingMode"
+                  [value]="'batch'"
+                  [(ngModel)]="filingMode"
+                />
+                <span>Batch File</span>
+              </label>
+            </div>
+          </div> -->
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Batch Reference Number
+            </div>
+            <input type="text"
+              class="h-9 w-full rounded-md border border-slate-200 bg-slate-50 px-3 text-[13px] text-slate-700 outline-none ring-0"
+              [(ngModel)]="batchReferenceNumber" readonly />
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              File Naming Convention
+            </div>
+            <select
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="fileNamingConvention">
+              <option>System Generated</option>
+              <option>Date + BIN + Sequence</option>
+            </select>
+          </div>
+          <div>
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              File Name
+            </div>
+            <input type="text"
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] text-slate-700 outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              [(ngModel)]="fileName" />
+          </div>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 items-end">
+          <div class="md:col-span-1">
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              File Format
+            </div>
+            <input type="text"
+              class="h-9 w-full rounded-md border border-slate-200 bg-slate-50 px-3 text-[13px] text-slate-700 outline-none ring-0"
+              [(ngModel)]="fileFormat" readonly />
+          </div>
+          <div class="md:col-span-1">
+            <div class="text-[11px] font-semibold uppercase text-slate-500 mb-1">
+              Record Count
+            </div>
+            <div class="rounded-md border border-blue-100 bg-blue-50 px-3 py-2">
+              <div class="text-[11px] text-blue-700">
+                Selected records
+              </div>
+              <div class="text-lg font-semibold text-blue-900">
+                {{ recordCount }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full mt-2">
+          <div class="flex items-end justify-end">
+            <button type="button"
+              class="inline-flex items-center rounded-md px-4 py-2 text-[11px] font-semibold text-white shadow-sm"
+              [ngClass]="
+                canExport
+                  ? 'bg-blue-600 hover:bg-blue-700'
+                  : 'bg-slate-300 cursor-not-allowed'
+              "
+              [disabled]="!canExport"
+              (click)="onExportDatFile()">
+              <span class="mr-2">
+                Export DAT File
+              </span>
+              <span class="text-[10px]">
+                ({{ recordCount }} records)
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- <section
+      class="sticky bottom-0 z-10 rounded-t-md border border-slate-200 bg-white px-4 py-3 text-xs shadow-[0_-4px_6px_rgba(15,23,42,0.06)]"
+    >
+      <div class="flex items-center justify-between gap-3">
+        <button
+          type="button"
+          class="inline-flex items-center rounded-md border border-slate-200 bg-white px-4 py-2 text-[11px] font-medium text-slate-700 hover:bg-slate-50"
+          (click)="onBackToDashboard()"
+        >
+          <span class="mr-1 text-xs">←</span>
+          <span>Back to dashboard</span>
+        </button>
+      
+      </div>
+    </section> -->
+  </div>
+</app-loms-layout>

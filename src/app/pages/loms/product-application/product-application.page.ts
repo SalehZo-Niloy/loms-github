@@ -43,15 +43,16 @@ export class LomsProductApplicationPageComponent {
 
   stepTitles: string[] = [
     'Application Information',
+    'Document Information',
     'Demographic Information',
     'Product Information',
-    'Financial Information',
     'Security Information',
-    'Document Information',
+    'Financial Information',
+    'Financial Assessment',
     'Preview'
   ];
 
-  currentStep = 2;
+  currentStep = 3;
   completedSteps: number[] = [];
   draftSteps: number[] = [];
   private readonly progressStorageKey = 'lomsCompletedSteps';
@@ -123,6 +124,9 @@ export class LomsProductApplicationPageComponent {
   }
 
   getStepCircleClasses(index: number): string[] {
+    if (index === 1) {
+      return ['hidden'];
+    }
     const isCompleted = this.completedSteps.includes(index);
     const isDraft = this.draftSteps.includes(index);
     const isCurrent = index === this.currentStep;
@@ -220,18 +224,13 @@ export class LomsProductApplicationPageComponent {
       return;
     }
 
-    if (index === 1) {
+    if (index === 1 || index === 2) {
       this.router.navigate(['/loms', 'demographic-application', 'application']);
       return;
     }
 
-    if (index === 2) {
-      this.currentStep = 2;
-      return;
-    }
-
     if (index === 3) {
-      this.router.navigate(['/loms', 'financial-application', 'application']);
+      this.currentStep = 3;
       return;
     }
 
@@ -241,11 +240,16 @@ export class LomsProductApplicationPageComponent {
     }
 
     if (index === 5) {
-      this.router.navigate(['/loms', 'document-application', 'application']);
+      this.router.navigate(['/loms', 'financial-application', 'application']);
       return;
     }
 
     if (index === 6) {
+      this.router.navigate(['/loms', 'financial-assessment', 'application']);
+      return;
+    }
+
+    if (index === 7) {
       this.saveFormToStorage();
       this.router.navigate(['/loms', 'application-preview']);
     }
@@ -315,14 +319,7 @@ export class LomsProductApplicationPageComponent {
     }
     this.lastSubmittedApplication = { ...this.form };
     this.saveFormToStorage();
-    const amount = this.numericRequestedAmount;
-    if (amount > 0 && typeof window !== 'undefined') {
-      try {
-        window.sessionStorage.setItem('lomsRequestedAmount', String(amount));
-      } catch {
-      }
-    }
-    this.router.navigate(['/loms', 'financial-application', 'application']);
+    this.router.navigate(['/loms', 'security-application', 'application']);
   }
 
   goBackToDemographic(): void {

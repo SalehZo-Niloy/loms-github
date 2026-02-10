@@ -40,6 +40,23 @@ interface DemographicApplicationForm {
 
 type DemographicApplicationStepStatus = 'completed' | 'in-progress' | 'pending';
 
+type DocumentUploadStatus = 'pending' | 'uploaded' | 'failed';
+
+interface DocumentUploadEntry {
+  id: number;
+  typeValue: string;
+  typeLabel: string;
+  fileName: string;
+  fileSizeBytes: number;
+  status: DocumentUploadStatus;
+  uploadedAt: string | null;
+  description: string;
+}
+
+interface DocumentApplicationForm {
+  documents: DocumentUploadEntry[];
+}
+
 @Component({
   selector: 'app-loms-demographic-application-page',
   standalone: true,
@@ -60,20 +77,22 @@ export class LomsDemographicApplicationPageComponent {
 
   stepTitles: string[] = [
     'Application Information',
+    'Document Information',
     'Demographic Information',
     'Product Information',
-    'Financial Information',
     'Security Information',
-    'Document Information',
+    'Financial Information',
+    'Financial Assessment',
     'Preview'
   ];
 
-  currentStep = 1;
+  currentStep = 2;
   completedSteps: number[] = [];
   draftSteps: number[] = [];
   private readonly progressStorageKey = 'lomsCompletedSteps';
   private readonly draftStorageKey = 'lomsDraftSteps';
   private readonly formStorageKey = 'lomsDemographicForm';
+  private readonly documentFormStorageKey = 'lomsDocumentForm';
 
   personaTypeOptions = [
     { label: 'Primary Applicant', value: 'primary' },
@@ -176,9 +195,27 @@ export class LomsDemographicApplicationPageComponent {
   lastSavedDraft: DemographicApplicationForm | null = null;
   lastSubmittedApplication: DemographicApplicationForm | null = null;
 
+  documentForm: DocumentApplicationForm = {
+    documents: []
+  };
+
+  nextDocumentId = 1;
+
+  documentTypeOptions = [
+    { label: 'National ID (NID)', value: 'nid' },
+    { label: 'Photograph', value: 'photo' },
+    { label: 'Bank Statement', value: 'bank_statement' },
+    { label: 'Utility Bill', value: 'utility_bill' },
+    { label: 'Salary Certificate', value: 'salary_certificate' },
+    { label: 'Other Supporting Document', value: 'supporting' }
+  ];
+
+  selectedDocumentType = '';
+
   constructor(private router: Router, private alertService: AlertService) {
     this.loadCompletedStepsFromStorage();
     this.loadFormFromStorage();
+    this.loadDocumentFormFromStorage();
   }
 
   addPersona(): void {
@@ -290,6 +327,9 @@ export class LomsDemographicApplicationPageComponent {
   }
 
   getStepCircleClasses(index: number): string[] {
+    if (index === 1) {
+      return ['hidden'];
+    }
     const isCompleted = this.completedSteps.includes(index);
     const isDraft = this.draftSteps.includes(index);
     const isCurrent = index === this.currentStep;
@@ -387,18 +427,13 @@ export class LomsDemographicApplicationPageComponent {
       return;
     }
 
-    if (index === 1) {
-      this.currentStep = 1;
-      return;
-    }
-
-    if (index === 2) {
-      this.router.navigate(['/loms', 'product-application', 'application']);
+    if (index === 1 || index === 2) {
+      this.currentStep = 2;
       return;
     }
 
     if (index === 3) {
-      this.router.navigate(['/loms', 'financial-application', 'application']);
+      this.router.navigate(['/loms', 'product-application', 'application']);
       return;
     }
 
@@ -408,16 +443,17 @@ export class LomsDemographicApplicationPageComponent {
     }
 
     if (index === 5) {
-      this.router.navigate(['/loms', 'document-application', 'application'], {
-        queryParams: { step: 5 }
-      });
+      this.router.navigate(['/loms', 'financial-application', 'application']);
       return;
     }
 
     if (index === 6) {
-      this.router.navigate(['/loms', 'document-application', 'application'], {
-        queryParams: { step: 6 }
-      });
+      this.router.navigate(['/loms', 'financial-assessment', 'application']);
+      return;
+    }
+
+    if (index === 7) {
+      this.router.navigate(['/loms', 'application-preview']);
     }
   }
 
@@ -543,6 +579,7 @@ export class LomsDemographicApplicationPageComponent {
       this.saveCompletedStepsToStorage();
     }
     this.saveFormToStorage();
+    this.saveDocumentFormToStorage();
     this.router.navigate(['/loms', 'product-application', 'application']);
   }
 
@@ -551,6 +588,151 @@ export class LomsDemographicApplicationPageComponent {
       persona.permanentAddress = { ...persona.presentAddress };
       this.clearPersonaAddressErrors(persona.id, 'permanentAddress');
     }
+  }
+
+  removeDocument(id: number): void {
+    this.documentForm.documents = this.documentForm.documents.filter(d => d.id !== id);
+    this.saveDocumentFormToStorage();
+  }
+
+  onCommonFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!this.selectedDocumentType) {
+      input.value = '';
+      return;
+    }
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const newEntries = Array.from(input.files).map(file =>
+      this.createDocumentFromFile(file, this.selectedDocumentType)
+    );
+    this.documentForm.documents = [...this.documentForm.documents, ...newEntries];
+    input.value = '';
+    this.saveDocumentFormToStorage();
+  }
+
+  getUploadStatusLabel(entry: DocumentUploadEntry): string {
+    if (entry.status === 'uploaded') {
+      return 'Uploaded Successfully';
+    }
+    if (entry.status === 'failed') {
+      return 'Upload Failed';
+    }
+    return 'Pending Upload';
+  }
+
+  getUploadStatusDescription(entry: DocumentUploadEntry): string {
+    if (entry.status === 'uploaded') {
+      return 'File is uploaded and ready for review.';
+    }
+    if (entry.status === 'failed') {
+      return 'There was a problem with this upload.';
+    }
+    return 'No file uploaded yet.';
+  }
+
+  getFileSizeLabel(entry: DocumentUploadEntry): string {
+    if (!entry.fileSizeBytes) {
+      return '';
+    }
+    const kb = entry.fileSizeBytes / 1024;
+    if (kb < 1024) {
+      return kb.toFixed(1) + ' KB';
+    }
+    const mb = kb / 1024;
+    return mb.toFixed(1) + ' MB';
+  }
+
+  getUploadedAtLabel(entry: DocumentUploadEntry): string {
+    if (!entry.uploadedAt) {
+      return '';
+    }
+    const date = new Date(entry.uploadedAt);
+    if (Number.isNaN(date.getTime())) {
+      return '';
+    }
+    return date.toLocaleString();
+  }
+
+  getUploadProgress(entry: DocumentUploadEntry): number {
+    if (entry.status === 'uploaded') {
+      return 100;
+    }
+    if (entry.status === 'failed') {
+      return 0;
+    }
+    return 0;
+  }
+
+  private createDocumentFromFile(file: File, typeValue?: string): DocumentUploadEntry {
+    const selectedValue = typeValue || '';
+    const matched = this.documentTypeOptions.find(option => option.value === selectedValue);
+    const typeLabel = matched?.label || this.getTypeLabelFromFile(file.name);
+    return {
+      id: this.nextDocumentId++,
+      typeValue: selectedValue || 'general',
+      typeLabel,
+      fileName: file.name,
+      fileSizeBytes: file.size,
+      status: 'uploaded',
+      uploadedAt: new Date().toISOString(),
+      description: ''
+    };
+  }
+
+  private getTypeLabelFromFile(name: string): string {
+    const ext = name.split('.').pop()?.toLowerCase();
+    if (!ext) {
+      return 'Supporting Document';
+    }
+    if (ext === 'pdf') {
+      return 'PDF Document';
+    }
+    if (ext === 'jpg' || ext === 'jpeg' || ext === 'png') {
+      return 'Image Document';
+    }
+    return 'Supporting Document';
+  }
+
+  private cloneDocuments(entries: DocumentUploadEntry[]): DocumentUploadEntry[] {
+    return entries.map(entry => ({ ...entry }));
+  }
+
+  private loadDocumentFormFromStorage(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      const raw = window.sessionStorage.getItem(this.documentFormStorageKey);
+      if (!raw) {
+        return;
+      }
+      const parsed = JSON.parse(raw) as DocumentApplicationForm;
+      if (parsed && Array.isArray(parsed.documents)) {
+        this.documentForm = {
+          documents: this.cloneDocuments(parsed.documents)
+        };
+        const maxId = parsed.documents.reduce(
+          (max, entry) => (entry.id && entry.id > max ? entry.id : max),
+          0
+        );
+        this.nextDocumentId = maxId + 1;
+      }
+    } catch {}
+  }
+
+  private saveDocumentFormToStorage(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      const snapshot: DocumentApplicationForm = {
+        documents: this.cloneDocuments(this.documentForm.documents)
+      };
+      window.sessionStorage.setItem(this.documentFormStorageKey, JSON.stringify(snapshot));
+    } catch {}
   }
 
   exportApplicationData(): DemographicApplicationForm {

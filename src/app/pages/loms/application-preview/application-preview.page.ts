@@ -3,6 +3,9 @@ import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { LomsLayoutComponent } from '../../../styles/layout/loms-layout.component';
 import { UiButtonComponent } from '../../../components/ui/ui-button.component';
+import { UiSideModalComponent } from '../../../components/ui/ui-side-modal.component';
+import { LomsApplicationSubmissionPageComponent } from '../application-submission/application-submission.page';
+import { LomsApplicationCommunicationPageComponent } from '../application-communication/application-communication.page';
 
 type StepStatus = 'completed' | 'in-progress' | 'pending' | 'draft';
 
@@ -26,7 +29,10 @@ interface DocumentApplicationPreview {
   imports: [
     CommonModule,
     LomsLayoutComponent,
-    UiButtonComponent
+    UiButtonComponent,
+    UiSideModalComponent,
+    LomsApplicationSubmissionPageComponent,
+    LomsApplicationCommunicationPageComponent
   ],
   templateUrl: './application-preview.page.html'
 })
@@ -37,15 +43,16 @@ export class LomsApplicationPreviewPageComponent {
 
   stepTitles: string[] = [
     'Application Information',
+    'Document Information',
     'Demographic Information',
     'Product Information',
-    'Financial Information',
     'Security Information',
-    'Document Information',
+    'Financial Information',
+    'Financial Assessment',
     'Preview'
   ];
 
-  currentStep = 6;
+  currentStep = 7;
   completedSteps: number[] = [];
   draftSteps: number[] = [];
 
@@ -65,12 +72,18 @@ export class LomsApplicationPreviewPageComponent {
   securityData: any = null;
   documentData: DocumentApplicationPreview | null = null;
 
+  showSubmissionDrawer = false;
+  showCommunicationDrawer = false;
+
   constructor(private router: Router) {
     this.loadStepStateFromStorage();
     this.loadAllSectionsFromStorage();
   }
 
   getStepCircleClasses(index: number): string[] {
+    if (index === 1) {
+      return ['hidden'];
+    }
     const isCompleted = this.completedSteps.includes(index);
     const isDraft = this.draftSteps.includes(index);
     const isCurrent = index === this.currentStep;
@@ -232,18 +245,13 @@ export class LomsApplicationPreviewPageComponent {
       return;
     }
 
-    if (index === 1) {
+    if (index === 1 || index === 2) {
       this.router.navigate(['/loms', 'demographic-application', 'application']);
       return;
     }
 
-    if (index === 2) {
-      this.router.navigate(['/loms', 'product-application', 'application']);
-      return;
-    }
-
     if (index === 3) {
-      this.router.navigate(['/loms', 'financial-application', 'application']);
+      this.router.navigate(['/loms', 'product-application', 'application']);
       return;
     }
 
@@ -253,11 +261,16 @@ export class LomsApplicationPreviewPageComponent {
     }
 
     if (index === 5) {
-      this.router.navigate(['/loms', 'document-application', 'application']);
+      this.router.navigate(['/loms', 'financial-application', 'application']);
       return;
     }
 
-    this.currentStep = 6;
+    if (index === 6) {
+      this.router.navigate(['/loms', 'financial-assessment', 'application']);
+      return;
+    }
+
+    this.currentStep = 7;
   }
 
   onStepKeydown(event: KeyboardEvent, index: number): void {
@@ -313,13 +326,23 @@ export class LomsApplicationPreviewPageComponent {
       return;
     }
     if (index === 5) {
-      this.router.navigate(['/loms', 'document-application', 'application']);
+      this.router.navigate(['/loms', 'demographic-application', 'application']);
       return;
     }
   }
 
   onConfirmSubmission(): void {
     this.router.navigate(['/loms']);
+  }
+
+  goToSubmission(): void {
+    this.showCommunicationDrawer = false;
+    this.showSubmissionDrawer = true;
+  }
+
+  goToCommunication(): void {
+    this.showSubmissionDrawer = false;
+    this.showCommunicationDrawer = true;
   }
 
   private focusStep(index: number): void {
@@ -334,13 +357,28 @@ export class LomsApplicationPreviewPageComponent {
   }
 
   private getSectionStatus(index: number): StepStatus {
-    if (this.completedSteps.includes(index)) {
+    const stepIndex =
+      index === 0
+        ? 0
+        : index === 1
+        ? 2
+        : index === 2
+        ? 3
+        : index === 3
+        ? 5
+        : index === 4
+        ? 4
+        : index === 5
+        ? 2
+        : index;
+
+    if (this.completedSteps.includes(stepIndex)) {
       return 'completed';
     }
-    if (this.draftSteps.includes(index)) {
+    if (this.draftSteps.includes(stepIndex)) {
       return 'draft';
     }
-    if (index === this.currentStep) {
+    if (stepIndex === this.currentStep) {
       return 'in-progress';
     }
     return 'pending';
@@ -430,4 +468,3 @@ export class LomsApplicationPreviewPageComponent {
     }
   }
 }
-

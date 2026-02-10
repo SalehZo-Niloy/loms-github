@@ -82,6 +82,7 @@ const USERS: UserOption[] = [
 ];
 
 const REASON_CODES = [
+  'Absent/Leave',
   'Workload Balancing',
   'Skill Match',
   'Policy Override',
@@ -90,10 +91,9 @@ const REASON_CODES = [
 ];
 
 const OVERRIDE_TYPES = [
-  'Manual Re-Assignment',
-  'Limit Override',
-  'SLA Escalation',
-  'Priority Escalation',
+  'Escalate to Next Level',
+  'Overrride Step',
+  'Force Re-route',
 ];
 
 const SEED: SeedData = {
@@ -259,7 +259,7 @@ export class WorkAllocationPageComponent {
   effectiveImmediately = true;
   reassignMessage = '';
 
-  overrideType = 'Manual Re-Assignment';
+  overrideType = 'Escalate to Next Level';
   overrideAssignTo = 'sam';
   overrideReason = 'VIP Handling';
   overrideJustification = '';
@@ -461,7 +461,7 @@ export class WorkAllocationPageComponent {
     this.reassignUserId = '';
     this.reassignReason = '';
     this.reassignRemarks = '';
-    this.overrideType = 'Manual Re-Assignment';
+    this.overrideType = 'Escalate to Next Level';
     this.overrideAssignTo = 'sam';
     this.overrideReason = 'VIP Handling';
     this.overrideJustification = '';

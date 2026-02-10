@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LomsLayoutComponent } from '../../../styles/layout/loms-layout.component';
 import { UiButtonComponent } from '../../../components/ui/ui-button.component';
-import { UiInputComponent } from '../../../components/ui/ui-input.component';
 import { UiDropdownComponent } from '../../../components/ui/ui-dropdown.component';
 import { AlertService } from '../../../services/alert.service';
 
@@ -30,15 +29,8 @@ type DocumentApplicationStepStatus = 'completed' | 'in-progress' | 'pending';
 @Component({
   selector: 'app-loms-document-application-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    LomsLayoutComponent,
-    UiButtonComponent,
-    UiInputComponent,
-    UiDropdownComponent
-  ],
-  templateUrl: './document-application.page.html'
+  imports: [CommonModule, FormsModule, LomsLayoutComponent, UiButtonComponent, UiDropdownComponent],
+  templateUrl: './document-application.page.html',
 })
 export class LomsDocumentApplicationPageComponent {
   @ViewChildren('stepButton') stepButtons!: QueryList<ElementRef<HTMLButtonElement>>;
@@ -47,33 +39,24 @@ export class LomsDocumentApplicationPageComponent {
 
   stepTitles: string[] = [
     'Application Information',
+    'Document Information',
     'Demographic Information',
     'Product Information',
-    'Financial Information',
     'Security Information',
-    'Document Information',
-    'Preview'
+    'Financial Information',
+    'Financial Assessment',
+    'Preview',
   ];
 
-  currentStep = 5;
+  currentStep = 1;
   completedSteps: number[] = [];
   draftSteps: number[] = [];
   private readonly progressStorageKey = 'lomsCompletedSteps';
   private readonly draftStorageKey = 'lomsDraftSteps';
   private readonly formStorageKey = 'lomsDocumentForm';
 
-  documentTypeOptions = [
-    { label: 'National ID (NID)', value: 'nid' },
-    { label: 'Photograph', value: 'photo' },
-    { label: 'Bank Statement', value: 'bank_statement' },
-    { label: 'Utility Bill', value: 'utility_bill' },
-    { label: 'Salary Certificate', value: 'salary_certificate' }
-  ];
-
-  selectedDocumentType = '';
-
   form: DocumentApplicationForm = {
-    documents: []
+    documents: [],
   };
 
   lastSavedDraft: DocumentApplicationForm | null = null;
@@ -81,16 +64,24 @@ export class LomsDocumentApplicationPageComponent {
 
   nextDocumentId = 1;
 
-  constructor(private router: Router, private alertService: AlertService, private route: ActivatedRoute) {
+  documentTypeOptions = [
+    { label: 'National ID (NID)', value: 'nid' },
+    { label: 'Photograph', value: 'photo' },
+    { label: 'Bank Statement', value: 'bank_statement' },
+    { label: 'Utility Bill', value: 'utility_bill' },
+    { label: 'Salary Certificate', value: 'salary_certificate' },
+    { label: 'Other Supporting Document', value: 'supporting' },
+  ];
+
+  selectedDocumentType = '';
+
+  constructor(
+    private router: Router,
+    private alertService: AlertService,
+    private route: ActivatedRoute,
+  ) {
     this.loadCompletedStepsFromStorage();
     this.loadFormFromStorage();
-    if (!this.form.documents.length) {
-      this.form.documents = [
-        this.createEmptyDocument('nid', 'National ID (NID)'),
-        this.createEmptyDocument('photo', 'Photograph'),
-        this.createEmptyDocument('bank_statement', 'Bank Statement')
-      ];
-    }
   }
 
   getStepStatus(index: number): DocumentApplicationStepStatus {
@@ -125,7 +116,7 @@ export class LomsDocumentApplicationPageComponent {
         'shadow-sm',
         'transition-colors',
         'duration-150',
-        'ease-out'
+        'ease-out',
       ];
     }
 
@@ -146,7 +137,7 @@ export class LomsDocumentApplicationPageComponent {
         'shadow-sm',
         'transition-colors',
         'duration-150',
-        'ease-out'
+        'ease-out',
       ];
     }
 
@@ -167,7 +158,7 @@ export class LomsDocumentApplicationPageComponent {
         'shadow-sm',
         'transition-colors',
         'duration-150',
-        'ease-out'
+        'ease-out',
       ];
     }
 
@@ -187,7 +178,7 @@ export class LomsDocumentApplicationPageComponent {
       'hover:text-slate-900',
       'transition-colors',
       'duration-150',
-      'ease-out'
+      'ease-out',
     ];
   }
 
@@ -202,17 +193,17 @@ export class LomsDocumentApplicationPageComponent {
     }
 
     if (index === 1) {
-      this.router.navigate(['/loms', 'demographic-application', 'application']);
+      this.currentStep = 1;
       return;
     }
 
     if (index === 2) {
-      this.router.navigate(['/loms', 'product-application', 'application']);
+      this.router.navigate(['/loms', 'demographic-application', 'application']);
       return;
     }
 
     if (index === 3) {
-      this.router.navigate(['/loms', 'financial-application', 'application']);
+      this.router.navigate(['/loms', 'product-application', 'application']);
       return;
     }
 
@@ -222,11 +213,16 @@ export class LomsDocumentApplicationPageComponent {
     }
 
     if (index === 5) {
-      this.currentStep = 5;
+      this.router.navigate(['/loms', 'financial-application', 'application']);
       return;
     }
 
     if (index === 6) {
+      this.router.navigate(['/loms', 'financial-assessment', 'application']);
+      return;
+    }
+
+    if (index === 7) {
       this.saveFormToStorage();
       this.router.navigate(['/loms', 'application-preview']);
     }
@@ -274,66 +270,41 @@ export class LomsDocumentApplicationPageComponent {
     }
   }
 
-  addDocumentFromSelector(): void {
-    const typeValue = this.selectedDocumentType;
-    if (!typeValue) {
-      return;
-    }
-    const option = this.documentTypeOptions.find(o => o.value === typeValue);
-    if (!option) {
-      return;
-    }
-    const exists = this.form.documents.some(d => d.typeValue === typeValue);
-    if (exists) {
-      return;
-    }
-    this.form.documents = [
-      ...this.form.documents,
-      this.createEmptyDocument(option.value, option.label)
-    ];
-    this.selectedDocumentType = '';
-  }
-
   removeDocument(id: number): void {
-    this.form.documents = this.form.documents.filter(d => d.id !== id);
+    this.form.documents = this.form.documents.filter((d) => d.id !== id);
   }
 
-  onFileSelected(event: Event, id: number): void {
+  onCommonFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
+    if (!this.selectedDocumentType) {
+      input.value = '';
+      return;
+    }
     if (!input.files || input.files.length === 0) {
       return;
     }
 
-    const file = input.files[0];
-    const index = this.form.documents.findIndex(d => d.id === id);
-    if (index === -1) {
-      return;
-    }
-
-    const current = this.form.documents[index];
-    const updated: DocumentUploadEntry = {
-      ...current,
-      fileName: file.name,
-      fileSizeBytes: file.size,
-      status: 'uploaded',
-      uploadedAt: new Date().toISOString()
-    };
-
-    const documents = [...this.form.documents];
-    documents[index] = updated;
-    this.form.documents = documents;
+    const newEntries = Array.from(input.files).map((file) =>
+      this.createDocumentFromFile(file, this.selectedDocumentType),
+    );
+    this.form.documents = [...this.form.documents, ...newEntries];
+    input.value = '';
+    this.saveFormToStorage();
   }
 
   saveAsDraft(): void {
     this.lastSavedDraft = {
-      documents: this.cloneDocuments(this.form.documents)
+      documents: this.cloneDocuments(this.form.documents),
     };
     this.saveFormToStorage();
   }
 
   saveDraftWithAlert(): void {
     this.saveAsDraft();
-    if (!this.completedSteps.includes(this.currentStep) && !this.draftSteps.includes(this.currentStep)) {
+    if (
+      !this.completedSteps.includes(this.currentStep) &&
+      !this.draftSteps.includes(this.currentStep)
+    ) {
       this.draftSteps.push(this.currentStep);
       this.saveCompletedStepsToStorage();
     }
@@ -342,12 +313,12 @@ export class LomsDocumentApplicationPageComponent {
 
   proceedToNextStep(): void {
     this.lastSubmittedApplication = {
-      documents: this.cloneDocuments(this.form.documents)
+      documents: this.cloneDocuments(this.form.documents),
     };
     this.saveFormToStorage();
     if (!this.completedSteps.includes(this.currentStep)) {
       this.completedSteps.push(this.currentStep);
-      this.draftSteps = this.draftSteps.filter(step => step !== this.currentStep);
+      this.draftSteps = this.draftSteps.filter((step) => step !== this.currentStep);
       this.saveCompletedStepsToStorage();
     }
     this.router.navigate(['/loms', 'application-preview']);
@@ -360,7 +331,7 @@ export class LomsDocumentApplicationPageComponent {
 
   exportApplicationData(): DocumentApplicationForm {
     return {
-      documents: this.cloneDocuments(this.form.documents)
+      documents: this.cloneDocuments(this.form.documents),
     };
   }
 
@@ -417,22 +388,38 @@ export class LomsDocumentApplicationPageComponent {
     return 0;
   }
 
-  private createEmptyDocument(typeValue: string, typeLabel: string): DocumentUploadEntry {
-    const entry: DocumentUploadEntry = {
+  private createDocumentFromFile(file: File, typeValue?: string): DocumentUploadEntry {
+    const selectedValue = typeValue || '';
+    const matched = this.documentTypeOptions.find((option) => option.value === selectedValue);
+    const typeLabel = matched?.label || this.getTypeLabelFromFile(file.name);
+    return {
       id: this.nextDocumentId++,
-      typeValue,
+      typeValue: selectedValue || 'general',
       typeLabel,
-      fileName: '',
-      fileSizeBytes: 0,
-      status: 'pending',
-      uploadedAt: null,
-      description: ''
+      fileName: file.name,
+      fileSizeBytes: file.size,
+      status: 'uploaded',
+      uploadedAt: new Date().toISOString(),
+      description: '',
     };
-    return entry;
+  }
+
+  private getTypeLabelFromFile(name: string): string {
+    const ext = name.split('.').pop()?.toLowerCase();
+    if (!ext) {
+      return 'Supporting Document';
+    }
+    if (ext === 'pdf') {
+      return 'PDF Document';
+    }
+    if (ext === 'jpg' || ext === 'jpeg' || ext === 'png') {
+      return 'Image Document';
+    }
+    return 'Supporting Document';
   }
 
   private cloneDocuments(entries: DocumentUploadEntry[]): DocumentUploadEntry[] {
-    return entries.map(entry => ({ ...entry }));
+    return entries.map((entry) => ({ ...entry }));
   }
 
   private loadFormFromStorage(): void {
@@ -447,16 +434,15 @@ export class LomsDocumentApplicationPageComponent {
       const parsed = JSON.parse(raw) as DocumentApplicationForm;
       if (parsed && Array.isArray(parsed.documents)) {
         this.form = {
-          documents: this.cloneDocuments(parsed.documents)
+          documents: this.cloneDocuments(parsed.documents),
         };
         const maxId = parsed.documents.reduce(
           (max, entry) => (entry.id && entry.id > max ? entry.id : max),
-          0
+          0,
         );
         this.nextDocumentId = maxId + 1;
       }
-    } catch {
-    }
+    } catch {}
   }
 
   private loadCompletedStepsFromStorage(): void {
@@ -470,7 +456,7 @@ export class LomsDocumentApplicationPageComponent {
         if (Array.isArray(parsedCompleted)) {
           this.completedSteps = parsedCompleted
             .filter((value: unknown) => Number.isInteger(value as number))
-            .map(value => Number(value));
+            .map((value) => Number(value));
         }
       }
 
@@ -480,11 +466,10 @@ export class LomsDocumentApplicationPageComponent {
         if (Array.isArray(parsedDraft)) {
           this.draftSteps = parsedDraft
             .filter((value: unknown) => Number.isInteger(value as number))
-            .map(value => Number(value));
+            .map((value) => Number(value));
         }
       }
-    } catch {
-    }
+    } catch {}
   }
 
   private saveCompletedStepsToStorage(): void {
@@ -496,8 +481,7 @@ export class LomsDocumentApplicationPageComponent {
       const uniqueDraft = Array.from(new Set(this.draftSteps)).sort((a, b) => a - b);
       window.sessionStorage.setItem(this.progressStorageKey, JSON.stringify(uniqueCompleted));
       window.sessionStorage.setItem(this.draftStorageKey, JSON.stringify(uniqueDraft));
-    } catch {
-    }
+    } catch {}
   }
 
   onRefreshSteps(): void {
@@ -510,8 +494,7 @@ export class LomsDocumentApplicationPageComponent {
         window.sessionStorage.removeItem(this.progressStorageKey);
         window.sessionStorage.removeItem(this.draftStorageKey);
         window.sessionStorage.removeItem('lomsRequestedAmount');
-      } catch {
-      }
+      } catch {}
     }
     this.router.navigate(['/loms', 'loan-application', 'application']);
   }
@@ -522,10 +505,9 @@ export class LomsDocumentApplicationPageComponent {
     }
     try {
       const snapshot: DocumentApplicationForm = {
-        documents: this.cloneDocuments(this.form.documents)
+        documents: this.cloneDocuments(this.form.documents),
       };
       window.sessionStorage.setItem(this.formStorageKey, JSON.stringify(snapshot));
-    } catch {
-    }
+    } catch {}
   }
 }

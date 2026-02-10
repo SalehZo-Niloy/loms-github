@@ -13,32 +13,20 @@
               {{ title }}
             </h1>
             <p class="text-xs text-slate-500">
-              Review all application details below. You can edit any section before confirming submission.
+              Review all application details below. You can edit any section before confirming
+              submission.
             </p>
           </div>
-          <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
-            <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-emerald-700 border border-emerald-200">
-              <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-              Completed
-            </span>
-            <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-amber-700 border border-amber-200">
-              <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
-              Draft
-            </span>
-            <span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-red-700 border border-red-200">
-              <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
-              Needs Attention
-            </span>
+          <div class="flex flex-wrap items-center gap-2 sm:justify-end">
+            <app-ui-button type="button" variant="secondary" (click)="goToSubmission()">
+              Submission
+            </app-ui-button>
+            <app-ui-button type="button" (click)="goToCommunication()"> Communication </app-ui-button>
           </div>
         </div>
 
-        <nav
-          class="mt-1 overflow-x-auto"
-          aria-label="Loan application steps"
-        >
-          <div
-            class="flex min-w-[520px] flex-wrap items-center gap-2 text-xs text-slate-600"
-          >
+        <nav class="mt-2 overflow-x-auto" aria-label="Loan application steps">
+          <div class="flex min-w-[520px] flex-wrap items-center gap-2 text-xs text-slate-600">
             <button
               *ngFor="let stepTitle of stepTitles; let i = index"
               type="button"
@@ -63,34 +51,27 @@
       <div class="space-y-5">
         <div class="flex items-center justify-between gap-3 border-b border-blue-100 pb-3">
           <div class="flex items-center gap-2">
-            <div class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs"
+            >
               <span>01</span>
             </div>
             <div>
-              <div class="text-sm font-semibold text-slate-900">
-                Application Information
-              </div>
-              <div class="text-[11px] text-slate-600">
-                Core application and customer context.
-              </div>
+              <div class="text-sm font-semibold text-slate-900">Application Information</div>
+              <div class="text-[11px] text-slate-600">Core application and customer context.</div>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span
-              [ngClass]="getSectionStatusClasses(0)"
-            >
-              <span class="h-1.5 w-1.5 rounded-full"
-                    [class.bg-emerald-500]="completedSteps.includes(0)"
-                    [class.bg-amber-400]="!completedSteps.includes(0) && draftSteps.includes(0)"
-                    [class.bg-red-500]="!completedSteps.includes(0) && !draftSteps.includes(0)"
+            <span [ngClass]="getSectionStatusClasses(0)">
+              <span
+                class="h-1.5 w-1.5 rounded-full"
+                [class.bg-emerald-500]="completedSteps.includes(0)"
+                [class.bg-amber-400]="!completedSteps.includes(0) && draftSteps.includes(0)"
+                [class.bg-red-500]="!completedSteps.includes(0) && !draftSteps.includes(0)"
               ></span>
               <span>{{ getSectionStatusLabel(0) }}</span>
             </span>
-            <app-ui-button
-              type="button"
-              variant="secondary"
-              (click)="onEditSection(0)"
-            >
+            <app-ui-button type="button" variant="secondary" (click)="onEditSection(0)">
               Edit
             </app-ui-button>
           </div>
@@ -98,13 +79,17 @@
 
         <div class="grid gap-4 md:grid-cols-2 text-xs text-slate-700">
           <div class="space-y-1.5">
-            <div class="font-semibold text-slate-800">
-              Customer & Application
-            </div>
+            <div class="font-semibold text-slate-800">Customer & Application</div>
             <div class="grid grid-cols-[140px_minmax(0,1fr)] gap-y-1.5">
               <div class="text-slate-500">Existing Customer</div>
               <div class="font-medium">
-                {{ loanData?.existingCustomer === 'yes' ? 'Yes' : loanData?.existingCustomer === 'no' ? 'No' : '--' }}
+                {{
+                  loanData?.existingCustomer === 'yes'
+                    ? 'Yes'
+                    : loanData?.existingCustomer === 'no'
+                      ? 'No'
+                      : '--'
+                }}
               </div>
               <div class="text-slate-500">Application Type</div>
               <div class="font-medium">
@@ -126,9 +111,7 @@
           </div>
 
           <div class="space-y-1.5">
-            <div class="font-semibold text-slate-800">
-              Proposal & Tracking
-            </div>
+            <div class="font-semibold text-slate-800">Proposal & Tracking</div>
             <div class="grid grid-cols-[140px_minmax(0,1fr)] gap-y-1.5">
               <div class="text-slate-500">Proposal Type</div>
               <div class="font-medium">
@@ -156,34 +139,27 @@
       <div class="space-y-5">
         <div class="flex items-center justify-between gap-3 border-b border-blue-100 pb-3">
           <div class="flex items-center gap-2">
-            <div class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs"
+            >
               <span>02</span>
             </div>
             <div>
-              <div class="text-sm font-semibold text-slate-900">
-                Demographic Information
-              </div>
-              <div class="text-[11px] text-slate-600">
-                Applicant personas and addresses.
-              </div>
+              <div class="text-sm font-semibold text-slate-900">Demographic Information</div>
+              <div class="text-[11px] text-slate-600">Applicant personas and addresses.</div>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span
-              [ngClass]="getSectionStatusClasses(1)"
-            >
-              <span class="h-1.5 w-1.5 rounded-full"
-                    [class.bg-emerald-500]="completedSteps.includes(1)"
-                    [class.bg-amber-400]="!completedSteps.includes(1) && draftSteps.includes(1)"
-                    [class.bg-red-500]="!completedSteps.includes(1) && !draftSteps.includes(1)"
+            <span [ngClass]="getSectionStatusClasses(1)">
+              <span
+                class="h-1.5 w-1.5 rounded-full"
+                [class.bg-emerald-500]="completedSteps.includes(1)"
+                [class.bg-amber-400]="!completedSteps.includes(1) && draftSteps.includes(1)"
+                [class.bg-red-500]="!completedSteps.includes(1) && !draftSteps.includes(1)"
               ></span>
               <span>{{ getSectionStatusLabel(1) }}</span>
             </span>
-            <app-ui-button
-              type="button"
-              variant="secondary"
-              (click)="onEditSection(1)"
-            >
+            <app-ui-button type="button" variant="secondary" (click)="onEditSection(1)">
               Edit
             </app-ui-button>
           </div>
@@ -223,10 +199,8 @@
               </div>
             </div>
           </div>
-          <div *ngIf="!(demographicData?.personas?.length)">
-            <div class="text-[11px] text-slate-500">
-              No demographic personas captured yet.
-            </div>
+          <div *ngIf="!demographicData?.personas?.length">
+            <div class="text-[11px] text-slate-500">No demographic personas captured yet.</div>
           </div>
         </div>
       </div>
@@ -236,34 +210,27 @@
       <div class="space-y-5">
         <div class="flex items-center justify-between gap-3 border-b border-blue-100 pb-3">
           <div class="flex items-center gap-2">
-            <div class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs"
+            >
               <span>03</span>
             </div>
             <div>
-              <div class="text-sm font-semibold text-slate-900">
-                Product Information
-              </div>
-              <div class="text-[11px] text-slate-600">
-                Loan product, amount and tenor.
-              </div>
+              <div class="text-sm font-semibold text-slate-900">Product Information</div>
+              <div class="text-[11px] text-slate-600">Loan product, amount and tenor.</div>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span
-              [ngClass]="getSectionStatusClasses(2)"
-            >
-              <span class="h-1.5 w-1.5 rounded-full"
-                    [class.bg-emerald-500]="completedSteps.includes(2)"
-                    [class.bg-amber-400]="!completedSteps.includes(2) && draftSteps.includes(2)"
-                    [class.bg-red-500]="!completedSteps.includes(2) && !draftSteps.includes(2)"
+            <span [ngClass]="getSectionStatusClasses(2)">
+              <span
+                class="h-1.5 w-1.5 rounded-full"
+                [class.bg-emerald-500]="completedSteps.includes(2)"
+                [class.bg-amber-400]="!completedSteps.includes(2) && draftSteps.includes(2)"
+                [class.bg-red-500]="!completedSteps.includes(2) && !draftSteps.includes(2)"
               ></span>
               <span>{{ getSectionStatusLabel(2) }}</span>
             </span>
-            <app-ui-button
-              type="button"
-              variant="secondary"
-              (click)="onEditSection(2)"
-            >
+            <app-ui-button type="button" variant="secondary" (click)="onEditSection(2)">
               Edit
             </app-ui-button>
           </div>
@@ -271,9 +238,7 @@
 
         <div class="grid gap-4 md:grid-cols-2 text-xs text-slate-700">
           <div class="space-y-1.5">
-            <div class="font-semibold text-slate-800">
-              Product Details
-            </div>
+            <div class="font-semibold text-slate-800">Product Details</div>
             <div class="grid grid-cols-[140px_minmax(0,1fr)] gap-y-1.5">
               <div class="text-slate-500">Product Name</div>
               <div class="font-medium">
@@ -295,9 +260,7 @@
           </div>
 
           <div class="space-y-1.5">
-            <div class="font-semibold text-slate-800">
-              Disbursement Details
-            </div>
+            <div class="font-semibold text-slate-800">Disbursement Details</div>
             <div class="grid grid-cols-[140px_minmax(0,1fr)] gap-y-1.5">
               <div class="text-slate-500">Disbursement Mode</div>
               <div class="font-medium">
@@ -317,34 +280,27 @@
       <div class="space-y-5">
         <div class="flex items-center justify-between gap-3 border-b border-blue-100 pb-3">
           <div class="flex items-center gap-2">
-            <div class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs"
+            >
               <span>04</span>
             </div>
             <div>
-              <div class="text-sm font-semibold text-slate-900">
-                Financial Information
-              </div>
-              <div class="text-[11px] text-slate-600">
-                Employment and bank account details.
-              </div>
+              <div class="text-sm font-semibold text-slate-900">Financial Information</div>
+              <div class="text-[11px] text-slate-600">Employment and bank account details.</div>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span
-              [ngClass]="getSectionStatusClasses(3)"
-            >
-              <span class="h-1.5 w-1.5 rounded-full"
-                    [class.bg-emerald-500]="completedSteps.includes(3)"
-                    [class.bg-amber-400]="!completedSteps.includes(3) && draftSteps.includes(3)"
-                    [class.bg-red-500]="!completedSteps.includes(3) && !draftSteps.includes(3)"
+            <span [ngClass]="getSectionStatusClasses(3)">
+              <span
+                class="h-1.5 w-1.5 rounded-full"
+                [class.bg-emerald-500]="completedSteps.includes(3)"
+                [class.bg-amber-400]="!completedSteps.includes(3) && draftSteps.includes(3)"
+                [class.bg-red-500]="!completedSteps.includes(3) && !draftSteps.includes(3)"
               ></span>
               <span>{{ getSectionStatusLabel(3) }}</span>
             </span>
-            <app-ui-button
-              type="button"
-              variant="secondary"
-              (click)="onEditSection(3)"
-            >
+            <app-ui-button type="button" variant="secondary" (click)="onEditSection(3)">
               Edit
             </app-ui-button>
           </div>
@@ -353,9 +309,7 @@
         <div class="space-y-4 text-xs text-slate-700">
           <div class="grid gap-4 md:grid-cols-2">
             <div class="space-y-1.5">
-              <div class="font-semibold text-slate-800">
-                Employment
-              </div>
+              <div class="font-semibold text-slate-800">Employment</div>
               <div class="grid grid-cols-[140px_minmax(0,1fr)] gap-y-1.5">
                 <div class="text-slate-500">Employment Type</div>
                 <div class="font-medium">
@@ -369,9 +323,7 @@
             </div>
 
             <div class="space-y-1.5">
-              <div class="font-semibold text-slate-800">
-                Income Summary
-              </div>
+              <div class="font-semibold text-slate-800">Income Summary</div>
               <div class="grid grid-cols-[140px_minmax(0,1fr)] gap-y-1.5">
                 <div class="text-slate-500">Monthly Income</div>
                 <div class="font-medium">
@@ -386,14 +338,14 @@
           </div>
 
           <div>
-            <div class="text-[11px] font-semibold text-slate-800 mb-2">
-              Bank Accounts
-            </div>
+            <div class="text-[11px] font-semibold text-slate-800 mb-2">Bank Accounts</div>
             <div class="overflow-x-auto rounded border border-blue-100 bg-blue-50/40">
               <table class="min-w-full border-collapse text-[11px] text-slate-700">
                 <thead>
                   <tr class="border-b border-blue-100 bg-blue-50/80 text-slate-600">
-                    <th class="px-3 py-2 text-left font-medium whitespace-nowrap">Account Number</th>
+                    <th class="px-3 py-2 text-left font-medium whitespace-nowrap">
+                      Account Number
+                    </th>
                     <th class="px-3 py-2 text-left font-medium whitespace-nowrap">Account Name</th>
                     <th class="px-3 py-2 text-left font-medium whitespace-nowrap">Bank Name</th>
                     <th class="px-3 py-2 text-left font-medium whitespace-nowrap">Account Type</th>
@@ -417,11 +369,8 @@
                       {{ account.accountType || '--' }}
                     </td>
                   </tr>
-                  <tr *ngIf="!(financialData?.bankAccounts?.length)">
-                    <td
-                      class="px-3 py-2 text-slate-500"
-                      colspan="4"
-                    >
+                  <tr *ngIf="!financialData?.bankAccounts?.length">
+                    <td class="px-3 py-2 text-slate-500" colspan="4">
                       No bank accounts captured yet.
                     </td>
                   </tr>
@@ -437,34 +386,29 @@
       <div class="space-y-5">
         <div class="flex items-center justify-between gap-3 border-b border-blue-100 pb-3">
           <div class="flex items-center gap-2">
-            <div class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs"
+            >
               <span>05</span>
             </div>
             <div>
-              <div class="text-sm font-semibold text-slate-900">
-                Security Information
-              </div>
+              <div class="text-sm font-semibold text-slate-900">Security Information</div>
               <div class="text-[11px] text-slate-600">
                 Collateral and security details supporting the loan.
               </div>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span
-              [ngClass]="getSectionStatusClasses(4)"
-            >
-              <span class="h-1.5 w-1.5 rounded-full"
-                    [class.bg-emerald-500]="completedSteps.includes(4)"
-                    [class.bg-amber-400]="!completedSteps.includes(4) && draftSteps.includes(4)"
-                    [class.bg-red-500]="!completedSteps.includes(4) && !draftSteps.includes(4)"
+            <span [ngClass]="getSectionStatusClasses(4)">
+              <span
+                class="h-1.5 w-1.5 rounded-full"
+                [class.bg-emerald-500]="completedSteps.includes(4)"
+                [class.bg-amber-400]="!completedSteps.includes(4) && draftSteps.includes(4)"
+                [class.bg-red-500]="!completedSteps.includes(4) && !draftSteps.includes(4)"
               ></span>
               <span>{{ getSectionStatusLabel(4) }}</span>
             </span>
-            <app-ui-button
-              type="button"
-              variant="secondary"
-              (click)="onEditSection(4)"
-            >
+            <app-ui-button type="button" variant="secondary" (click)="onEditSection(4)">
               Edit
             </app-ui-button>
           </div>
@@ -504,10 +448,8 @@
               </div>
             </div>
           </div>
-          <div *ngIf="!(securityData?.securities?.length)">
-            <div class="text-[11px] text-slate-500">
-              No security entries captured yet.
-            </div>
+          <div *ngIf="!securityData?.securities?.length">
+            <div class="text-[11px] text-slate-500">No security entries captured yet.</div>
           </div>
         </div>
       </div>
@@ -517,34 +459,27 @@
       <div class="space-y-5">
         <div class="flex items-center justify-between gap-3 border-b border-blue-100 pb-3">
           <div class="flex items-center gap-2">
-            <div class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+            <div
+              class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs"
+            >
               <span>06</span>
             </div>
             <div>
-              <div class="text-sm font-semibold text-slate-900">
-                Document Information
-              </div>
-              <div class="text-[11px] text-slate-600">
-                Uploaded documents and their statuses.
-              </div>
+              <div class="text-sm font-semibold text-slate-900">Document Information</div>
+              <div class="text-[11px] text-slate-600">Uploaded documents and their statuses.</div>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <span
-              [ngClass]="getSectionStatusClasses(5)"
-            >
-              <span class="h-1.5 w-1.5 rounded-full"
-                    [class.bg-emerald-500]="completedSteps.includes(5)"
-                    [class.bg-amber-400]="!completedSteps.includes(5) && draftSteps.includes(5)"
-                    [class.bg-red-500]="!completedSteps.includes(5) && !draftSteps.includes(5)"
+            <span [ngClass]="getSectionStatusClasses(5)">
+              <span
+                class="h-1.5 w-1.5 rounded-full"
+                [class.bg-emerald-500]="completedSteps.includes(5)"
+                [class.bg-amber-400]="!completedSteps.includes(5) && draftSteps.includes(5)"
+                [class.bg-red-500]="!completedSteps.includes(5) && !draftSteps.includes(5)"
               ></span>
               <span>{{ getSectionStatusLabel(5) }}</span>
             </span>
-            <app-ui-button
-              type="button"
-              variant="secondary"
-              (click)="onEditSection(5)"
-            >
+            <app-ui-button type="button" variant="secondary" (click)="onEditSection(5)">
               Edit
             </app-ui-button>
           </div>
@@ -574,10 +509,16 @@
                     {{ document.fileName || '--' }}
                   </td>
                   <td class="px-3 py-1.5 align-top">
-                    {{ document.fileSizeBytes ? (document.fileSizeBytes / 1024 | number: '1.0-1') + ' KB' : '--' }}
+                    {{
+                      document.fileSizeBytes
+                        ? (document.fileSizeBytes / 1024 | number: '1.0-1') + ' KB'
+                        : '--'
+                    }}
                   </td>
                   <td class="px-3 py-1.5 align-top">
-                    <span class="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                    <span
+                      class="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700"
+                    >
                       <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
                       <span>{{ document.status || 'Pending' }}</span>
                     </span>
@@ -586,13 +527,8 @@
                     {{ document.uploadedAt ? (document.uploadedAt | date: 'medium') : '--' }}
                   </td>
                 </tr>
-                <tr *ngIf="!(documentData?.documents?.length)">
-                  <td
-                    class="px-3 py-2 text-slate-500"
-                    colspan="5"
-                  >
-                    No documents uploaded yet.
-                  </td>
+                <tr *ngIf="!documentData?.documents?.length">
+                  <td class="px-3 py-2 text-slate-500" colspan="5">No documents uploaded yet.</td>
                 </tr>
               </tbody>
             </table>
@@ -604,12 +540,12 @@
     <section class="border border-blue-100 bg-white p-6 shadow-sm">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div class="space-y-1">
-          <div class="text-sm font-semibold text-slate-900">
-            Final Confirmation
-          </div>
+          <div class="text-sm font-semibold text-slate-900">Final Confirmation</div>
           <div class="text-[11px] text-slate-600">
             By confirming, you submit the complete application for processing. Sections marked
-            <span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-1.5 py-0.5 text-[10px] font-semibold text-red-700 border border-red-200">
+            <span
+              class="inline-flex items-center gap-1 rounded-full bg-red-50 px-1.5 py-0.5 text-[10px] font-semibold text-red-700 border border-red-200"
+            >
               <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
               Needs Attention
             </span>
@@ -617,21 +553,38 @@
           </div>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <app-ui-button
-            type="button"
-            variant="secondary"
-            (click)="goToStep(5)"
-          >
+          <app-ui-button type="button" variant="secondary" (click)="goToStep(1)">
             Back to Documents
           </app-ui-button>
-          <app-ui-button
-            type="button"
-            (click)="onConfirmSubmission()"
-          >
+          <app-ui-button type="button" (click)="onConfirmSubmission()">
             Confirm Submission
           </app-ui-button>
         </div>
       </div>
     </section>
   </div>
+
+  <app-ui-side-modal
+    *ngIf="showSubmissionDrawer"
+    [open]="showSubmissionDrawer"
+    size="lg"
+    (close)="showSubmissionDrawer = false"
+  >
+    <app-loms-application-submission-page
+      mode="drawer"
+      (close)="showSubmissionDrawer = false"
+    ></app-loms-application-submission-page>
+  </app-ui-side-modal>
+
+  <app-ui-side-modal
+    *ngIf="showCommunicationDrawer"
+    [open]="showCommunicationDrawer"
+    size="xl"
+    (close)="showCommunicationDrawer = false"
+  >
+    <app-loms-application-communication-page
+      mode="drawer"
+      (close)="showCommunicationDrawer = false"
+    ></app-loms-application-communication-page>
+  </app-ui-side-modal>
 </app-loms-layout>

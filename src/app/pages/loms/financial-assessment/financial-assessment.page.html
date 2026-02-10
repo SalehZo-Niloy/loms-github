@@ -5,6 +5,48 @@
   basePath="/loms"
 >
   <div class="px-2 py-4 bg-slate-50 min-h-screen space-y-4 w-full flex-1 max-w-screen-xl mx-auto">
+    <section class="rounded-xl border border-blue-100 bg-white p-6 shadow-sm">
+      <div class="space-y-4">
+        <div>
+          <h1 class="text-xl font-semibold text-slate-900">
+            Financial Assessment
+          </h1>
+          <p class="text-xs text-slate-500">
+            Review and manage the overall loan application steps.
+          </p>
+        </div>
+
+        <nav
+          class="mt-1 overflow-x-auto"
+          aria-label="Loan application steps"
+        >
+          <div
+            class="flex min-w-[520px] flex-wrap items-center gap-2 text-xs text-slate-600"
+          >
+            <button
+              *ngFor="let stepTitle of stepTitles; let i = index"
+              #stepButton
+              type="button"
+              class="focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus-visible:ring-offset-white"
+              [ngClass]="getStepCircleClasses(i)"
+              [attr.aria-current]="currentStep === i ? 'step' : null"
+              [attr.aria-label]="'Step ' + (i + 1) + ': ' + stepTitle"
+              (click)="goToStep(i)"
+              (keydown)="onStepKeydown($event, i)"
+            >
+              <span
+                *ngIf="currentStep === i"
+                class="inline-flex h-1.5 w-1.5 rounded-full bg-blue-600"
+              ></span>
+              <span class="truncate">
+                {{ stepTitle }}
+              </span>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </section>
+
     <section class="rounded-md border border-blue-100 bg-white px-4 py-3 shadow-sm flex flex-col gap-3 md:flex-row md:items-end md:justify-between text-xs">
       <div class="grid gap-3 md:grid-cols-4 w-full md:max-w-3xl">
         <label class="space-y-1">

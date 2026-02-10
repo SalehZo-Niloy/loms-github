@@ -27,10 +27,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class UiSideModalComponent {
   @Input() open = false;
-  @Input() size: 'md' | 'lg' = 'md';
+  @Input() size: 'md' | 'lg' | 'xl' = 'md';
   @Output() close = new EventEmitter<void>();
 
   get panelClass(): string {
+    if (this.size === 'xl') {
+      return 'w-full sm:w-[95%] lg:w-[70%] max-w-5xl';
+    }
     if (this.size === 'lg') {
       return 'w-full sm:w-[80%] lg:w-[45%] max-w-3xl';
     }

@@ -129,6 +129,74 @@ interface LomsMenuItem {
                           </span>
                           <span
                             class="flex h-4 w-4 items-center justify-center text-slate-400"
+                            *ngIf="item.label === 'Appeal/Re-open'"
+                          >
+                            <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                              <path
+                                d="M5 10a5 5 0 0 1 8-3.5"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M11.5 5H14v2.5"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M15 10a5 5 0 0 1-8 3.5"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M8.5 15H6v-2.5"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="flex h-4 w-4 items-center justify-center text-slate-400"
+                            *ngIf="item.label === 'Manual Re-Assignment'"
+                          >
+                            <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                              <circle
+                                cx="7"
+                                cy="7"
+                                r="2.2"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              />
+                              <circle
+                                cx="13"
+                                cy="7"
+                                r="2.2"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                              />
+                              <path
+                                d="M4.5 13c.7-1.6 2.1-2.5 3.5-2.5s2.8.9 3.5 2.5"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                              />
+                              <path
+                                d="M10 13h2.5"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="flex h-4 w-4 items-center justify-center text-slate-400"
                             *ngIf="item.label === 'Self Defined Form Builder'"
                           >
                             <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
@@ -236,6 +304,27 @@ interface LomsMenuItem {
                           </span>
                           <span
                             class="flex h-4 w-4 items-center justify-center text-slate-400"
+                            *ngIf="item.label === 'Verification'"
+                          >
+                            <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
+                              <path
+                                d="M10 3.5 5 5.5v4.5c0 3.2 2.4 5.6 5 6.5 2.6-.9 5-3.3 5-6.5V5.5L10 3.5Z"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M7.5 10.2 9.2 11.9 12.5 8.9"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            class="flex h-4 w-4 items-center justify-center text-slate-400"
                             *ngIf="item.label === 'Vetting & Valuation'"
                           >
                             <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
@@ -308,7 +397,7 @@ interface LomsMenuItem {
                           </span>
                           <span
                             class="flex h-4 w-4 items-center justify-center text-slate-400"
-                            *ngIf="item.label === 'Product Configuration'"
+                            *ngIf="item.label === 'Product Configuration' || item.label === 'Configuration'"
                           >
                             <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none">
                               <circle
@@ -638,163 +727,148 @@ export class LomsLayoutComponent implements OnInit {
       route: ['/loms', 'dashboard'],
     },
     {
-      label: 'Dashboard Configuration',
-      route: ['/loms', 'dashboard-configuration'],
-      children: [
-        {
-          label:'Configuration',
-          route: ['/loms', 'dashboard-configuration'],
-        },
-        {
-          label: 'Company Profile',
-        },
-        {
-          label: 'Campaign Details',
-        },
-      ],
-    },
-    {
-      label: 'De Duplication',
-      children: [
-        {
-          label: 'De-DUP application',
-          route: ['/loms', 'de-dup', 'application'],
-        },
-      ],
-    },
-    {
       label: 'Loan',
       children: [
         {
-          label: 'Loan Application',
+          label: 'Application',
           route: ['/loms', 'loan-application', 'application'],
         },
-        {
-          label: 'Financial Assessment',
-          route: ['/loms', 'financial-assessment', 'application'],
-        },
       ],
     },
     {
-      label: 'Vetting & Valuation',
+      label: 'Verification',
       children: [
+        {
+          label: 'CIB',
+          children: [
+            {
+              label: 'CIB Initiation',
+              route: ['/loms', 'cib-initiation', 'application'],
+            },
+            {
+              label: 'Officer Assignment',
+              route: ['/loms', 'cib-initiation', 'officer-assignment'],
+            },
+            {
+              label: 'CIB Finalization',
+              route: ['/loms', 'cib-initiation', 'finalization'],
+            },
+          ],
+        },
+        {
+          label: 'CPV',
+          children: [
+            {
+              label: 'Dashboard',
+              route: ['/loms', 'cpv', 'dashboard'],
+            },
+            {
+              label: 'Finalization',
+              route: ['/loms', 'cpv', 'finalization'],
+            },
+            {
+          label: 'DAT File Generation',
+          route: ['/loms', 'card-operation', 'dat-file-generation'],
+        },
+        {
+          label: 'Card Disbursement',
+          route: ['/loms', 'card-operation', 'card-disbursement'],
+        },
+      ],
+        },
         {
           label: 'Vetting & Valuation',
-          route: ['/loms', 'vetting-valuation', 'application'],
+          children: [
+            {
+              label: 'Vetting & Valuation',
+              route: ['/loms', 'vetting-valuation', 'application'],
+            },
+          ],
+        },
+        {
+          label: 'KYC Management',
+          children: [
+            {
+              label: 'KYC Dashboard',
+              route: ['/loms', 'kyc'],
+            },
+          ],
+        },
+        {
+          label: 'Credit Risk Management',
+          children: [
+            {
+              label: 'Configurations',
+              route: ['/loms', 'credit-risk'],
+            },
+            {
+              label: 'Scoring Worklist',
+              route: ['/loms', 'credit-risk', 'scoring'],
+            },
+          ],
         },
       ],
     },
     {
-      label: 'Card Operation',
+      label: 'Configuration',
       children: [
         {
-          label: 'Issuance Review',
-          route: ['/loms', 'card-operation', 'application'],
+          label: 'Dashboard Configuration',
+          route: ['/loms', 'dashboard-configuration'],
+          children: [
+            {
+              label: 'Configuration',
+              route: ['/loms', 'dashboard-configuration'],
+            },
+            {
+              label: 'Company Profile',
+            },
+            {
+              label: 'Campaign Details',
+            },
+          ],
         },
         {
-          label: 'Issuance Processing',
-          route: ['/loms', 'card-operation', 'issuance-processing'],
-        },
-      ],
-    },
-    {
-      label: 'Product Configuration',
-      route: ['/loms', 'product'],
-      children: [
-        {
-          label: 'Design Product',
+          label: 'Product Configuration',
           route: ['/loms', 'product'],
+          children: [
+            {
+              label: 'Design Product',
+              route: ['/loms', 'product'],
+            },
+          ],
+        },
+        {
+          label: 'User Defined Page Builder',
+          route: ['/loms', 'form-builder'],
+        },
+        {
+          label: 'Report Builder',
+          route: ['/loms', 'report-builder'],
         },
       ],
     },
+    // {
+    //   label: 'Query Management',
+    //   route: ['/loms', 'query'],
+    //   children: [
+    //     {
+    //       label: 'Dashboard',
+    //       route: ['/loms', 'query'],
+    //     },
+    //     {
+    //       label: 'Create Query',
+    //       route: ['/loms', 'query', 'create'],
+    //     },
+    //   ],
+    // },
     {
-      label: 'Query Management',
-      route: ['/loms', 'query'],
-      children: [
-        {
-          label: 'Dashboard',
-          route: ['/loms', 'query'],
-        },
-        {
-          label: 'Create Query',
-          route: ['/loms', 'query', 'create'],
-        },
-      ],
+      label: 'Appeal/Re-open',
+      route: ['/loms', 'appeal-reopen'],
     },
     {
-      label: 'KYC Management',
-      route: ['/loms', 'kyc'],
-      children: [
-        {
-          label: 'KYC Dashboard',
-          route: ['/loms', 'kyc'],
-        },
-      ],
-    },
-    {
-      label: 'Credit Risk Scoring',
-      route: ['/loms', 'credit-risk'],
-      children: [
-        {
-          label: 'Configurations',
-          route: ['/loms', 'credit-risk'],
-        },
-        {
-          label: 'Scoring Worklist',
-          route: ['/loms', 'credit-risk', 'scoring'],
-        },
-      ],
-    },
-    {
-      label: 'CIB',
-      children: [
-        {
-          label: 'CIB Initiation',
-          route: ['/loms', 'cib-initiation', 'application'],
-        },
-        {
-          label: 'Officer Assignment',
-          route: ['/loms', 'cib-initiation', 'officer-assignment'],
-        },
-        {
-          label: 'CIB Finalization',
-          route: ['/loms', 'cib-initiation', 'finalization'],
-        },
-      ],
-    },
-    {
-      label: 'User Defined Page Builder',
-      route: ['/loms', 'form-builder'],
-    },
-    {
-      label: 'Report Builder',
-      route: ['/loms', 'report-builder'],
-    },
-    {
-      label:'Appeal/Re-open',
-      route:['/loms','appeal-reopen']
-
-    },
-    {
-       label:'Manual Re-Assignment/Override',
-        route:['/loms','work-allocation']
-    },
-    {
-      label: 'Submission',
-      route: ['/loms', 'submission'],
-    },
-    {
-      label: 'CPV',
-      children: [
-        {
-          label: 'Dashboard',
-          route: ['/loms', 'cpv', 'dashboard'],
-        },
-        {
-          label: 'Finalization',
-          route: ['/loms', 'cpv', 'finalization'],
-        },
-      ],
+      label: 'Manual Re-Assignment',
+      route: ['/loms', 'work-allocation'],
     },
   ];
 
