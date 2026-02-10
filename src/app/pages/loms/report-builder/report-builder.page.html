@@ -1,0 +1,442 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Report Builder"
+  basePath="/loms"
+>
+  <div class="w-full min-h-screen bg-white px-3 py-4 sm:px-4 lg:px-6">
+    <section class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-1">
+        <h1 class="text-2xl font-semibold text-slate-900">Report Builder</h1>
+        <p class="text-xs text-slate-500">LOS Admin • Documents & Templates</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-2 text-xs text-slate-600">
+          <span>Logged in as:</span>
+          <select
+            class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="currentUserId"
+            (ngModelChange)="onUserChange()"
+          >
+            <option *ngFor="let user of users" [ngValue]="user.id">
+              {{ user.label }}
+            </option>
+          </select>
+        </div>
+        <button
+          type="button"
+          class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700"
+          (click)="resetDemo()"
+        >
+          Reset Demo Data
+        </button>
+      </div>
+    </section>
+
+    <section class="mt-4 grid gap-4 grid-cols-1 xl:grid-cols-[260px_minmax(0,1fr)_300px]">
+      <div class="rounded-md border border-slate-200 bg-white p-3 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="text-sm font-semibold text-slate-900">Template Library</div>
+          <button
+            type="button"
+            class="rounded-md bg-blue-600 px-2.5 py-1 text-[11px] font-semibold text-white"
+            (click)="toggleCreate()"
+          >
+            + New
+          </button>
+        </div>
+        <input
+          type="text"
+          class="w-full rounded-md border border-slate-200 px-2.5 py-1 text-xs text-slate-700"
+          placeholder="Search templates..."
+          [(ngModel)]="searchTerm"
+        />
+        <div *ngIf="showCreateInput" class="space-y-2 rounded-md border border-blue-200 bg-blue-50 p-2">
+          <input
+            type="text"
+            class="w-full rounded-md border border-blue-200 px-2.5 py-1 text-xs text-slate-700"
+            placeholder="New template name"
+            [(ngModel)]="newTemplateName"
+            (keydown.enter)="createTemplate()"
+          />
+          <div class="flex items-center justify-end gap-2">
+            <button
+              type="button"
+              class="rounded-md border border-blue-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-blue-700"
+              (click)="toggleCreate()"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="rounded-md bg-blue-600 px-2.5 py-1 text-[11px] font-semibold text-white"
+              (click)="createTemplate()"
+            >
+              Create
+            </button>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <div
+            *ngFor="let template of filteredTemplates"
+            class="rounded-md border px-3 py-2 text-xs cursor-pointer"
+            [ngClass]="selectedTemplateId === template.id ? 'border-blue-300 bg-blue-50' : 'border-slate-200 bg-white'"
+            (click)="setSelectedTemplate(template.id)"
+          >
+            <div class="font-semibold text-slate-900">{{ template.name }}</div>
+            <div class="mt-1 flex items-center justify-between text-[10px] text-slate-500">
+              <span>{{ template.version }}</span>
+              <span
+                class="rounded-full px-2 py-0.5 font-semibold"
+                [ngClass]="template.status === 'DRAFT' ? 'bg-slate-100 text-slate-700' : template.status === 'PENDING' ? 'bg-amber-50 text-amber-700' : template.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'"
+              >
+                {{ template.status }}
+              </span>
+            </div>
+          </div>
+          <div *ngIf="filteredTemplates.length === 0" class="text-[11px] text-slate-400">
+            No templates found.
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-3 min-w-0">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              *ngFor="let tab of tabs"
+              type="button"
+              class="px-3 py-1.5 text-xs font-semibold"
+              [ngClass]="activeTab === tab ? 'border-b-2 border-blue-600 text-blue-700' : 'text-slate-500'"
+              (click)="setActiveTab(tab)"
+            >
+              {{ tab === 'DataMapping' ? 'Data Mapping' : tab }}
+            </button>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              class="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white"
+              (click)="saveDraft()"
+            >
+              Save Draft
+            </button>
+            <button
+              type="button"
+              class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600"
+              [disabled]="!canUndo()"
+              (click)="undo()"
+            >
+              Undo
+            </button>
+            <button
+              type="button"
+              class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600"
+              [disabled]="!canRedo()"
+              (click)="redo()"
+            >
+              Redo
+            </button>
+            <button
+              type="button"
+              class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600"
+              (click)="submitForApproval()"
+            >
+              Submit for Approval
+            </button>
+            <button
+              type="button"
+              class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600"
+              (click)="publish()"
+            >
+              Publish
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="activeTab === 'Designer'" class="grid gap-3 lg:grid-cols-[44px_minmax(0,1fr)]">
+          <div class="space-y-2">
+            <button type="button" class="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-sm font-semibold" (mousedown)="onPaletteMouseDown($event, 'TEXT')">T</button>
+            <button type="button" class="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-sm font-semibold" (mousedown)="onPaletteMouseDown($event, 'FIELD')">{{ '{' }}{{ '}' }}</button>
+            <button type="button" class="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-xs font-semibold" (mousedown)="onPaletteMouseDown($event, 'TABLE')">tbl</button>
+            <button type="button" class="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-xs font-semibold" (mousedown)="onPaletteMouseDown($event, 'IMAGE')">img</button>
+            <button type="button" class="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-xs font-semibold" (mousedown)="onPaletteMouseDown($event, 'SIGNATURE')">Sig</button>
+            <button type="button" class="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-xs font-semibold" (mousedown)="onPaletteMouseDown($event, 'BOX')">□</button>
+          </div>
+          <div class="rounded-md border border-slate-200 bg-slate-50 p-3 overflow-x-auto">
+            <div class="flex items-center justify-between text-xs text-slate-600">
+              <span>Designer</span>
+              <button type="button" class="text-[11px] text-blue-600" (click)="toggleGrid()">
+                {{ showGrid ? 'Hide Grid' : 'Show Grid' }}
+              </button>
+            </div>
+            <div
+              id="canvas"
+              class="relative mt-2 mx-auto bg-white shadow-sm min-w-[820px]"
+              [ngStyle]="getCanvasStyle()"
+              (mousedown)="onCanvasMouseDown($event)"
+              (mouseup)="onCanvasMouseUp()"
+            >
+              <div
+                *ngFor="let el of elements"
+                class="absolute cursor-move"
+                [ngClass]="selectedElementId === el.id ? 'outline outline-2 outline-blue-400' : ''"
+                [style.left.px]="el.x * scale"
+                [style.top.px]="el.y * scale"
+                [style.width.px]="el.w * scale"
+                [style.height.px]="el.h * scale"
+                (mousedown)="selectElement(el.id); onElementMouseDown($event, el); $event.stopPropagation()"
+              >
+                <div *ngIf="el.type === 'TEXT'" class="h-full w-full flex items-center justify-center text-slate-800" [style.fontSize.px]="el.fontSize">
+                  <input
+                    *ngIf="isEditing(el)"
+                    class="h-full w-full rounded-sm border border-blue-300 px-1 text-center text-slate-800"
+                    [(ngModel)]="editingValue"
+                    (blur)="finishInlineEdit()"
+                    (keydown.enter)="finishInlineEdit()"
+                    (mousedown)="$event.stopPropagation()"
+                  />
+                  <span *ngIf="!isEditing(el)" (dblclick)="startInlineEdit(el)">{{ el.text }}</span>
+                </div>
+                <div *ngIf="el.type === 'FIELD'" class="h-full w-full flex items-center justify-center border border-dashed border-slate-400 text-slate-800" [style.fontSize.px]="el.fontSize">
+                  <input
+                    *ngIf="isEditing(el)"
+                    class="h-full w-full rounded-sm border border-blue-300 px-1 text-center text-slate-800"
+                    [(ngModel)]="editingValue"
+                    (blur)="finishInlineEdit()"
+                    (keydown.enter)="finishInlineEdit()"
+                    (mousedown)="$event.stopPropagation()"
+                  />
+                  <span *ngIf="!isEditing(el)" (dblclick)="startInlineEdit(el)">{{ el.text }}</span>
+                </div>
+                <div *ngIf="el.type === 'IMAGE'" class="h-full w-full border border-dashed border-slate-300">
+                  <img *ngIf="el.src" [src]="el.src" class="h-full w-full object-contain" />
+                  <div *ngIf="!el.src" class="h-full w-full flex items-center justify-center text-[10px] text-slate-500">IMAGE</div>
+                </div>
+                <div *ngIf="el.type === 'SIGNATURE'" class="h-full w-full flex items-center justify-center text-[10px] font-semibold text-slate-700">
+                  SIGNATURE
+                </div>
+                <div *ngIf="el.type === 'BOX'" class="h-full w-full border border-slate-700"></div>
+                <div *ngIf="el.type === 'TABLE'" class="h-full w-full border border-slate-700 text-[9px]">
+                  <table class="w-full h-full border-collapse">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let col of el.columns" class="border border-slate-700 px-1 py-0.5 text-left">{{ col }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="border border-slate-700 px-1 py-0.5">Term Loan</td>
+                        <td class="border border-slate-700 px-1 py-0.5">5,000,000</td>
+                        <td class="border border-slate-700 px-1 py-0.5">BDT</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeTab === 'DataMapping'" class="grid gap-3 lg:grid-cols-[220px_minmax(0,1fr)]">
+          <div class="rounded-md border border-slate-200 bg-white p-3 text-xs">
+            <div class="text-sm font-semibold text-slate-900 mb-2">Data Sources</div>
+            <div class="space-y-1">
+              <button
+                *ngFor="let path of dataPaths"
+                type="button"
+                class="w-full text-left rounded-md px-2 py-1 hover:bg-slate-50"
+                (click)="setBindingFromPath(path)"
+              >
+                {{ path }}
+              </button>
+            </div>
+          </div>
+          <div class="rounded-md border border-slate-200 bg-slate-50 p-6 text-center text-xs text-slate-500">
+            <div class="text-sm font-semibold text-slate-700">Data Mapping Instructions</div>
+            <div class="mt-2 space-y-1">
+              <div>1. Select a Field element on the canvas.</div>
+              <div>2. Click a path from the Data Sources list.</div>
+              <div>3. The field will bind to the selected path.</div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeTab === 'Preview'" class="rounded-md border border-slate-200 bg-slate-50 p-3 overflow-x-auto">
+          <div class="flex items-center justify-between text-xs text-slate-600">
+            <div class="flex items-center gap-2">
+              <span>Preview Data:</span>
+              <select class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs" [(ngModel)]="previewDataKey" (ngModelChange)="changePreviewSet($event)">
+                <option *ngFor="let option of previewSets" [ngValue]="option.key">{{ option.label }}</option>
+              </select>
+            </div>
+            <button type="button" class="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white">Print / Export PDF</button>
+          </div>
+          <div class="mt-3 mx-auto bg-white shadow-sm relative min-w-[820px]" [ngStyle]="getCanvasStyle()">
+            <div
+              *ngFor="let el of elements"
+              class="absolute"
+              [style.left.px]="el.x * scale"
+              [style.top.px]="el.y * scale"
+              [style.width.px]="el.w * scale"
+              [style.height.px]="el.h * scale"
+            >
+              <div *ngIf="el.type === 'TEXT'" class="h-full w-full flex items-center justify-center text-slate-800" [style.fontSize.px]="el.fontSize">
+                {{ el.text }}
+              </div>
+              <div *ngIf="el.type === 'FIELD'" class="h-full w-full flex items-center justify-center text-slate-800" [style.fontSize.px]="el.fontSize">
+                {{ getValue(el) }}
+              </div>
+              <div *ngIf="el.type === 'IMAGE'" class="h-full w-full border border-slate-200 bg-slate-50">
+                <img *ngIf="el.src" [src]="el.src" class="h-full w-full object-contain" />
+                <div *ngIf="!el.src" class="h-full w-full flex items-center justify-center text-[10px] text-slate-500">IMAGE</div>
+              </div>
+              <div *ngIf="el.type === 'SIGNATURE'" class="h-full w-full flex items-center justify-center text-[10px] font-semibold text-slate-700">
+                SIGNATURE
+              </div>
+              <div *ngIf="el.type === 'BOX'" class="h-full w-full border border-slate-700"></div>
+              <div *ngIf="el.type === 'TABLE'" class="h-full w-full border border-slate-700 text-[9px]">
+                <table class="w-full h-full border-collapse">
+                  <thead>
+                    <tr>
+                      <th *ngFor="let col of el.columns" class="border border-slate-700 px-1 py-0.5 text-left">{{ col }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of getTableRows(el); let i = index">
+                      <td class="border border-slate-700 px-1 py-0.5">{{ row.name }}</td>
+                      <td class="border border-slate-700 px-1 py-0.5">{{ row.amount }}</td>
+                      <td class="border border-slate-700 px-1 py-0.5">{{ row.currency }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeTab === 'Inbox'" class="rounded-md border border-slate-200 bg-white p-4 text-xs">
+          <div class="text-sm font-semibold text-slate-900">Approval Inbox</div>
+          <div class="mt-3 space-y-2">
+            <div
+              *ngFor="let item of inboxItems"
+              class="rounded-md border border-slate-200 p-3 flex items-center justify-between"
+            >
+              <div>
+                <div class="font-semibold text-slate-900">{{ item.name }}</div>
+                <div class="text-[10px] text-slate-500">Submitted by {{ item.createdBy }}</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  class="rounded-md bg-emerald-600 px-2.5 py-1 text-[11px] font-semibold text-white"
+                  [disabled]="!isChecker"
+                  (click)="approve(item.id)"
+                >
+                  Approve
+                </button>
+                <button
+                  type="button"
+                  class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700"
+                  [disabled]="!isChecker"
+                  (click)="reject(item.id)"
+                >
+                  Reject
+                </button>
+              </div>
+            </div>
+            <div *ngIf="inboxItems.length === 0" class="text-[11px] text-slate-400">
+              No items pending approval.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-md border border-slate-200 bg-white p-4 text-xs space-y-3 xl:sticky xl:top-4">
+        <div class="text-sm font-semibold text-slate-900">Properties</div>
+        <div *ngIf="!selectedElement" class="text-[11px] text-slate-400">Select an element</div>
+        <ng-container *ngIf="selectedElement">
+          <div class="space-y-2">
+            <label class="text-[11px] font-semibold text-slate-600">Type</label>
+            <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" [ngModel]="selectedElement.type" disabled />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-600">X</label>
+              <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" type="number" [(ngModel)]="selectedElement.x" (ngModelChange)="saveAndCommit()" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-600">Y</label>
+              <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" type="number" [(ngModel)]="selectedElement.y" (ngModelChange)="saveAndCommit()" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-600">W</label>
+              <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" type="number" [(ngModel)]="selectedElement.w" (ngModelChange)="saveAndCommit()" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-600">H</label>
+              <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" type="number" [(ngModel)]="selectedElement.h" (ngModelChange)="saveAndCommit()" />
+            </div>
+          </div>
+          <div *ngIf="selectedElement.type === 'TEXT' || selectedElement.type === 'FIELD'" class="space-y-2">
+            <label class="text-[11px] font-semibold text-slate-600">Display Text</label>
+            <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" [(ngModel)]="selectedElement.text" (ngModelChange)="saveAndCommit()" />
+          </div>
+          <div *ngIf="selectedElement.type === 'FIELD'" class="space-y-2">
+            <label class="text-[11px] font-semibold text-slate-600">Binding Mode</label>
+            <div class="flex items-center gap-3">
+              <label class="flex items-center gap-1">
+                <input type="radio" [value]="'path'" name="bindingMode" [(ngModel)]="selectedElement.bindingMode" (ngModelChange)="saveAndCommit()" />
+                <span>Simple Path</span>
+              </label>
+              <label class="flex items-center gap-1">
+                <input type="radio" [value]="'expr'" name="bindingMode" [(ngModel)]="selectedElement.bindingMode" (ngModelChange)="saveAndCommit()" />
+                <span>Expression (JS)</span>
+              </label>
+            </div>
+            <div *ngIf="selectedElement.bindingMode === 'path'">
+              <label class="text-[11px] font-semibold text-slate-600">Data Binding Path</label>
+              <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" [(ngModel)]="selectedElement.bindingPath" (ngModelChange)="saveAndCommit()" />
+            </div>
+            <div *ngIf="selectedElement.bindingMode === 'expr'">
+              <label class="text-[11px] font-semibold text-slate-600">Expression</label>
+              <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" [(ngModel)]="selectedElement.expr" (ngModelChange)="saveAndCommit()" />
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-600">Font Size</label>
+              <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" type="number" [(ngModel)]="selectedElement.fontSize" (ngModelChange)="saveAndCommit()" />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-600">Font Weight</label>
+              <select class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" [(ngModel)]="selectedElement.fontWeight" (ngModelChange)="saveAndCommit()">
+                <option [ngValue]="'Normal'">Normal</option>
+                <option [ngValue]="'Medium'">Medium</option>
+                <option [ngValue]="'Bold'">Bold</option>
+              </select>
+            </div>
+          </div>
+          <div *ngIf="selectedElement.type === 'IMAGE'" class="space-y-2">
+            <label class="text-[11px] font-semibold text-slate-600">Upload Image</label>
+            <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" type="file" accept="image/*" (change)="onImageUpload($event)" />
+            <div *ngIf="selectedElement.src" class="rounded-md border border-slate-200 p-2">
+              <img [src]="selectedElement.src" class="w-full max-h-28 object-contain" />
+            </div>
+          </div>
+          <div *ngIf="selectedElement.type === 'TABLE'" class="space-y-1">
+            <label class="text-[11px] font-semibold text-slate-600">Data Path</label>
+            <input class="w-full rounded-md border border-slate-200 px-2 py-1 text-xs" [(ngModel)]="selectedElement.dataPath" (ngModelChange)="saveAndCommit()" />
+          </div>
+          <button
+            type="button"
+            class="w-full rounded-md border border-red-200 bg-red-50 px-2.5 py-1 text-[11px] font-semibold text-red-700"
+            (click)="deleteElement(selectedElement.id)"
+          >
+            Delete Element
+          </button>
+        </ng-container>
+      </div>
+    </section>
+  </div>
+</app-loms-layout>

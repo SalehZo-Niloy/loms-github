@@ -1,0 +1,464 @@
+<app-loms-layout
+  organisationName="Loan Origination and Management System"
+  solutionName="LOMS"
+  breadcrumb="Appeal/Re-open"
+  basePath="/loms"
+>
+  <div class="w-full min-h-screen space-y-4 bg-white px-3 py-4 sm:px-4 lg:px-6">
+    <section class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-1">
+        <h1 class="text-2xl font-semibold text-slate-900">Appeal/Re-open</h1>
+        <p class="text-xs text-slate-500">Branch Operations • Appeals • Rejected Loans</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-2 text-xs text-slate-600">
+          <span>Simulate User:</span>
+          <select
+            class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            [(ngModel)]="currentUserId"
+            (ngModelChange)="onUserChange()"
+          >
+            <option *ngFor="let user of users" [ngValue]="user.id">
+              {{ user.label }}
+            </option>
+          </select>
+        </div>
+        <button
+          type="button"
+          class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700"
+          (click)="resetDemo()"
+        >
+          Reset Data
+        </button>
+      </div>
+    </section>
+
+    <section class="grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,2fr)_minmax(0,1fr)]">
+      <aside class="space-y-3 rounded-md border border-slate-200 bg-slate-50 p-3">
+        <div class="space-y-2">
+          <h2 class="text-sm font-semibold text-slate-900">Rejected Applications Queue</h2>
+          <input
+            type="text"
+            class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
+            placeholder="Search"
+            [(ngModel)]="searchTerm"
+          />
+        </div>
+        <div class="space-y-2">
+          <button
+            *ngFor="let app of filteredApplications"
+            type="button"
+            class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-left transition"
+            [ngClass]="selectedAppId === app.id ? 'border-blue-200 bg-blue-50' : 'hover:border-blue-200 hover:bg-blue-50'"
+            (click)="selectApplication(app)"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="text-xs font-semibold text-slate-900">{{ app.customer }}</div>
+                <div class="text-[11px] text-slate-500">{{ app.id }}</div>
+                <div class="text-[11px] text-slate-600">
+                  {{ app.product }} • {{ app.amount | currency: app.currency:'symbol':'1.0-0' }}
+                </div>
+              </div>
+              <span class="rounded-full px-2 py-0.5 text-[10px] font-semibold" [ngClass]="getStatusPill(app.status)">
+                {{ app.status }}
+              </span>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      <section class="space-y-3">
+        <nav class="flex flex-wrap gap-6 border-b border-slate-200 text-xs font-semibold text-slate-600">
+          <button
+            type="button"
+            class="border-b-2 pb-2"
+            [ngClass]="activeTab === 'create' ? 'border-blue-600 text-blue-700' : 'border-transparent'"
+            (click)="setActiveTab('create')"
+          >
+            Create Appeal
+          </button>
+          <button
+            type="button"
+            class="border-b-2 pb-2"
+            [ngClass]="activeTab === 'cro' ? 'border-blue-600 text-blue-700' : 'border-transparent'"
+            (click)="setActiveTab('cro')"
+          >
+            CRO Review
+          </button>
+          <button
+            type="button"
+            class="border-b-2 pb-2"
+            [ngClass]="activeTab === 'checker' ? 'border-blue-600 text-blue-700' : 'border-transparent'"
+            (click)="setActiveTab('checker')"
+          >
+            Checker Approval
+          </button>
+          <button
+            type="button"
+            class="border-b-2 pb-2"
+            [ngClass]="activeTab === 'timeline' ? 'border-blue-600 text-blue-700' : 'border-transparent'"
+            (click)="setActiveTab('timeline')"
+          >
+            Timeline
+          </button>
+        </nav>
+
+        <div class="rounded-md border border-slate-200 bg-white p-4 text-xs text-slate-700">
+          <ng-container *ngIf="selectedApplication; else noSelection">
+            <ng-container *ngIf="activeTab === 'create'">
+              <div class="space-y-4">
+                <div class="rounded-md border border-slate-200 bg-slate-50 p-3">
+                  <div class="text-[11px] font-semibold uppercase text-slate-500">Rejection Summary</div>
+                  <div class="mt-2 space-y-1">
+                    <div><span class="font-medium">Rejected By:</span> {{ selectedApplication.rejectedBy }}</div>
+                    <div><span class="font-medium">Date:</span> {{ selectedApplication.rejectedOn }}</div>
+                    <div><span class="font-medium">Reason:</span> {{ selectedApplication.rejectionReason }}</div>
+                    <div><span class="font-medium">Score:</span> Below policy threshold</div>
+                  </div>
+                </div>
+
+                <div class="space-y-3">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600">Appeal Type</label>
+                    <select
+                      class="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"
+                      [(ngModel)]="activeDraft!.type"
+                    >
+                      <option *ngFor="let option of appealTypes" [ngValue]="option">{{ option }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600">What Changed Since Rejection</label>
+                    <textarea
+                      rows="3"
+                      class="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"
+                      placeholder="Explain why this should be reconsidered..."
+                      [(ngModel)]="activeDraft!.justification"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <div class="text-[11px] font-semibold uppercase text-slate-500">Corrected Fields</div>
+                  <div class="overflow-hidden rounded-md border border-slate-200">
+                    <table class="w-full text-left text-[11px]">
+                      <thead class="bg-slate-50 text-[10px] uppercase text-slate-500">
+                        <tr>
+                          <th class="px-3 py-2">Field</th>
+                          <th class="px-3 py-2">Old Value</th>
+                          <th class="px-3 py-2">New Value</th>
+                          <th class="px-3 py-2">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let field of activeDraft!.correctedFields; let i = index" class="border-t border-slate-200">
+                          <td class="px-3 py-2">
+                            <input
+                              type="text"
+                              class="w-full rounded-md border border-slate-200 px-2 py-1 text-[11px]"
+                              [(ngModel)]="field.field"
+                            />
+                          </td>
+                          <td class="px-3 py-2">
+                            <input
+                              type="text"
+                              class="w-full rounded-md border border-slate-200 px-2 py-1 text-[11px]"
+                              [(ngModel)]="field.oldValue"
+                            />
+                          </td>
+                          <td class="px-3 py-2">
+                            <input
+                              type="text"
+                              class="w-full rounded-md border border-slate-200 px-2 py-1 text-[11px]"
+                              [(ngModel)]="field.newValue"
+                            />
+                          </td>
+                          <td class="px-3 py-2">
+                            <button
+                              type="button"
+                              class="rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] text-slate-600"
+                              (click)="removeCorrectedField(i)"
+                            >
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                        <tr *ngIf="activeDraft!.correctedFields.length === 0" class="border-t border-slate-200">
+                          <td colspan="4" class="px-3 py-3 text-center text-[11px] text-slate-400">
+                            No corrected fields added yet.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <button
+                    type="button"
+                    class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-700"
+                    (click)="addCorrectedField()"
+                  >
+                    + Add Field
+                  </button>
+                  <label class="flex items-center gap-2 text-[11px] text-slate-600">
+                    <input type="checkbox" [(ngModel)]="activeDraft!.exceptionRequested" />
+                    Exception Requested
+                  </label>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600">Priority</label>
+                    <select
+                      class="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"
+                      [(ngModel)]="activeDraft!.priority"
+                    >
+                      <option *ngFor="let option of priorities" [ngValue]="option">{{ option }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <div class="text-[11px] text-slate-500">
+                    Routing To: {{ selectedApplication.rejectedBy }}
+                  </div>
+                  <button
+                    type="button"
+                    class="rounded-md bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                    (click)="submitAppeal()"
+                  >
+                    Submit Appeal
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="activeTab === 'cro'">
+              <ng-container *ngIf="selectedRequest; else noCroRequest">
+                <div class="space-y-4">
+                  <div>
+                    <div class="text-[11px] font-semibold uppercase text-slate-500">Appeal Request</div>
+                    <div class="mt-2 space-y-1">
+                      <div><span class="font-medium">Maker:</span> {{ selectedRequest.makerName }}</div>
+                      <div><span class="font-medium">Type:</span> {{ selectedRequest.type }}</div>
+                      <div class="text-[11px] text-slate-600">Justification</div>
+                      <div class="rounded-md border border-slate-200 bg-slate-50 p-3">
+                        {{ selectedRequest.justification || 'No justification provided.' }}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600">CRO Decision</label>
+                    <select
+                      class="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"
+                      [(ngModel)]="selectedRequest.croDecision"
+                    >
+                      <option *ngFor="let option of croDecisions" [ngValue]="option">{{ option }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600">CRO Notes</label>
+                    <textarea
+                      rows="3"
+                      class="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"
+                      [(ngModel)]="selectedRequest.croNotes"
+                    ></textarea>
+                  </div>
+                  <button
+                    type="button"
+                    class="rounded-md bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                    (click)="submitCroDecision()"
+                  >
+                    Submit Decision
+                  </button>
+                </div>
+              </ng-container>
+              <ng-template #noCroRequest>
+                <div class="text-[11px] text-slate-500">
+                  No appeal submitted for this application yet.
+                </div>
+              </ng-template>
+            </ng-container>
+
+            <ng-container *ngIf="activeTab === 'checker'">
+              <ng-container *ngIf="checkerReviewRequest; else checkerList">
+                <div class="space-y-4">
+                  <button
+                    type="button"
+                    class="text-[11px] font-semibold text-slate-500"
+                    (click)="checkerReviewAppId = null"
+                  >
+                    ← Back to List
+                  </button>
+                  <div class="space-y-2">
+                    <div class="text-[11px] font-semibold uppercase text-slate-500">Approval Request</div>
+                    <div><span class="font-medium">Current Status:</span> Rejected</div>
+                    <div><span class="font-medium">Target Status:</span> Reopened</div>
+                    <div><span class="font-medium">Target Workflow Step:</span> Credit Risk Review</div>
+                  </div>
+                  <div class="space-y-2">
+                    <div class="text-[11px] font-semibold text-slate-600">Maker Remarks</div>
+                    <div class="rounded-md border border-slate-200 bg-slate-50 p-3">
+                      {{ checkerReviewRequest.justification || 'No remarks provided.' }}
+                    </div>
+                  </div>
+                  <div class="space-y-2">
+                    <div class="text-[11px] font-semibold text-slate-600">CRO Notes</div>
+                    <div class="rounded-md border border-slate-200 bg-slate-50 p-3">
+                      {{ checkerReviewRequest.croNotes || 'No notes provided.' }}
+                    </div>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[11px] font-semibold text-slate-600">Checker Remarks</label>
+                    <textarea
+                      rows="3"
+                      class="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"
+                      [(ngModel)]="checkerReviewRequest.checkerNotes"
+                    ></textarea>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      class="rounded-md bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
+                      (click)="approveReopen()"
+                    >
+                      Approve Reopen
+                    </button>
+                    <button
+                      type="button"
+                      class="rounded-md bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-700"
+                      (click)="rejectReopen()"
+                    >
+                      Reject Reopen
+                    </button>
+                    <button
+                      type="button"
+                      class="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700"
+                      (click)="sendBackToCro()"
+                    >
+                      Send Back
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #checkerList>
+                <div class="space-y-2">
+                  <div class="text-[11px] font-semibold uppercase text-slate-500">Pending Approvals</div>
+                  <div class="overflow-hidden rounded-md border border-slate-200">
+                    <table class="w-full text-left text-[11px]">
+                      <thead class="bg-slate-50 text-[10px] uppercase text-slate-500">
+                        <tr>
+                          <th class="px-3 py-2">App ID</th>
+                          <th class="px-3 py-2">Maker</th>
+                          <th class="px-3 py-2">CRO</th>
+                          <th class="px-3 py-2">Rec.</th>
+                          <th class="px-3 py-2">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let request of checkerRequests" class="border-t border-slate-200">
+                          <td class="px-3 py-2">{{ request.appId }}</td>
+                          <td class="px-3 py-2">{{ request.makerName }}</td>
+                          <td class="px-3 py-2">{{ request.croName || 'CRO' }}</td>
+                          <td class="px-3 py-2">Reopen</td>
+                          <td class="px-3 py-2">
+                            <button
+                              type="button"
+                              class="rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px]"
+                              (click)="openCheckerReview(request)"
+                            >
+                              Review
+                            </button>
+                          </td>
+                        </tr>
+                        <tr *ngIf="checkerRequests.length === 0" class="border-t border-slate-200">
+                          <td colspan="5" class="px-3 py-3 text-center text-[11px] text-slate-400">
+                            No pending approvals.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+
+            <ng-container *ngIf="activeTab === 'timeline'">
+              <div class="space-y-3">
+                <div class="text-[11px] font-semibold uppercase text-slate-500">Appeal Timeline</div>
+                <div class="space-y-2">
+                  <div
+                    *ngFor="let item of selectedTimeline"
+                    class="rounded-md border border-slate-200 bg-white p-3"
+                    [ngClass]="item.appId === selectedApplication.id ? 'border-blue-200 bg-blue-50' : ''"
+                  >
+                    <div class="flex items-center justify-between">
+                      <div class="font-semibold text-slate-900">{{ item.title }}</div>
+                      <span class="text-[10px] text-slate-500">{{ item.timeAgo }}</span>
+                    </div>
+                    <div class="mt-1 text-[11px] text-slate-600">{{ item.detail }}</div>
+                  </div>
+                  <div *ngIf="selectedTimeline.length === 0" class="text-[11px] text-slate-400">
+                    No timeline entries yet.
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-template #noSelection>
+            <div class="text-[11px] text-slate-500">
+              Select an application from the queue to view details or start an appeal.
+            </div>
+          </ng-template>
+        </div>
+      </section>
+
+      <aside class="space-y-3 rounded-md border border-slate-200 bg-white p-4">
+        <div class="text-sm font-semibold text-slate-900">Application Snapshot</div>
+        <ng-container *ngIf="selectedApplication; else noSnapshot">
+          <div class="space-y-3 text-[11px] text-slate-600">
+            <div>
+              <div class="text-[10px] uppercase text-slate-400">Customer</div>
+              <div class="text-sm font-semibold text-slate-900">{{ selectedApplication.customer }}</div>
+              <div class="text-[11px] text-slate-500">{{ selectedApplication.id }}</div>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase text-slate-400">Loan Details</div>
+              <div>{{ selectedApplication.product }}</div>
+              <div class="font-semibold text-slate-900">
+                {{ selectedApplication.amount | currency: selectedApplication.currency:'symbol':'1.0-0' }}
+              </div>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase text-slate-400">Status Info</div>
+              <span class="inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold" [ngClass]="getStatusPill(selectedApplication.status)">
+                {{ selectedApplication.status }}
+              </span>
+              <div class="mt-1 text-[11px] text-slate-500">Rejected by {{ selectedApplication.rejectedBy }}</div>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase text-slate-400">Previous CRO</div>
+              <div>{{ selectedApplication.rejectedBy }}</div>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase text-slate-400">Flags</div>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  *ngFor="let flag of selectedApplication.flags"
+                  class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px]"
+                >
+                  {{ flag }}
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="w-full rounded-md bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+            >
+              Open Full Case
+            </button>
+          </div>
+        </ng-container>
+        <ng-template #noSnapshot>
+          <div class="text-[11px] text-slate-500">No application selected</div>
+        </ng-template>
+      </aside>
+    </section>
+  </div>
+</app-loms-layout>

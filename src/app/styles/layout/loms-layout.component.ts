@@ -638,6 +638,22 @@ export class LomsLayoutComponent implements OnInit {
       route: ['/loms', 'dashboard'],
     },
     {
+      label: 'Dashboard Configuration',
+      route: ['/loms', 'dashboard-configuration'],
+      children: [
+        {
+          label:'Configuration',
+          route: ['/loms', 'dashboard-configuration'],
+        },
+        {
+          label: 'Company Profile',
+        },
+        {
+          label: 'Campaign Details',
+        },
+      ],
+    },
+    {
       label: 'De Duplication',
       children: [
         {
@@ -746,10 +762,22 @@ export class LomsLayoutComponent implements OnInit {
         },
       ],
     },
-
     {
-      label: 'Self Defined Form Builder',
+      label: 'User Defined Page Builder',
       route: ['/loms', 'form-builder'],
+    },
+    {
+      label: 'Report Builder',
+      route: ['/loms', 'report-builder'],
+    },
+    {
+      label:'Appeal/Re-open',
+      route:['/loms','appeal-reopen']
+
+    },
+    {
+       label:'Manual Re-Assignment/Override',
+        route:['/loms','work-allocation']
     },
     {
       label: 'Submission',

@@ -29,12 +29,24 @@ import { LomsKycProfilingPageComponent } from '../pages/loms/kyc/kyc-profiling.p
 // import { LomsKycDashboardPageComponent } from '../pages/loms/kyc/kyc-dashboard.page';
 // import { LomsKycSetupWizardPageComponent } from '../pages/loms/kyc/kyc-setup-wizard.page';
 // import { LomsKycProfilingPageComponent } from '../pages/loms/kyc/kyc-profiling.page';
+// import { LomsSubmissionPageComponent } from '../pages/loms/submission/submission.page';
+// import { LomsProductDashboardPageComponent } from '../pages/loms/product/product-dashboard.page';
+// import { LomsProductWizardPageComponent } from '../pages/loms/product/product-wizard.page';
+// import { LomsProductViewPageComponent } from '../pages/loms/product/product-view.page';
+// import { LomsQueryDashboardPageComponent } from '../pages/loms/query/query-dashboard.page';
+// import { LomsQueryCreatePageComponent } from '../pages/loms/query/query-create.page';
+// import { LomsKycDashboardPageComponent } from '../pages/loms/kyc/kyc-dashboard.page';
+// import { LomsKycSetupWizardPageComponent } from '../pages/loms/kyc/kyc-setup-wizard.page';
+// import { LomsKycProfilingPageComponent } from '../pages/loms/kyc/kyc-profiling.page';
 import { LomsSubmissionPageComponent } from '../pages/loms/submission/submission.page';
 import { CreditRiskDashboardPage } from '../pages/loms/credit-risk/credit-risk-dashboard.page';
 import { CreditRiskWizardPage } from '../pages/loms/credit-risk/credit-risk-wizard.page';
 import { CreditRiskScoringDashboardPage } from '../pages/loms/credit-risk/credit-risk-scoring-dashboard.page';
 import { CreditRiskScoringAssessmentPage } from '../pages/loms/credit-risk/credit-risk-scoring-assessment.page';
 import { LomsFormBuilderPageComponent } from '../pages/loms/form-builder/form-builder.page';
+import { LomsReportBuilderPageComponent } from '../pages/loms/report-builder/report-builder.page';
+import { WorkAllocationPageComponent } from '../pages/loms/work-allocation/work-allocation.page';
+import { AppealReopenPageComponent } from '../pages/loms/appeal-reopen/appeal-reopen.page';
 import { LomsCibInitiationPageComponent } from '../pages/loms/cib-initiation/cib-initiation.page';
 import { LomsCibPersonaDetailsPageComponent } from '../pages/loms/cib-initiation/cib-persona-details.page';
 import { LomsCibOfficerAssignmentPageComponent } from '../pages/loms/cib-initiation/cib-officer-assignment.page';
@@ -45,11 +57,16 @@ import { LomsVettingValuationAssetDetailsPageComponent } from '../pages/loms/vet
 import { LomsCardOperationPageComponent } from '../pages/loms/card-operation/card-operation.page';
 import { LomsCardOperationDetailsPageComponent } from '../pages/loms/card-operation/card-operation-details.page';
 import { LomsCardIssuanceProcessingPageComponent } from '../pages/loms/card-operation/card-operation-issuance-processing.page';
+import { LomsDashboardConfigurationPageComponent } from '../pages/loms/dashboard-configuration/dashboard-configuration.page';
 
 export const lomsRoutes: Routes = [
   {
     path: 'dashboard',
     component: TradeDashboardPageComponent,
+  },
+  {
+    path: 'dashboard-configuration',
+    component: LomsDashboardConfigurationPageComponent,
   },
   {
     path: 'de-dup/application',
@@ -239,6 +256,20 @@ export const lomsRoutes: Routes = [
     path: 'vetting-valuation/asset-details',
     component: LomsVettingValuationAssetDetailsPageComponent,
   },
+  {
+    path: 'report-builder',
+    component: LomsReportBuilderPageComponent,
+  },
+  
+  {
+    path: 'work-allocation',
+    component: WorkAllocationPageComponent,
+  },
+  {
+    path: 'appeal-reopen',
+    component: AppealReopenPageComponent,
+  },
+
   {
     path: '',
     redirectTo: 'product',
